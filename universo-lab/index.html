@@ -4,6 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#10111a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="VyROX">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
   <meta name="description" content="VyROX: videos, noticias y descubrimientos en una experiencia móvil, dinámica e interactiva.">
   <title>VyROX — Descubre lo que se mueve</title>
   <link rel="stylesheet" href="styles.css">
@@ -37,6 +43,10 @@
           <button class="menu-chip" data-category="estados">◉ Estados</button>
           <button class="menu-chip" data-category="guardados">♡ Guardados <span id="savedCount">0</span></button>
         </nav>
+        <section class="device-connect" aria-label="Instalación en este teléfono">
+          <div class="device-connect-copy"><strong>VyROX en tu teléfono</strong><small id="deviceStatus">Sin cuenta ni correo. Tus guardados se conservan en este dispositivo.</small></div>
+          <button type="button" id="installAppButton" class="install-app-button">Instalar VyROX</button>
+        </section>
       </div>
     </section>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
