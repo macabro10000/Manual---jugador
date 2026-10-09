@@ -56,7 +56,7 @@
     if(category==="principal")list=sortPrincipal(list);
     else list.sort((a,b)=>score(b)-score(a));
     $("#savedCount").textContent=String(saved.length);
-    $$$(".menu-chip").forEach(button=>button.classList.toggle("active",button.dataset.category===category));
+    $$(".menu-chip").forEach(button=>button.classList.toggle("active",button.dataset.category===category));
     $("#feedStatus").textContent=list.some(verifiedViral)?"TENDENCIAS CON MÉTRICAS DISPONIBLES":"MUESTRA · SIN MÉTRICAS VIRALES";
     if(!list.length){
       $("#storyFeed").innerHTML='<section class="empty-state"><span class="empty-symbol">✧</span><h2>'+esc(emptyTitle())+'</h2><p>'+esc(emptyMessage())+'</p><button type="button" id="clearFilter">Volver a Principal</button></section>';
