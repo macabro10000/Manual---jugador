@@ -48,4 +48,4 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Se agregó `content.json` como catálogo independiente y se actualizó `app.js` para cargarlo. Catálogo: 9 registros demo; IDs únicos; campos requeridos presentes; sin campos antiguos `type/source/url/label` en el renderizado.
 - Commit de catálogo: `200335f70fd66b6627e8a984c5a4d4d2f3aa21c0`.
 - Commit de carga del catálogo: `099cd32b99a4970c8082f16524691167da4b6719`.
-- El despliegue automático del commit de `app.js` comenzó; pendiente confirmar el evento final de Render antes de dar el despliegue por terminado.
+- Render confirmó como exitoso el despliegue del commit `099cd32b99a4970c8082f16524691167da4b6719` (carga del catálogo). La actualización de este archivo operativo también dispara el despliegue automático del nuevo commit.
