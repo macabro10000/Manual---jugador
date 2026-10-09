@@ -28,6 +28,15 @@
     $$("[data-save]").forEach(btn=>btn.addEventListener("click",()=>{const id=btn.dataset.save;saved=saved.includes(id)?saved.filter(x=>x!==id):[...saved,id];writeSaved();render();}));
     $$("[data-share]").forEach(btn=>btn.addEventListener("click",async()=>{const item=items.find(x=>x.id===btn.dataset.share);const text=item.title+" — "+item.canonicalUrl;try{if(navigator.share)await navigator.share({title:item.title,text,url:item.canonicalUrl});else{await navigator.clipboard.writeText(text);toast("Enlace copiado para compartir.")}}catch(e){if(e.name!=="AbortError")toast("No se pudo compartir. Abre la fuente original.")}}));
   }
+  function moveRail(direction){
+    const rail=$("#feedGrid");
+    const card=rail.querySelector(".content-card");
+    if(!card)return;
+    const gap=parseFloat(getComputedStyle(rail).gap)||16;
+    rail.scrollBy({left:direction*(card.getBoundingClientRect().width+gap),behavior:"smooth"});
+  }
+  $("#railPrev")?.addEventListener("click",()=>moveRail(-1));
+  $("#railNext")?.addEventListener("click",()=>moveRail(1));
   function toast(message){const el=$("#toast");el.textContent=message;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2200)}
   $$(".category").forEach(btn=>btn.addEventListener("click",()=>{category=btn.dataset.category;render();$("#feed").scrollIntoView({behavior:"smooth",block:"start"})}));
   $("#searchInput").addEventListener("input",e=>{search=e.target.value.trim();render()});
