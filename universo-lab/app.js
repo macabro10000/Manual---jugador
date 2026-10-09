@@ -38,7 +38,7 @@
   function isFreshNews(item,now=Date.now()){const added=Date.parse(item.addedAt||"");return Number.isFinite(added)&&added>0&&now-added<24*60*60*1000}
   function filteredItems(){
     const now=Date.now();
-    let list=items.filter(x=>category==="guardados"?saved.includes(x.id):isNews(x)&&category==="descubrimientos"&&isFreshNews(x,now)&&itemMatchesFilter(x));
+    let list=items.filter(x=>isFreshNews(x,now)&&(category==="guardados"?saved.includes(x.id):isNews(x)&&category==="descubrimientos"&&itemMatchesFilter(x)));
     list=list.filter(x=>searchable(x).includes(norm(search)));
     return list.sort((a,b)=>newsTimestamp(b)-newsTimestamp(a)||score(b)-score(a));
   }
