@@ -374,3 +374,32 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Servicios, base de datos y cliente OAuth creados: ninguno.
 - Pruebas de autenticación: todavía no aplican.
 - Siguiente paso exacto: implementar en la rama de laboratorio solo el esqueleto del backend en `vyrox-server/` (`package.json`, servidor Express, configuración validada y `GET /api/health`), sin conectar todavía Google ni una base de datos. Después probar localmente/CI y revisar el diff antes de crear el servicio API en Render.
+
+
+## Proceso 4 — Esqueleto inicial del backend VyROX — 2026-10-09
+
+### Archivos añadidos en laboratorio
+- `vyrox-server/package.json`: paquete Node.js ES modules, scripts `start` y `test`, dependencias Express y Helmet, requisito Node.js 20+.
+- `vyrox-server/src/config.js`: valida entorno, puerto y origen exacto del frontend; en producción exige `FRONTEND_ORIGIN` explícito y HTTPS.
+- `vyrox-server/src/server.js`: aplicación Express con Helmet, límite JSON de 16 KB, CORS limitado al origen permitido, respuesta 403 para otros orígenes, ruta `GET /api/health`, JSON 404 y manejo básico de errores sin stack trace.
+- `vyrox-server/test/server.test.js`: pruebas automatizadas de configuración, rechazo de puertos inválidos, validación de origen HTTPS, respuesta de salud y rechazo de origen web no autorizado.
+- `vyrox-server/.env.example`: plantilla sin secretos.
+- `vyrox-server/.gitignore`: excluye `.env`, dependencias instaladas y archivos de cobertura.
+- `vyrox-server/README.md`: instrucciones de ejecución y límites de esta fase.
+- `.github/workflows/vyrox-server-tests.yml`: ejecuta las pruebas con Node.js 20 cuando cambie el backend en esta rama o manualmente.
+
+### Controles y límites
+- No se implementó Google OAuth, sesiones, base de datos, usuarios, `@usuario`, conversaciones ni mensajes.
+- No se añadieron credenciales ni secretos.
+- No se creó ni configuró un servicio API en Render; no se modificó la configuración del servicio estático actual.
+- El servidor no debe considerarse listo para producción: falta ejecutar y revisar CI, fijar dependencias mediante lockfile, revisar el comportamiento real de cookies/orígenes y realizar pruebas antes del despliegue.
+- El origen permitido se configura por variable de entorno; la plantilla de desarrollo usa localhost y no contiene secretos.
+
+### Verificación
+- Archivos creados y commit de código: `8614aa6b43c073f904b0d39c526a36138993f66c`.
+- Se añadió un workflow para que la rama de laboratorio ejecute las pruebas automáticamente; el resultado de CI debe consultarse después del commit que introduce el workflow.
+- Prueba local desde este entorno: no ejecutada; no afirmar que los tests pasaron hasta ver el resultado real de GitHub Actions.
+- Frontend y producción: sin cambios funcionales; `main` y el servicio `manual-jugador` permanecen fuera del alcance.
+
+### Siguiente paso exacto
+Comprobar el resultado real de GitHub Actions para `vyrox-server-tests.yml`. Si falla, inspeccionar el log y corregir la causa antes de seguir. Si pasa, revisar/fijar las dependencias y generar un lockfile reproducible; todavía no desplegar ni conectar OAuth/base de datos.
