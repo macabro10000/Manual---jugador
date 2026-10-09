@@ -40,7 +40,7 @@
   const savedDaily = safeRead("smartdaily_daily_v1", {});
   let dailyAnswered = savedDaily.date === todayKey();
   let dailyChoice = dailyAnswered ? savedDaily.answer : null;
-  let dailyResultShown = dailyAnswered;
+  let dailyResultShown = false;
   if (dailyAnswered) showDailyFeedback(savedDaily.answer, false);
 
   function showDailyFeedback(answer, fresh) {
