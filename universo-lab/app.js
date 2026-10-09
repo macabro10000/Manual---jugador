@@ -14,7 +14,7 @@
     mundo:["mundo","país","países","actualidad","historia","noticia"],
     virales:["viral","virales","tendencia","popular"]
   };
-  let items=[], localVideos=[], category="principal", search="", saved=readArray(KEYS.saved), tastes=readArray(KEYS.tastes), signals=readObject(KEYS.signals), drawerOpen=false;
+  let items=[], localVideos=[], category="principal", newsFilter="todos", search="", saved=readArray(KEYS.saved), tastes=readArray(KEYS.tastes), signals=readObject(KEYS.signals), drawerOpen=false;
   function readArray(k){try{const v=JSON.parse(localStorage.getItem(k)||"[]");return Array.isArray(v)?v:[]}catch{return []}}
   function readObject(k){try{const v=JSON.parse(localStorage.getItem(k)||"{}");return v&&typeof v==="object"&&!Array.isArray(v)?v:{}}catch{return {}}}
   function persist(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
@@ -24,9 +24,19 @@
   function score(item){let n=0;const text=searchable(item);tastes.forEach(t=>{if((TOPICS[t]||[t]).some(word=>text.includes(norm(word))))n+=4});const s=signals[item.id]||{};return n+(s.like?8:0)+(s.open||0)*1.5+(s.save||0)*3-(s.skip||0)*7+(saved.includes(item.id)?3:0)}
   function safeUrl(value){try{const u=new URL(value);return u.protocol==="https:"?u.href:""}catch{return ""}}
   function isNews(item){return ["noticias","economia","entretenimiento","ciencia","tecnologia","tecnología","mundo","curiosidades","animales","deportes","musica","música","humor","descubrimientos","virales"].includes(norm(item.category))}
+  const NEWS_FILTERS=[["todos","Todos"],["economia","Economía"],["entretenimiento","Entretenimiento"],["ciencia","Ciencia"],["tecnologia","Tecnología"],["mundo","Mundo"],["virales","Virales"]];
+  function itemMatchesFilter(item){
+    if(newsFilter==="todos")return true;
+    const text=searchable(item), cat=norm(item.category);
+    if(newsFilter==="virales")return cat==="virales"||cat==="viral"||(item.tags||[]).some(t=>["viral","virales","tendencia"].includes(norm(t)));
+    return cat===newsFilter||(TOPICS[newsFilter]||[]).some(word=>text.includes(norm(word)));
+  }
+  function filterBar(){
+    return '<nav class="news-filter-rail" aria-label="Filtrar noticias">'+NEWS_FILTERS.map(([id,label])=>'<button type="button" class="news-filter '+(newsFilter===id?'active':'')+'" data-news-filter="'+id+'" aria-pressed="'+(newsFilter===id?'true':'false')+'">'+label+'</button>').join("")+'</nav>';
+  }
   function filteredItems(){
-    let list=items.filter(x=>category==="guardados"?saved.includes(x.id):isNews(x)&&category==="descubrimientos"&&searchable(x).includes(norm(search)));
-    if(category==="guardados")list=list.filter(x=>searchable(x).includes(norm(search)));
+    let list=items.filter(x=>category==="guardados"?saved.includes(x.id):isNews(x)&&category==="descubrimientos"&&itemMatchesFilter(x));
+    list=list.filter(x=>searchable(x).includes(norm(search)));
     return list.sort((a,b)=>score(b)-score(a));
   }
   function render(){
@@ -42,7 +52,7 @@
     if(!list.length){
       const title=search?"No encontramos resultados":category==="guardados"?"Tus guardados aparecerán aquí":"Noticias en preparación";
       const desc=search?"Prueba otra palabra.":category==="guardados"?"Guarda noticias para encontrarlas rápidamente.":"Aquí aparecerán noticias actuales de economía, entretenimiento, ciencia, tecnología, mundo y tendencias. Cada tarjeta tendrá resumen breve, fecha y enlace a la fuente. Aún falta conectar fuentes reales.";
-      feed.innerHTML='<section class="empty-state discover-empty"><span class="empty-symbol">▤</span><h2>'+esc(title)+'</h2><p>'+esc(desc)+'</p>'+(category!=="descubrimientos"?'<button type="button" id="goNews">Ver noticias</button>':'<span class="empty-note">SIN NOTICIAS INVENTADAS · FUENTES VERIFICABLES</span>')+'</section>';
+      feed.innerHTML=(category==="descubrimientos"?filterBar():"")+'<section class="empty-state discover-empty"><span class="empty-symbol">▤</span><h2>'+esc(title)+'</h2><p>'+esc(desc)+'</p>'+(category!=="descubrimientos"?'<button type="button" id="goNews">Ver noticias</button>':'<span class="empty-note">SIN NOTICIAS INVENTADAS · FUENTES VERIFICABLES</span>')+'</section>';
       $("#goNews")?.addEventListener("click",()=>setCategory("descubrimientos"));
       return;
     }
@@ -55,7 +65,8 @@
       const link=url?'<a class="story-action primary" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Ver noticia original ↗</a>':"";
       return '<article class="story-card discover-card" data-story="'+esc(item.id)+'">'+image+'<div class="story-fallback" '+(image?'hidden':'')+'>▤</div><div class="story-content"><div class="story-source"><span class="source-dot"></span>'+source+' '+date+'</div><h2>'+esc(item.title)+'</h2><p>'+esc(item.description)+'</p><div class="story-tags"><span>'+esc(item.category||"noticias")+'</span></div><div class="story-actions"><button class="story-action '+(sig.like?"liked":"")+'" data-like="'+esc(item.id)+'">'+(sig.like?"♥ Me interesa":"♡ Me interesa")+'</button><button class="story-action '+(saved.includes(item.id)?"saved":"")+'" data-save="'+esc(item.id)+'">'+(saved.includes(item.id)?"♥ Guardado":"＋ Guardar")+'</button>'+link+'</div></div></article>';
     }).join("");
-    $$("[data-like]").forEach(btn=>btn.addEventListener("click",()=>{const id=btn.dataset.like;const sig=signals[id]||{};sig.like=sig.like?0:1;signals[id]=sig;persist(KEYS.signals,signals);render()}));
+    $("[data-news-filter]").forEach(btn=>btn.addEventListener("click",()=>{newsFilter=btn.dataset.newsFilter;render();$("#storyFeed").scrollTo({top:0,behavior:"smooth"})}));
+    $("[data-like]").forEach(btn=>btn.addEventListener("click",()=>{const id=btn.dataset.like;const sig=signals[id]||{};sig.like=sig.like?0:1;signals[id]=sig;persist(KEYS.signals,signals);render()}));
     $$("[data-save]").forEach(btn=>btn.addEventListener("click",()=>{const id=btn.dataset.save;saved=saved.includes(id)?saved.filter(x=>x!==id):[...saved,id];persist(KEYS.saved,saved);render()}));
   }
   function renderVideos(){
