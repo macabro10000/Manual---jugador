@@ -142,6 +142,54 @@
   },{passive:true});
   $("#storyFeed").addEventListener("touchcancel",()=>{touchStart=null},{passive:true});
   document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(drawerOpen)closeDrawer();else $("#searchPanel").hidden=true}});
+  // Instalación como aplicación web (PWA); no requiere cuenta ni correo.
+  let installPromptEvent=null;
+  const installButton=$("#installAppButton");
+  const deviceStatus=$("#deviceStatus");
+  function isStandalone(){return window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone===true}
+  function updateInstallState(){
+    if(!installButton||!deviceStatus)return;
+    if(isStandalone()){
+      installButton.hidden=true;
+      deviceStatus.textContent="VyROX está abierto como aplicación en este teléfono. No necesitas iniciar sesión.";
+    }else if(!window.isSecureContext){
+      installButton.hidden=true;
+      deviceStatus.textContent="Abre VyROX mediante su enlace HTTPS para poder instalarlo.";
+    }else if(!installPromptEvent){
+      installButton.textContent="Cómo instalar";
+      deviceStatus.textContent="Puedes añadir VyROX a la pantalla de inicio desde el menú de Chrome. No necesitas correo.";
+    }else{
+      installButton.hidden=false;
+      installButton.textContent="Instalar VyROX";
+      deviceStatus.textContent="Instálalo en este teléfono para abrirlo como una aplicación.";
+    }
+  }
+  window.addEventListener("beforeinstallprompt",event=>{
+    event.preventDefault();
+    installPromptEvent=event;
+    updateInstallState();
+  });
+  window.addEventListener("appinstalled",()=>{
+    installPromptEvent=null;
+    updateInstallState();
+    toast("VyROX quedó instalado en este teléfono");
+  });
+  installButton?.addEventListener("click",async()=>{
+    if(installPromptEvent){
+      installPromptEvent.prompt();
+      await installPromptEvent.userChoice;
+      installPromptEvent=null;
+      updateInstallState();
+      return;
+    }
+    toast("En Chrome: toca los tres puntos y elige Instalar aplicación o Añadir a pantalla de inicio");
+  });
+  updateInstallState();
+  if("serviceWorker" in navigator && window.isSecureContext){
+    window.addEventListener("load",()=>{
+      navigator.serviceWorker.register("./sw.js").then(()=>console.info("VyROX offline shell ready")).catch(error=>console.warn("VyROX service worker unavailable",error));
+    },{once:true});
+  }
   async function loadContent(){try{const r=await fetch("./content.json",{cache:"no-store"});if(!r.ok)throw Error("HTTP "+r.status);const data=await r.json();if(!data||!Array.isArray(data.items))throw Error("Formato de catálogo inválido");const seen=new Set();items=data.items.filter(x=>x&&typeof x.id==="string"&&typeof x.title==="string"&&x.contentStatus!=="demo"&&!seen.has(x.id)&&seen.add(x.id));render()}catch(error){items=[];render();console.error("VyROX catalog error",error)}}
   loadContent();
 })();
