@@ -138,3 +138,12 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Objetivo: reducir cambios involuntarios de pantalla al intentar recorrer el contenido. Se mantiene la navegación lateral cuando el gesto es claramente horizontal.
 - Commit JS: `6ade6e7839fe9db85fe0dd74c52d3738475f4c9b`.
 - Pendiente: confirmar despliegue en Render y probar con el dedo en Android; no se afirma todavía que la prueba física se haya realizado.
+
+
+## Noticias verificadas y lectura en voz alta — 2026-10-09
+- Se reemplazaron registros de demostración por cinco resúmenes editoriales con enlaces directos a EFE, Reuters y Minuto60, publicados el 8–9 de octubre de 2026. Categorías: economía, entretenimiento, ciencia/medio ambiente, tecnología y mundo.
+- Cada tarjeta indica fuente, fecha, resumen original y enlace al artículo. No se copian artículos completos ni se inventan métricas de visitas; el catálogo aclara que la selección es inicial y que el feed automático aún no está conectado.
+- Se añadió botón «Escuchar» con SpeechSynthesis del navegador, idioma `es-CO`, que lee el titular y el resumen y permite detener la lectura. No requiere API de pago; depende de la compatibilidad y voces disponibles en el navegador Android.
+- Se mejoró la tipografía de titulares y controles para móvil.
+- Commits: catálogo `66d188f705d7ac77d943159d9fec5a8b05f984ea`; JS `c23ee645e08a96ce4b047a45c7fba17d070e1acb`; CSS `0329434c26ed6cd95c0be2af2820389da7d6b00a`.
+- Pendiente: confirmar despliegue de Render, probar lectura en el teléfono y después automatizar la actualización mediante fuentes RSS/APIs permitidas con tareas programadas. La lectura en voz alta y estos artículos iniciales no equivalen todavía a un robot autónomo que actualiza noticias de forma continua.
