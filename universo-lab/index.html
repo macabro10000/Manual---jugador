@@ -4,26 +4,24 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#10111a">
-  <meta name="description" content="UNIVERSO: explora videos, noticias y curiosidades en una sola pantalla.">
+  <meta name="description" content="UNIVERSO: descubre y reproduce videos de nuestro propio catálogo en una sola pantalla.">
   <title>UNIVERSO — Principal</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
 </head>
 <body>
   <main class="universe-app" id="universeApp">
     <header class="app-top">
-      <a class="brand" href="#" aria-label="UNIVERSO Principal"><span class="brand-orbit">✦</span><span>UNIVERSO<small>UN SOLO LUGAR, MUCHOS MUNDOS</small></span></a>
-      <div class="top-category" id="topCategory" aria-live="polite"><span class="category-spark">✦</span><span id="topCategoryName">Principal</span></div><div class="top-status" id="feedStatus">MUESTRA DE EXPLORACIÓN</div>
+      <a class="brand" href="#" aria-label="UNIVERSO Principal"><span class="brand-orbit">✦</span><span>UNIVERSO<small>NUESTRO ESPACIO DE VIDEOS</small></span></a>
+      <div class="top-category" id="topCategory" aria-live="polite"><span class="category-spark">✦</span><span id="topCategoryName">Principal</span></div>
+      <div class="top-status" id="feedStatus">CATÁLOGO PROPIO</div>
       <button class="icon-button" id="searchToggle" aria-label="Buscar contenido">⌕</button>
     </header>
     <form class="search-panel" id="searchPanel" hidden>
-      <input id="searchInput" type="search" placeholder="Buscar videos, noticias, temas…" aria-label="Buscar contenido">
+      <input id="searchInput" type="search" placeholder="Buscar videos y temas…" aria-label="Buscar contenido">
       <button type="button" id="searchClose" aria-label="Cerrar búsqueda">×</button>
     </form>
-    <section class="story-feed" id="storyFeed" aria-label="Contenido para explorar">
+    <section class="story-feed" id="storyFeed" aria-label="Videos para explorar">
       <div class="loading-state" id="loadingState">Preparando tu universo…</div>
     </section>
     <div class="screen-shade" aria-hidden="true"></div>
@@ -32,13 +30,9 @@
         <span class="handle-line"></span><span class="handle-label" id="handleLabel">MENÚ · DESLIZA O TOCA</span>
       </button>
       <div class="drawer-body" id="drawerBody" hidden>
-        <div class="drawer-title-row"><div><strong>Explora por mundos</strong><small>Desliza hacia los lados para cambiar de menú</small></div><button class="icon-button drawer-close" id="drawerClose" aria-label="Cerrar menú">×</button></div>
+        <div class="drawer-title-row"><div><strong>Explora por mundos</strong><small>Desliza hacia los lados para cambiar de categoría</small></div><button class="icon-button drawer-close" id="drawerClose" aria-label="Cerrar menú">×</button></div>
         <nav class="menu-rail" id="menuRail" aria-label="Categorías">
           <button class="menu-chip active" data-category="principal">✦ Principal</button>
-          <button class="menu-chip" data-category="youtube">▶ YouTube</button>
-          <button class="menu-chip" data-category="tiktok">♪ TikTok</button>
-          <button class="menu-chip" data-category="facebook">f Facebook</button>
-          <button class="menu-chip" data-category="instagram">◎ Instagram</button>
           <button class="menu-chip" data-category="entretenimiento">▶ Entretenimiento</button>
           <button class="menu-chip" data-category="infantil">🧸 Infantil</button>
           <button class="menu-chip" data-category="adultos">🎬 Adultos</button>
@@ -52,12 +46,11 @@
           <button class="menu-chip" data-category="ciencia">🔬 Ciencia</button>
           <button class="menu-chip" data-category="animales">🐾 Animales</button>
           <button class="menu-chip" data-category="curiosidades">✧ Curiosidades</button>
-          <button class="menu-chip" data-category="noticias">◉ Noticias</button>
           <button class="menu-chip" data-category="retos">▦ Retos</button>
           <button class="menu-chip" data-category="guardados">♡ Guardados <span id="savedCount">0</span></button>
         </nav>
         <div class="taste-section">
-          <div class="drawer-title-row"><div><strong>Mis gustos</strong><small>Ayudan a personalizar el orden</small></div><span class="local-tag">SOLO EN ESTE DISPOSITIVO</span></div>
+          <div class="drawer-title-row"><div><strong>Mis gustos</strong><small>Personaliza tu selección</small></div><span class="local-tag">SOLO EN ESTE DISPOSITIVO</span></div>
           <div class="taste-options">
             <label><input type="checkbox" value="ciencia"><span>🔬 Ciencia</span></label>
             <label><input type="checkbox" value="humor"><span>😂 Humor</span></label>
@@ -69,7 +62,7 @@
             <label><input type="checkbox" value="curiosidades"><span>✨ Curiosidades</span></label>
             <label><input type="checkbox" value="retos"><span>🧩 Retos</span></label>
           </div>
-          <p class="drawer-note">“Principal” solo podrá ordenar por más vistos del día cuando una fuente autorizada entregue métricas reales. Esta versión usa contenido de demostración; no inventa cifras de viralidad.</p>
+          <p class="drawer-note">UNIVERSO reproducirá videos propios o autorizados desde su catálogo. Las tarjetas de muestra no son videos virales reales. La popularidad solo se mostrará cuando tengamos métricas comprobables.</p>
         </div>
       </div>
     </section>
