@@ -81,3 +81,11 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .story-card:has(.inapp-player) .story-content{z-index:3;pointer-events:none}
 .story-card:has(.inapp-player) .story-actions,.story-card:has(.inapp-player) .story-actions button{pointer-events:auto}
 .story-card:has(.inapp-player) .story-count{z-index:3}
+
+.story-feed{inset:64px 0 calc(76px + env(safe-area-inset-bottom,0px));padding:8px 12px 28px;scroll-snap-type:none;background:#0b0c13}
+.story-card.discover-card{height:auto;min-height:0;margin:0 auto 14px;max-width:760px;border:1px solid #ffffff18;border-radius:18px;background:#171925;overflow:hidden}
+.discover-card .story-image{position:relative;inset:auto;display:block;width:100%;height:200px;object-fit:cover;opacity:1}
+.discover-card .story-vignette,.discover-card .story-count{display:none}
+.discover-card .story-content{position:relative;inset:auto;max-width:none;margin:0;padding:15px 16px;text-shadow:none}
+.discover-card .story-content h2{font-size:24px;line-height:1.2;margin:0 0 8px}
+.discover-card .story-content p{font-size:14px;line-height:1.5;color:#c7cad8}
