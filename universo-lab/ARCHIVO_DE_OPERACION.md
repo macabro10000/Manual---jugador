@@ -130,3 +130,11 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Cambio realizado únicamente en `lab/universo-frontend`; producción `main` no se modificó.
 - Commit HTML: `3be60497e7cfccef20cfa626c74e4c0654241af2`.
 - Pendiente: confirmar despliegue automático de este cambio en Render.
+
+
+## Corrección de gestos accidentales — 2026-10-09
+- Se endureció la detección del gesto lateral: ahora requiere desplazamiento horizontal de al menos 100 px y una relación horizontal/vertical de 1.8, en vez de 65 px y 1.35.
+- Los gestos que comienzan sobre botones, enlaces, campos, videos o la barra de filtros no cambian de pantalla. Se limpia el gesto si Android cancela el toque.
+- Objetivo: reducir cambios involuntarios de pantalla al intentar recorrer el contenido. Se mantiene la navegación lateral cuando el gesto es claramente horizontal.
+- Commit JS: `6ade6e7839fe9db85fe0dd74c52d3738475f4c9b`.
+- Pendiente: confirmar despliegue en Render y probar con el dedo en Android; no se afirma todavía que la prueba física se haya realizado.
