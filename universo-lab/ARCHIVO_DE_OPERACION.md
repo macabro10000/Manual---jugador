@@ -95,3 +95,10 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - CSS ahora usa `touch-action:none` sobre cada tarjeta para que el navegador no intercepte el gesto vertical antes de que la aplicación pueda interpretarlo. El cambio se limita al feed de laboratorio.
 - Verificación: el archivo JS compila sintácticamente y las tres iteraciones de menú usan NodeList. Se confirmó el despliegue anterior, pero el despliegue de esta reparación debe confirmarse por separado.
 - Commits correctivos: JS 7e94f4d8788c8b010bee8ab4e6b5d3bc1032914f; CSS ef3d7a63d4c13d7c35f951e712ca06f2c7f705a8.
+
+## Categorías de entretenimiento y reproductor integrado — 2026-10-09
+- Se ampliaron las categorías del menú: Entretenimiento, Infantil, Adultos, Dramas chinos, Comedia, Anime, Películas, Música, Deportes, Videojuegos, Ciencia y Animales, conservando las plataformas y secciones anteriores.
+- Se añadió soporte de reproducción integrada para URL de inserción autorizadas de YouTube/Vimeo y el reproductor oficial de TikTok cuando el registro tiene un ID de video real. Los enlaces raíz de las plataformas no son videos y no se convierten mágicamente en reproductores.
+- Limitación importante: el catálogo actual sigue teniendo 9 tarjetas de demostración y no contiene IDs de videos reales ni métricas virales. Por eso esta actualización prepara la interfaz y el reproductor, pero NO crea todavía un feed real de TikTok ni una selección real de los videos más virales. Para eso hacen falta URLs/IDs reales, fuentes oficiales o autorizadas y métricas accesibles. La reproducción integrada depende de que la plataforma permita insertar cada publicación.
+- La categoría Infantil debe tener clasificación y filtros adecuados; la categoría Adultos significa contenido general para público adulto, no contenido sexual explícito.
+- Cambios de interfaz/código en rama laboratorio; producción `main` no se modificó.
