@@ -117,3 +117,10 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .news-filter{flex:0 0 auto;min-height:36px;border:1px solid #343648;border-radius:999px;padding:0 14px;background:#171925;color:#d9dbea;font-size:11px;font-weight:700;white-space:nowrap;cursor:pointer}
 .news-filter.active{background:#eeeaff;color:#211a38;border-color:#eeeaff;box-shadow:0 3px 12px #0003}
 .news-mode .discover-empty{min-height:55vh}
+
+
+/* Lectura accesible de resúmenes en las noticias. */
+.news-mode .story-actions{gap:7px}
+.news-mode .story-action{min-height:40px}
+.news-mode .story-content h2{font-size:clamp(21px,5.8vw,28px);line-height:1.18;letter-spacing:-.35px}
+.news-mode .story-tags span{font-size:9px;letter-spacing:.4px}
