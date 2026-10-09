@@ -217,3 +217,11 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Se añadió `.github/workflows/universo-rss-audit.yml` con disparador manual (`workflow_dispatch`), permisos de contenido de solo lectura y retención del informe como artefacto durante 7 días.
 - La ejecución programada cada 30 minutos NO se activó todavía. Primero hay que ejecutar la auditoría manual y revisar los resultados reales de los feeds. El workflow no se ha declarado probado hasta observar una ejecución satisfactoria.
 - Cambios realizados exclusivamente en `lab/universo-frontend`; sin cambios a `main`, producción, catálogo ni servicios de Render. No se agregaron secretos ni recursos de pago.
+
+
+## Identidad visual VyROX — 2026-10-09
+- Se cambió el nombre visible de la experiencia de UNIVERSO a VyROX en título, metadatos, marca superior, accesibilidad y textos de interfaz.
+- Se diseñó una identidad visual más divertida con gradiente multicolor animado en la «y», una órbita alrededor del símbolo, brillo suave y acentos coral, cian, violeta y amarillo.
+- Las animaciones respetan `prefers-reduced-motion` para usuarios que reducen movimiento.
+- Se mantuvieron los nombres técnicos internos, rutas, archivos, almacenamiento local y el servicio de laboratorio para no romper compatibilidad. El proyecto continúa en `lab/universo-frontend`; no se modificó `main` ni el servicio de producción.
+- Estado: cambios de código aplicados; queda pendiente validar el despliegue en Render y comprobar visualmente la animación en Android. El nombre VyROX es un candidato de marca; su disponibilidad legal todavía debe investigarse.
