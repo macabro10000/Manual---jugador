@@ -147,3 +147,12 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Se mejoró la tipografía de titulares y controles para móvil.
 - Commits: catálogo `66d188f705d7ac77d943159d9fec5a8b05f984ea`; JS `c23ee645e08a96ce4b047a45c7fba17d070e1acb`; CSS `0329434c26ed6cd95c0be2af2820389da7d6b00a`.
 - Pendiente: confirmar despliegue de Render, probar lectura en el teléfono y después automatizar la actualización mediante fuentes RSS/APIs permitidas con tareas programadas. La lectura en voz alta y estos artículos iniciales no equivalen todavía a un robot autónomo que actualiza noticias de forma continua.
+
+
+## Vigencia y orden de noticias — 2026-10-09
+- Se agregó `addedAt` al catálogo para marcar cuándo entró cada noticia al feed. La regla de interfaz excluye noticias con más de 24 horas desde esa marca, incluso si están en Guardados; al expirar, dejan de mostrarse en el feed.
+- Las noticias vigentes se ordenan por fecha de publicación, de más reciente a más antigua, para que las antiguas vayan quedando abajo cuando entren noticias nuevas.
+- El vencimiento se calcula en el navegador y no borra físicamente el registro de `content.json`; para que el catálogo siga lleno después de 24 horas hace falta conectar la automatización de nuevas noticias, que todavía está pendiente.
+- Verificación técnica: `app.js` pasó compilación sintáctica con `new Function`. Cambios solo en `lab/universo-frontend`; producción `main` no se modificó.
+- Commits: expiración inicial `56695ab00975461c2638c8cb6ef29e1f235a35bc`, orden por fecha `455732595995c7917543f0a523bdce25cb98dba5`, catálogo con `addedAt` `6d274a410bd2c89f4d6f864db6a64e24617996b7`, expiración también en Guardados `2bfd9204c32eeade4cdfa023ccb7da1fc9a0c8d6`.
+- Pendiente: confirmar el despliegue de Render y probar la expiración/orden en Android; no se afirma que la prueba física ya se realizó.
