@@ -102,3 +102,12 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Limitación importante: el catálogo actual sigue teniendo 9 tarjetas de demostración y no contiene IDs de videos reales ni métricas virales. Por eso esta actualización prepara la interfaz y el reproductor, pero NO crea todavía un feed real de TikTok ni una selección real de los videos más virales. Para eso hacen falta URLs/IDs reales, fuentes oficiales o autorizadas y métricas accesibles. La reproducción integrada depende de que la plataforma permita insertar cada publicación.
 - La categoría Infantil debe tener clasificación y filtros adecuados; la categoría Adultos significa contenido general para público adulto, no contenido sexual explícito.
 - Cambios de interfaz/código en rama laboratorio; producción `main` no se modificó.
+
+
+## Portada editorial tipo Discover — 2026-10-09
+- Se redujo la navegación visible a Principal, Noticias y descubrimientos, y Guardados. Ya no hay botones separados de YouTube, TikTok, Instagram ni Facebook.
+- Se reescribió `app.js` para eliminar reproductores incrustados de redes sociales, filtrar registros marcados como demostración y mostrar historias editoriales con titular, resumen, fuente, fecha y enlace seguro HTTPS cuando esos datos existan.
+- Se corrigió la estructura del renderizado y se verificó que `app.js` compila sintácticamente; también se comprobó que el menú HTML contiene únicamente las tres secciones indicadas.
+- CSS actualizado para mostrar tarjetas editoriales verticales, más parecidas a un feed de noticias y no a una pantalla de video a pantalla completa.
+- El catálogo disponible solo contiene datos de demostración, que ahora se excluyen deliberadamente. La portada puede mostrar el estado de preparación hasta incorporar noticias reales con fuente y fecha verificables; no afirmar que ya hay noticias en vivo.
+- Rama modificada: `lab/universo-frontend`. Producción `main` no se modificó.
