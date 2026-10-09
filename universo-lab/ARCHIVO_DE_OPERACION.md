@@ -19,8 +19,9 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Interfaz adaptable a móvil con búsqueda local, categorías, guardados en localStorage, compartir enlaces y cambio de tema.
 - Servicio estático de Render creado y primer despliegue reportado como exitoso por los eventos de Render.
 - No requiere backend para la maqueta actual.
-- No hay todavía fuentes de contenido en vivo ni APIs conectadas.
-- Las tarjetas actuales son ejemplos y algunos enlaces apuntan a páginas generales; no presentarlas como noticias o videos reales.
+- `content.json` es ahora el catálogo de contenido independiente de la interfaz; contiene 9 registros de demostración con campos explícitos para categoría, plataforma, tipo, URL canónica, fecha, autor, integración y estado.
+- `app.js` carga `content.json` y valida su estructura básica antes de renderizar. Si falla la carga, muestra un estado de error en vez de inventar contenido.
+- No hay todavía fuentes de contenido en vivo ni APIs conectadas. Los nueve registros siguen marcados como `demo`; varios enlaces son páginas generales y no publicaciones concretas.
 - Los archivos de imágenes locales son opcionales por ahora; la interfaz usa fondos de reserva si faltan.
 - Los guardados se quedan en el navegador del usuario; no hay cuenta ni base de datos.
 
@@ -36,11 +37,15 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 
 ## Próximas tareas
 1. Revisar la página desplegada en un teléfono y corregir cualquier fallo visual o de navegación.
-2. Sustituir tarjetas de ejemplo por un esquema de contenido real, identificando fuente, URL canónica, título, fecha, tipo de integración y permisos de inserción.
+2. Reemplazar los registros de demostración por publicaciones concretas y verificadas, con fecha y fuente comprobables.
 3. Diseñar adaptadores separados por plataforma; empezar por fuentes oficiales y enlaces que no necesiten credenciales.
-4. Investigar qué contenido puede mostrarse legalmente mediante embeds, o requiere API y autorización. No activar APIs con costo sin aprobación.
-5. Añadir pruebas de enlaces, errores de carga y diseño móvil.
+4. Investigar qué contenido puede mostrarse mediante embeds oficiales, o requiere API y autorización. No activar APIs con costo sin aprobación.
+5. Añadir pruebas automatizadas de estructura, enlaces, errores de carga y diseño móvil.
 6. Solo después de revisión, evaluar una publicación controlada; nunca fusionar automáticamente en producción.
 
 ## Último hito
-Se creó el servicio Render `universo-explorador` conectado a la rama `lab/universo-frontend`, con directorio publicado `universo-lab`. Servicio ID: `srv-db4js3id0e5s73ckoed0`. Primer deploy ID: `dep-db4js42d0e5s73ckoh60`.
+- Se creó el servicio Render `universo-explorador` conectado a la rama `lab/universo-frontend`, con directorio publicado `universo-lab`. Servicio ID: `srv-db4js3id0e5s73ckoed0`.
+- Se agregó `content.json` como catálogo independiente y se actualizó `app.js` para cargarlo. Catálogo: 9 registros demo; IDs únicos; campos requeridos presentes; sin campos antiguos `type/source/url/label` en el renderizado.
+- Commit de catálogo: `200335f70fd66b6627e8a984c5a4d4d2f3aa21c0`.
+- Commit de carga del catálogo: `099cd32b99a4970c8082f16524691167da4b6719`.
+- El despliegue automático del commit de `app.js` comenzó; pendiente confirmar el evento final de Render antes de dar el despliegue por terminado.
