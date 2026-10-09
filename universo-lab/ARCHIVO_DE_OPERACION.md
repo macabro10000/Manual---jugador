@@ -111,3 +111,14 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - CSS actualizado para mostrar tarjetas editoriales verticales, más parecidas a un feed de noticias y no a una pantalla de video a pantalla completa.
 - El catálogo disponible solo contiene datos de demostración, que ahora se excluyen deliberadamente. La portada puede mostrar el estado de preparación hasta incorporar noticias reales con fuente y fecha verificables; no afirmar que ya hay noticias en vivo.
 - Rama modificada: `lab/universo-frontend`. Producción `main` no se modificó.
+
+
+## Tres pantallas laterales — 2026-10-09
+- Se definió la navegación principal en tres pantallas: Principal · Videos, Noticias y Estados. Guardados queda como utilidad adicional y no forma parte del recorrido lateral.
+- El gesto horizontal sobre el feed cambia entre Noticias ↔ Principal ↔ Estados; dentro de Principal, los videos se recorren verticalmente. Las noticias conservan tarjetas editoriales verticales.
+- Principal incluye una herramienta de prueba local para elegir hasta tres archivos de video del teléfono y reproducirlos con el reproductor HTML5 integrado. Los archivos se usan mediante URL temporales del navegador, no se suben al servidor ni se comparten con otros usuarios; al cambiar los archivos se liberan las URL temporales anteriores.
+- Estados tiene una pantalla inicial honesta. La publicación y visualización de estados entre usuarios requiere una futura capa de cuentas y almacenamiento; no se simula una comunidad activa.
+- Las noticias siguen filtrando los registros de demostración. No hay todavía fuentes reales conectadas ni titulares inventados.
+- Cambios aplicados únicamente en `lab/universo-frontend`; no se modificó `main` ni el servicio `manual-jugador`.
+- Commits de esta etapa: HTML `2ff0fbc28764e13d04f847b0b1b84c716eb89217`, JS `88b1b5427fc5939f46c0f79f63f0fa227a5042cb`, CSS `57d4bd6f7bb5cc85f946729b721501c74d7e25c7`.
+- Verificación técnica: `app.js` pasó compilación sintáctica con `new Function`; se confirmó presencia del gesto horizontal y del selector local de videos. Pendiente: confirmar despliegue final y probar el gesto y reproducción en el navegador Android real.
