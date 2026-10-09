@@ -156,3 +156,11 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Verificación técnica: `app.js` pasó compilación sintáctica con `new Function`. Cambios solo en `lab/universo-frontend`; producción `main` no se modificó.
 - Commits: expiración inicial `56695ab00975461c2638c8cb6ef29e1f235a35bc`, orden por fecha `455732595995c7917543f0a523bdce25cb98dba5`, catálogo con `addedAt` `6d274a410bd2c89f4d6f864db6a64e24617996b7`, expiración también en Guardados `2bfd9204c32eeade4cdfa023ccb7da1fc9a0c8d6`.
 - Pendiente: confirmar el despliegue de Render y probar la expiración/orden en Android; no se afirma que la prueba física ya se realizó.
+
+
+## Legibilidad de tarjetas de noticias — 2026-10-09
+- Diagnóstico del código: las tarjetas sin imagen mostraban un pictograma de reserva grande (▤) dentro de `.story-fallback`, con apariencia de cuadro rayado detrás del contenido. No aporta información y compite visualmente con el titular/resumen.
+- Corrección: ocultar ese pictograma solo en Noticias y Guardados; se conserva el fondo oscuro de la tarjeta para mantener contraste y legibilidad. No se alteran imágenes reales ni la estructura del texto.
+- Cambio únicamente en `lab/universo-frontend`; no se modificó `main` ni producción.
+- Commit CSS: `f163fd0e99b9168e81513f2016b88ab87169db74`.
+- Pendiente: comprobar que Render publique este commit y revisar visualmente en el navegador Android; no se afirma que la pantalla física ya haya sido verificada.
