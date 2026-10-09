@@ -88,3 +88,10 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Validación técnica: JavaScript pasó compilación sintáctica con `new Function`; se verificaron IDs de interfaz y se guardó el código solo en la rama lab/universo-frontend.
 - Commits de esta iteración: HTML 28f3b5ba22be1bb71e4c7f50e5bc11553c31fd2a, CSS 09d0244abd1f56ff09e2a8e0aa1af65af78643d3, JS 84d4c3798da344eb7b055847bd10a1dd3c65cd84.
 - Pendiente de esta iteración: confirmar el despliegue del último commit en Render y validar los gestos en el navegador táctil. La prueba sintáctica no sustituye la comprobación en dispositivo real.
+
+## Reparación de funcionalidad — 2026-10-09
+- Causa raíz encontrada: tres lugares trataban el resultado de `querySelector(".menu-chip")` (un solo elemento) como si fuera una lista y llamaban `.forEach`. En `updateTopCategory()` eso podía detener el render inicial antes de mostrar las tarjetas; además, los botones de categorías no quedaban enlazados. Se corrigió para usar `querySelectorAll(".menu-chip")` en los tres puntos.
+- Se reemplazó el manejo incompleto de gestos por Pointer Events explícitos: arriba avanza una tarjeta; abajo vuelve una tarjeta; izquierda avanza categoría; derecha retrocede categoría. Se excluyen botones y enlaces para preservar sus clics.
+- CSS ahora usa `touch-action:none` sobre cada tarjeta para que el navegador no intercepte el gesto vertical antes de que la aplicación pueda interpretarlo. El cambio se limita al feed de laboratorio.
+- Verificación: el archivo JS compila sintácticamente y las tres iteraciones de menú usan NodeList. Se confirmó el despliegue anterior, pero el despliegue de esta reparación debe confirmarse por separado.
+- Commits correctivos: JS 7e94f4d8788c8b010bee8ab4e6b5d3bc1032914f; CSS ef3d7a63d4c13d7c35f951e712ca06f2c7f705a8.
