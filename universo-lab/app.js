@@ -63,8 +63,20 @@
       const source=esc(item.sourceLabel||"Fuente");
       const date=item.publishedAt?'<time>'+esc(item.publishedAt)+'</time>':"";
       const link=url?'<a class="story-action primary" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Ver noticia original ↗</a>':"";
-      return '<article class="story-card discover-card" data-story="'+esc(item.id)+'">'+image+'<div class="story-fallback" '+(image?'hidden':'')+'>▤</div><div class="story-content"><div class="story-source"><span class="source-dot"></span>'+source+' '+date+'</div><h2>'+esc(item.title)+'</h2><p>'+esc(item.description)+'</p><div class="story-tags"><span>'+esc(item.category||"noticias")+'</span></div><div class="story-actions"><button class="story-action '+(sig.like?"liked":"")+'" data-like="'+esc(item.id)+'">'+(sig.like?"♥ Me interesa":"♡ Me interesa")+'</button><button class="story-action '+(saved.includes(item.id)?"saved":"")+'" data-save="'+esc(item.id)+'">'+(saved.includes(item.id)?"♥ Guardado":"＋ Guardar")+'</button>'+link+'</div></div></article>';
+      return '<article class="story-card discover-card" data-story="'+esc(item.id)+'">'+image+'<div class="story-fallback" '+(image?'hidden':'')+'>▤</div><div class="story-content"><div class="story-source"><span class="source-dot"></span>'+source+' '+date+'</div><h2>'+esc(item.title)+'</h2><p>'+esc(item.description)+'</p><div class="story-tags"><span>'+esc(item.category||"noticias")+'</span><span>RESUMEN VERIFICADO</span></div><div class="story-actions"><button type="button" class="story-action" data-speak="'+esc(item.id)+'">▶ Escuchar</button><button class="story-action '+(sig.like?"liked":"")+'" data-like="'+esc(item.id)+'">'+(sig.like?"♥ Me interesa":"♡ Me interesa")+'</button><button class="story-action '+(saved.includes(item.id)?"saved":"")+'" data-save="'+esc(item.id)+'">'+(saved.includes(item.id)?"♥ Guardado":"＋ Guardar")+'</button>'+link+'</div></div></article>';
     }).join("");
+    $("[data-speak]").forEach(btn=>btn.addEventListener("click",()=>{
+      const item=items.find(x=>x.id===btn.dataset.speak);
+      if(!item)return;
+      if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){toast("Este navegador no permite lectura en voz alta");return}
+      if(window.speechSynthesis.speaking){window.speechSynthesis.cancel();if(btn.dataset.speaking==="true"){btn.dataset.speaking="false";btn.textContent="▶ Escuchar";return}}
+      $("[data-speak]").forEach(b=>{b.dataset.speaking="false";b.textContent="▶ Escuchar"});
+      const utterance=new SpeechSynthesisUtterance(item.title+". "+item.description);
+      utterance.lang="es-CO";utterance.rate=0.96;
+      btn.dataset.speaking="true";btn.textContent="Ⅱ Detener";
+      utterance.onend=utterance.onerror=()=>{btn.dataset.speaking="false";btn.textContent="▶ Escuchar"};
+      window.speechSynthesis.speak(utterance);
+    }));
     $("[data-news-filter]").forEach(btn=>btn.addEventListener("click",()=>{newsFilter=btn.dataset.newsFilter;render();$("#storyFeed").scrollTo({top:0,behavior:"smooth"})}));
     $("[data-like]").forEach(btn=>btn.addEventListener("click",()=>{const id=btn.dataset.like;const sig=signals[id]||{};sig.like=sig.like?0:1;signals[id]=sig;persist(KEYS.signals,signals);render()}));
     $$("[data-save]").forEach(btn=>btn.addEventListener("click",()=>{const id=btn.dataset.save;saved=saved.includes(id)?saved.filter(x=>x!==id):[...saved,id];persist(KEYS.saved,saved);render()}));
