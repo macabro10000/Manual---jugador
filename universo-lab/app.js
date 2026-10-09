@@ -1,189 +1,66 @@
 (() => {
   "use strict";
-  const $ = (selector, root=document) => root.querySelector(selector);
-  const $$ = (selector, root=document) => [...root.querySelectorAll(selector)];
+  const $ = (s, root=document) => root.querySelector(s);
+  const $$ = (s, root=document) => [...root.querySelectorAll(s)];
   const KEYS = {saved:"universo_saved_v1", tastes:"universo_tastes_v1", signals:"universo_signals_v1"};
+  const CATEGORIES = ["principal","descubrimientos","guardados"];
+  const NAMES = {principal:"Principal",descubrimientos:"Noticias y descubrimientos",guardados:"Guardados"};
   const TOPICS = {
-    ciencia:["ciencia","espacio","científico","científicos","naturaleza","descubrimiento"],
+    ciencia:["ciencia","espacio","científico","naturaleza","descubrimiento","astronomía"],
     humor:["humor","gracioso","risa","comedia","divertido"],
-    animales:["animal","animales","perro","gato","fauna","comportamiento animal"],
+    animales:["animal","animales","perro","gato","fauna"],
     tecnologia:["tecnología","tecnologia","robot","inteligencia artificial","digital"],
-    mundo:["mundo","país","países","actualidad","historia"],
-    deportes:["deporte","deportes","fútbol","futbol","baloncesto","atleta"],
-    musica:["música","musica","canción","cancion","cantante","concierto"],
-    curiosidades:["curiosidad","curiosidades","sorprendente","pregunta","formas en las nubes","parecen de otro planeta"],
-    retos:["reto","retos","resolver","patrón","patron","prueba"]
+    mundo:["mundo","país","países","actualidad","historia","noticia"],
+    deportes:["deporte","deportes","fútbol","baloncesto","atleta"],
+    musica:["música","musica","canción","cantante","concierto"],
+    curiosidades:["curiosidad","curiosidades","sorprendente","pregunta"]
   };
-  const CATEGORY_ORDER=["principal","entretenimiento","infantil","adultos","dramas-chinos","comedia","anime","peliculas","musica","deportes","videojuegos","ciencia","animales","curiosidades","retos","guardados"];
-  const CATEGORY_NAMES={principal:"Principal",entretenimiento:"Entretenimiento",infantil:"Infantil",adultos:"Adultos","dramas-chinos":"Dramas chinos",comedia:"Comedia",anime:"Anime",peliculas:"Películas",musica:"Música",deportes:"Deportes",videojuegos:"Videojuegos",ciencia:"Ciencia",animales:"Animales",curiosidades:"Curiosidades",retos:"Retos",guardados:"Guardados"};
-  let items=[], category="principal", search="", saved=readArray(KEYS.saved,[]), tastes=readArray(KEYS.tastes,[]), signals=readObject(KEYS.signals,{}), drawerOpen=false;
-  function readArray(key,fallback){try{const value=JSON.parse(localStorage.getItem(key)||"null");return Array.isArray(value)?value:fallback}catch{return fallback}}
-  function readObject(key,fallback){try{const value=JSON.parse(localStorage.getItem(key)||"null");return value&&typeof value==="object"&&!Array.isArray(value)?value:fallback}catch{return fallback}}
-  function persist(key,value){try{localStorage.setItem(key,JSON.stringify(value))}catch{}}
-  function esc(value){return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]))}
-  function normalized(value){return String(value||"").toLocaleLowerCase("es").normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
-  function textOf(item){return normalized([item.title,item.description,item.category,item.sourcePlatform,item.sourceLabel,item.contentType,...(item.tags||[])].join(" "))}
-  function score(item){
-    const text=textOf(item);let points=0;
-    tastes.forEach(taste=>{
-      const terms=TOPICS[taste]||[taste];
-      if(terms.some(term=>text.includes(normalized(term))))points+=4;
-    });
-    const s=signals[item.id]||{};
-    points+=(s.like?8:0)+(s.open||0)*1.5+(s.save||0)*3-(s.skip||0)*7;
-    if(saved.includes(item.id))points+=3;
-    return points;
-  }
-  function verifiedViral(item){return item.contentStatus==="verified"&&Number.isFinite(item.viralScore)}
-  function sortPrincipal(list){
-    return list.sort((a,b)=>{
-      const av=verifiedViral(a),bv=verifiedViral(b);
-      if(av!==bv)return av?-1:1;
-      if(av&&bv&&a.viralScore!==b.viralScore)return b.viralScore-a.viralScore;
-      return score(b)-score(a);
-    });
-  }
-  function categoryMatches(item){
-    if(category==="principal")return true;
-    if(category==="guardados")return saved.includes(item.id);
-    if(category==="entretenimiento")return ["infantil","adultos","dramas-chinos","comedia","anime","peliculas"].includes(normalized(item.category));
-    return normalized(item.category)===category;
-  }
-  function localVideoUrl(value){
-    if(typeof value!=="string"||value.includes("..")||value.includes("\\"))return "";
-    return /^assets\/videos\/[A-Za-z0-9._/-]+\.(mp4|webm|ogv)$/i.test(value)?value:"";
-  }
+  let items=[], category="principal", search="", saved=readArray(KEYS.saved), tastes=readArray(KEYS.tastes), signals=readObject(KEYS.signals), drawerOpen=false;
+  function readArray(k){try{const v=JSON.parse(localStorage.getItem(k)||"[]");return Array.isArray(v)?v:[]}catch{return []}}
+  function readObject(k){try{const v=JSON.parse(localStorage.getItem(k)||"{}");return v&&typeof v==="object"&&!Array.isArray(v)?v:{}}catch{return {}}}
+  function persist(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+  function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+  function norm(v){return String(v||"").toLocaleLowerCase("es").normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+  function searchable(item){return norm([item.title,item.description,item.category,item.sourceLabel,item.contentType,...(item.tags||[])].join(" "))}
+  function score(item){let n=0;const text=searchable(item);tastes.forEach(t=>{if((TOPICS[t]||[t]).some(word=>text.includes(norm(word))))n+=4});const s=signals[item.id]||{};return n+(s.like?8:0)+(s.open||0)*1.5+(s.save||0)*3-(s.skip||0)*7+(saved.includes(item.id)?3:0)}
+  function safeUrl(value){try{const u=new URL(value);return u.protocol==="https:"?u.href:""}catch{return ""}}
+  function matches(item){if(category==="guardados")return saved.includes(item.id);if(category==="principal")return true;return ["noticias","ciencia","tecnologia","mundo","curiosidades","animales","deportes","musica","humor"].includes(norm(item.category))||norm(item.category)==="descubrimientos"}
   function render(){
-    updateTopCategory();
-    let list=items.filter(item=>categoryMatches(item)&&textOf(item).includes(normalized(search)));
-    if(category==="principal")list=sortPrincipal(list);
-    else list.sort((a,b)=>score(b)-score(a));
+    updateCategory();
+    let list=items.filter(x=>matches(x)&&searchable(x).includes(norm(search))).sort((a,b)=>score(b)-score(a));
     $("#savedCount").textContent=String(saved.length);
-    $$(".menu-chip").forEach(button=>button.classList.toggle("active",button.dataset.category===category));
-    $("#feedStatus").textContent=list.length?"CATÁLOGO PROPIO":"CATÁLOGO EN PREPARACIÓN";
+    $$(".menu-chip").forEach(btn=>btn.classList.toggle("active",btn.dataset.category===category));
+    $("#feedStatus").textContent=list.length?"DESCUBRIMIENTOS":"CATÁLOGO EN PREPARACIÓN";
     if(!list.length){
-      $("#storyFeed").innerHTML='<section class="empty-state"><span class="empty-symbol">✧</span><h2>'+esc(emptyTitle())+'</h2><p>'+esc(emptyMessage())+'</p><button type="button" id="clearFilter">Volver a Principal</button></section>';
-      $("#clearFilter").addEventListener("click",()=>{category="principal";search="";$("#searchInput").value="";render();closeDrawer();scrollToFirst()});
+      $("#storyFeed").innerHTML='<section class="empty-state discover-empty"><span class="empty-symbol">✦</span><h2>'+esc(category==="guardados"?"Tus historias guardadas aparecerán aquí":search?"No encontramos resultados":"Estamos preparando tu portada")+'</h2><p>'+esc(search?"Prueba otra palabra.":"UNIVERSO tendrá noticias importantes, ciencia, tecnología, naturaleza y curiosidades en tarjetas dentro de esta pantalla. Estamos incorporando fuentes verificables; no mostraremos titulares inventados.")+'</p>'+(category!=="principal"?'<button type="button" id="goHome">Ir a Principal</button>':'<span class="empty-note">PRINCIPAL · NOTICIAS · CIENCIA · CURIOSIDADES</span>')+'</section>';
+      $("#goHome")?.addEventListener("click",()=>setCategory("principal"));
       return;
     }
-    $("#storyFeed").innerHTML=list.map((item,index)=>{
-      const s=signals[item.id]||{};
-      const isSaved=saved.includes(item.id);
-      const videoUrl=localVideoUrl(item.videoUrl);
-      const status=verifiedViral(item)?"POPULARIDAD VERIFICADA":videoUrl?"VIDEO DEL CATÁLOGO":"VIDEO PENDIENTE";
-      const image=item.image?'<img class="story-image" src="'+esc(item.image)+'" alt="" loading="'+(index<2?"eager":"lazy")+'" onerror="this.style.display=\\'none\\';this.nextElementSibling.hidden=false">':'';
-      const topic=esc(item.category||"descubrimiento");
-      const source=esc(item.sourceLabel||"UNIVERSO");
-      const player=videoUrl?'<div class="inapp-player"><video controls playsinline preload="metadata" title="'+esc(item.title)+'"><source src="'+esc(videoUrl)+'" type="video/'+(videoUrl.toLowerCase().endsWith(".webm")?"webm":videoUrl.toLowerCase().endsWith(".ogv")?"ogg":"mp4")+'">Tu navegador no puede reproducir este video.</video></div>':'';
-      return '<article class="story-card" data-story="'+esc(item.id)+'">'+player+image+'<div class="story-fallback" '+(image||player?'hidden':'')+'>'+esc(item.symbol||"✦")+'</div><div class="story-vignette"></div><div class="story-count" aria-hidden="true">'+list.map((_,dot)=>'<span class="'+(dot===index?"active":"")+'"></span>').join("")+'</div><div class="story-content"><div class="story-source"><span class="source-dot"></span>'+source+' <span class="demo-badge">'+status+'</span></div><h1>'+esc(item.title)+'</h1><p>'+esc(item.description)+'</p><div class="story-tags"><span>'+topic+'</span><span>'+esc(item.contentType||"VIDEO")+'</span>'+(item.duration?'<span>'+esc(item.duration)+'</span>':'')+'</div><div class="story-actions"><button class="story-action '+(s.like?"liked":"")+'" data-like="'+esc(item.id)+'">'+(s.like?"♥ Te interesa":"♡ Me interesa")+'</button><button class="story-action '+(isSaved?"saved":"")+'" data-save="'+esc(item.id)+'">'+(isSaved?"♥ Guardado":"＋ Guardar")+'</button><button class="story-action" data-next="'+esc(item.id)+'">Siguiente ↓</button>'+</div></div></article>';
+    $("#storyFeed").innerHTML=list.map((item,i)=>{
+      const sig=signals[item.id]||{};
+      const image=item.image?'<img class="story-image" src="'+esc(item.image)+'" alt="" loading="lazy" onerror="this.hidden=true">':'';
+      const url=safeUrl(item.canonicalUrl);
+      const source=esc(item.sourceLabel||"Fuente verificada");
+      const date=item.publishedAt?'<time>'+esc(item.publishedAt)+'</time>':"";
+      const link=url?'<a class="story-action primary" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Leer fuente ↗</a>':"";
+      return '<article class="story-card discover-card" data-story="'+esc(item.id)+'">'+image+'<div class="story-fallback" '+(image?'hidden':'')+'>'+esc(item.symbol||"✦")+'</div><div class="story-content"><div class="story-source"><span class="source-dot"></span>'+source+' '+date+'</div><h2>'+esc(item.title)+'</h2><p>'+esc(item.description)+'</p><div class="story-tags"><span>'+esc(item.category||"descubrimiento")+'</span><span>'+esc(item.contentType||"LECTURA")+'</span></div><div class="story-actions"><button class="story-action '+(sig.like?"liked":"")+'" data-like="'+esc(item.id)+'">'+(sig.like?"♥ Me interesa":"♡ Me interesa")+'</button><button class="story-action '+(saved.includes(item.id)?"saved":"")+'" data-save="'+esc(item.id)+'">'+(saved.includes(item.id)?"♥ Guardado":"＋ Guardar")+'</button>'+link+'</div></div></article>';
     }).join("");
-    $$("[data-like]").forEach(button=>button.addEventListener("click",()=>{
-      const id=button.dataset.like;const signal=signals[id]||{open:0,like:0,skip:0,save:0};signal.like=signal.like?0:1;signals[id]=signal;persist(KEYS.signals,signals);toast(signal.like?"Preferencia guardada":"Preferencia retirada");renderKeepPosition(id);
-    }));
-    $$("[data-save]").forEach(button=>button.addEventListener("click",()=>{
-      const id=button.dataset.save;
-      saved=saved.includes(id)?saved.filter(value=>value!==id):[...saved,id];persist(KEYS.saved,saved);
-      const signal=signals[id]||{open:0,like:0,skip:0,save:0};signal.save=saved.includes(id)?1:0;signals[id]=signal;persist(KEYS.signals,signals);
-      renderKeepPosition(id);
-    }));
-    $$("[data-next]").forEach(button=>button.addEventListener("click",()=>{
-      const current=button.dataset.next;const signal=signals[current]||{open:0,like:0,skip:0,save:0};signal.skip=(signal.skip||0)+1;signals[current]=signal;persist(KEYS.signals,signals);
-      const card=button.closest(".story-card");const next=card?.nextElementSibling;
-      if(next)next.scrollIntoView({behavior:"smooth",block:"start"});else toast("Llegaste al final de esta selección.");
-    }));
+    $$("[data-like]").forEach(btn=>btn.addEventListener("click",()=>{const id=btn.dataset.like;const sig=signals[id]||{};sig.like=sig.like?0:1;signals[id]=sig;persist(KEYS.signals,signals);render()}));
+    $$("[data-save]").forEach(btn=>btn.addEventListener("click",()=>{const id=btn.dataset.save;saved=saved.includes(id)?saved.filter(x=>x!==id):[...saved,id];persist(KEYS.saved,saved);render()}));
   }
-  function updateTopCategory(){
-    const label=$("#topCategoryName");if(!label)return;
-    const next=CATEGORY_NAMES[category]||category;
-    if(label.textContent!==next){const pill=$("#topCategory");pill?.classList.add("changing");label.textContent=next;document.title="UNIVERSO — "+next;window.setTimeout(()=>pill?.classList.remove("changing"),180)}
-    $$(".menu-chip").forEach(button=>button.setAttribute("aria-current",button.dataset.category===category?"page":"false"));
-    const active=$(".menu-chip.active");if(active&&drawerOpen)active.scrollIntoView({block:"nearest",inline:"nearest",behavior:"smooth"});
-  }
-  function setCategory(next){
-    const index=CATEGORY_ORDER.indexOf(category);const target=CATEGORY_ORDER.indexOf(next);
-    if(target<0)return;category=next;render();scrollToFirst();
-    const active=$(".menu-chip.active");if(active)active.scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"});
-    toast(CATEGORY_NAMES[category]||category);
-  }
-  function changeCategoryBySwipe(direction){
-    const index=CATEGORY_ORDER.indexOf(category);const nextIndex=Math.max(0,Math.min(CATEGORY_ORDER.length-1,index+direction));
-    if(nextIndex!==index)setCategory(CATEGORY_ORDER[nextIndex]);
-  }
-  function renderKeepPosition(id){const old=$("#storyFeed [data-story='"+CSS.escape(id)+"']");const index=old?Array.from(old.parentElement.children).indexOf(old):0;render();const card=$("#storyFeed").children[Math.max(0,index)];if(card)card.scrollIntoView({behavior:"auto",block:"start"})}
-  function emptyTitle(){return category==="guardados"?"Todavía no has guardado ningún video":"Todavía estamos preparando esta categoría"}
-  function emptyMessage(){return search?"Prueba con otra palabra o vuelve a Principal.":"UNIVERSO ya no carga reproductores de YouTube ni otras redes. Aquí aparecerán videos propios o autorizados cuando agreguemos archivos ligeros al catálogo."}
-  function scrollToFirst(){const first=$("#storyFeed").firstElementChild;if(first)first.scrollIntoView({behavior:"smooth",block:"start"})}
-  function toast(message){const el=$("#toast");el.textContent=message;el.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove("show"),2100)}
-  function openDrawer(){drawerOpen=true;$("#drawerBody").hidden=false;$("#drawerToggle").setAttribute("aria-expanded","true");$("#handleLabel").textContent="CERRAR MENÚ · TOCA LA RAYITA";$("#bottomDrawer").classList.add("expanded")}
-  function closeDrawer(){drawerOpen=false;$("#drawerBody").hidden=true;$("#drawerToggle").setAttribute("aria-expanded","false");$("#handleLabel").textContent="MENÚ · DESLIZA O TOCA";$("#bottomDrawer").classList.remove("expanded")}
+  function updateCategory(){const label=$("#topCategoryName");if(label)label.textContent=NAMES[category]||NAMES.principal;document.title="UNIVERSO — "+(NAMES[category]||NAMES.principal);$$(".menu-chip").forEach(b=>b.setAttribute("aria-current",b.dataset.category===category?"page":"false"))}
+  function setCategory(next){if(!CATEGORIES.includes(next))return;category=next;render();$("#storyFeed").scrollTo({top:0,behavior:"smooth"})}
+  function openDrawer(){drawerOpen=true;$("#drawerBody").hidden=false;$("#drawerToggle").setAttribute("aria-expanded","true");$("#handleLabel").textContent="CERRAR MENÚ";$("#bottomDrawer").classList.add("expanded")}
+  function closeDrawer(){drawerOpen=false;$("#drawerBody").hidden=true;$("#drawerToggle").setAttribute("aria-expanded","false");$("#handleLabel").textContent="MENÚ · TOCA PARA EXPLORAR";$("#bottomDrawer").classList.remove("expanded")}
   $("#drawerToggle").addEventListener("click",()=>drawerOpen?closeDrawer():openDrawer());
-  // Gestos explícitos con Pointer Events: funciona con dedo y ratón.
-  // Se excluyen botones/enlaces para no romper sus acciones.
-  const feed=$("#storyFeed");feed.classList.add("gesture-enabled");
-  let pointerStart=null,lastGestureAt=0;
-  feed.addEventListener("pointerdown",event=>{
-    if(event.button!==undefined&&event.button!==0)return;
-    if(event.target.closest("button,a,input,label"))return;
-    pointerStart={id:event.pointerId,x:event.clientX,y:event.clientY,target:event.target};
-  });
-  feed.addEventListener("pointerup",event=>{
-    if(!pointerStart||event.pointerId!==pointerStart.id)return;
-    const origin=pointerStart,dx=event.clientX-origin.x,dy=event.clientY-origin.y;pointerStart=null;
-    const ax=Math.abs(dx),ay=Math.abs(dy);
-    if(Math.max(ax,ay)<45)return;
-    const now=Date.now();if(now-lastGestureAt<260)return;lastGestureAt=now;
-    if(ax>ay*1.2&&ax>55){
-      changeCategoryBySwipe(dx<0?1:-1);
-    }else if(ay>ax*1.15&&ay>45){
-      const cards=$$(".story-card",feed);if(!cards.length)return;
-      const current=origin.target.closest(".story-card");
-      let index=current?cards.indexOf(current):Math.round(feed.scrollTop/Math.max(feed.clientHeight,1));
-      if(index<0)index=0;
-      const nextIndex=Math.max(0,Math.min(cards.length-1,index+(dy<0?1:-1)));
-      if(nextIndex!==index){cards[nextIndex].scrollIntoView({behavior:"smooth",block:"start"});recordOpen(cards[nextIndex].dataset.story)}
-    }
-  });
-  feed.addEventListener("pointercancel",()=>{pointerStart=null});
-  function recordOpen(id){
-    if(!id)return;const signal=signals[id]||{open:0,like:0,skip:0,save:0};
-    signal.open=(signal.open||0)+1;signals[id]=signal;persist(KEYS.signals,signals);
-  }
-  let handleStartY=null;
-  $("#drawerToggle").addEventListener("pointerdown",event=>{handleStartY=event.clientY});
-  $("#drawerToggle").addEventListener("pointerup",event=>{
-    if(handleStartY===null)return;const dy=event.clientY-handleStartY;handleStartY=null;
-    if(dy < -18)openDrawer();else if(dy > 18)closeDrawer();
-  });
   $("#drawerClose").addEventListener("click",closeDrawer);
-  $$(".menu-chip").forEach(button=>button.addEventListener("click",()=>{
-    setCategory(button.dataset.category);closeDrawer();
-  }));
-  $("#searchToggle").addEventListener("click",()=>{const panel=$("#searchPanel");panel.hidden=!panel.hidden;if(!panel.hidden)$("#searchInput").focus()});
+  $$(".menu-chip").forEach(btn=>btn.addEventListener("click",()=>{setCategory(btn.dataset.category);closeDrawer()}));
+  $("#searchToggle").addEventListener("click",()=>{const p=$("#searchPanel");p.hidden=!p.hidden;if(!p.hidden)$("#searchInput").focus()});
   $("#searchClose").addEventListener("click",()=>{search="";$("#searchInput").value="";$("#searchPanel").hidden=true;render()});
-  $("#searchInput").addEventListener("input",event=>{search=event.target.value.trim();render()});
-  $$("#drawerBody input[type=checkbox]").forEach(input=>{
-    input.checked=tastes.includes(input.value);
-    input.addEventListener("change",()=>{
-      tastes=$$("#drawerBody input[type=checkbox]:checked").map(el=>el.value);persist(KEYS.tastes,tastes);
-      if(category==="principal")render();
-      toast(tastes.length?"Tus gustos están actualizados":"Se mostrarán todos los temas");
-    });
-  });
-  document.addEventListener("keydown",event=>{if(event.key==="Escape"){if(drawerOpen)closeDrawer();else if(!$("#searchPanel").hidden)$("#searchPanel").hidden=true}});
-  async function loadContent(){
-    try{
-      const response=await fetch("./content.json",{cache:"no-store"});
-      if(!response.ok)throw new Error("HTTP "+response.status);
-      const data=await response.json();
-      if(!data||!Array.isArray(data.items))throw new Error("Formato de catálogo inválido");
-      const seen=new Set();
-      items=data.items.filter(item=>item&&typeof item.id==="string"&&typeof item.title==="string"&&localVideoUrl(item.videoUrl)&&!seen.has(item.id)&&seen.add(item.id));
-      render();
-    }catch(error){
-      $("#storyFeed").innerHTML='<section class="empty-state"><span class="empty-symbol">!</span><h2>No pudimos cargar el catálogo</h2><p>Comprueba la conexión y vuelve a intentarlo. No se mostrará contenido inventado.</p><button type="button" id="retryLoad">Reintentar</button></section>';
-      $("#retryLoad").addEventListener("click",loadContent);
-      console.error("UNIVERSO: error al cargar content.json",error);
-    }
-  }
+  $("#searchInput").addEventListener("input",e=>{search=e.target.value.trim();render()});
+  $$("#drawerBody input[type=checkbox]").forEach(input=>{input.checked=tastes.includes(input.value);input.addEventListener("change",()=>{tastes=$$("#drawerBody input[type=checkbox]:checked").map(x=>x.value);persist(KEYS.tastes,tastes);render()})});
+  $("#storyFeed").addEventListener("click",e=>{const card=e.target.closest("[data-story]");if(card&& !e.target.closest("button,a")){const sig=signals[card.dataset.story]||{};sig.open=(sig.open||0)+1;signals[card.dataset.story]=sig;persist(KEYS.signals,signals)}});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(drawerOpen)closeDrawer();else $("#searchPanel").hidden=true}});
+  async function loadContent(){try{const r=await fetch("./content.json",{cache:"no-store"});if(!r.ok)throw Error("HTTP "+r.status);const data=await r.json();if(!data||!Array.isArray(data.items))throw Error("Formato de catálogo inválido");const seen=new Set();items=data.items.filter(x=>x&&typeof x.id==="string"&&typeof x.title==="string"&&x.contentStatus!=="demo"&&!seen.has(x.id)&&seen.add(x.id));render()}catch(error){$("#storyFeed").innerHTML='<section class="empty-state"><span class="empty-symbol">!</span><h2>No pudimos cargar las noticias</h2><p>Comprueba la conexión e inténtalo de nuevo.</p><button type="button" id="retryLoad">Reintentar</button></section>';$("#retryLoad").addEventListener("click",loadContent);console.error("UNIVERSO catalog error",error)}}
   loadContent();
 })();
