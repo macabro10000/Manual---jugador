@@ -16,6 +16,25 @@
   <header class="topbar">
     <a class="brand" href="#" aria-label="Universo inicio"><span class="brand-orbit">✦</span><span>UNIVERSO<small>DESCUBRE ALGO NUEVO</small></span></a>
     <label class="search"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Busca videos, noticias, ideas…" aria-label="Buscar contenido"><kbd>↵</kbd></label>
+    <div class="taste-wrap">
+      <button class="taste-button" id="tasteToggle" aria-expanded="false" aria-controls="tasteMenu">☷ <span>Mis gustos</span></button>
+      <section class="taste-menu" id="tasteMenu" hidden>
+        <div class="taste-menu-head"><div><strong>Tu universo personal</strong><small>Elige qué quieres descubrir</small></div><button id="tasteClose" class="taste-close" aria-label="Cerrar preferencias">×</button></div>
+        <p class="taste-caption">Temas que te interesan</p>
+        <div class="taste-options">
+          <label><input type="checkbox" value="ciencia"><span>🔬 Ciencia</span></label>
+          <label><input type="checkbox" value="humor"><span>😂 Humor</span></label>
+          <label><input type="checkbox" value="animales"><span>🐾 Animales</span></label>
+          <label><input type="checkbox" value="tecnologia"><span>🤖 Tecnología</span></label>
+          <label><input type="checkbox" value="mundo"><span>🌍 Mundo</span></label>
+          <label><input type="checkbox" value="deportes"><span>⚽ Deportes</span></label>
+          <label><input type="checkbox" value="musica"><span>🎵 Música</span></label>
+          <label><input type="checkbox" value="curiosidades"><span>✨ Curiosidades</span></label>
+          <label><input type="checkbox" value="retos"><span>🧩 Retos</span></label>
+        </div>
+        <div class="taste-menu-foot"><span id="tasteStatus">Preferencias guardadas en este dispositivo</span><button class="primary-btn" id="tasteApply">Personalizar mi universo →</button></div>
+      </section>
+    </div>
     <button class="round-btn" id="themeButton" aria-label="Cambiar tema" title="Cambiar tema">◐</button>
   </header>
 
@@ -58,6 +77,10 @@
     </section>
     <footer><a class="brand footer-brand" href="#"><span class="brand-orbit">✦</span><span>UNIVERSO<small>DESCUBRE ALGO NUEVO</small></span></a><p>Una experiencia independiente de descubrimiento. Las marcas y contenidos pertenecen a sus respectivos titulares.</p><span>LABORATORIO · VERSIÓN DE PRUEBA</span></footer>
   </main>
+  <section class="immersive" id="immersive" role="dialog" aria-modal="true" aria-labelledby="immersiveTitle" hidden>
+    <button class="immersive-close" id="immersiveClose" aria-label="Cerrar pantalla completa">× <span>Salir</span></button>
+    <div class="immersive-stage" id="immersiveStage"><div class="immersive-orbit">✦</div><span class="immersive-kicker">UNIVERSO · DESCUBRIMIENTO</span><h2 id="immersiveTitle">Descubre algo nuevo</h2><p id="immersiveDescription"></p><div class="immersive-tags" id="immersiveTags"></div><div class="immersive-actions"><button class="immersive-action" id="immersiveLike">♡ Me interesa</button><button class="immersive-action" id="immersiveSkip">↗ Muéstrame otro</button><a class="immersive-action immersive-source" id="immersiveSource" href="#" target="_blank" rel="noopener noreferrer">Abrir fuente original ↗</a></div><small class="immersive-note">La personalización aprende de tus elecciones en este dispositivo. Las tendencias reales de cada plataforma se conectarán mediante fuentes oficiales cuando estén disponibles.</small></div>
+  </section>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
