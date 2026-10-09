@@ -1,4 +1,4 @@
-:root{color-scheme:dark;--bg:#0b0c13;--panel:#171925;--panel2:#222538;--line:#34374c;--text:#f8f8fc;--muted:#b4b7c9;--purple:#c2adff;--cyan:#8be8ee;--lime:#c8f7d4;--safe-bottom:env(safe-area-inset-bottom,0px)}
+:root{color-scheme:dark;--bg:#0b0c13;--panel:#171925;--panel2:#222538;--line:#34374c;--text:#f8f8fc;--muted:#b4b7c9;--purple:#c2adff;--cyan:#8be8ee;--lime:#c8f7d4;--hot:#ff70c8;--sun:#ffe66d;--blue:#73a7ff;--safe-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font:15px/1.5 "DM Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 body{overscroll-behavior:none}
@@ -139,3 +139,24 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .news-mode .news-card-head h2,.saved-mode .news-card-head h2{margin-top:0}
 .news-mode .story-content h2,.saved-mode .story-content h2{overflow-wrap:anywhere}
 @media(max-width:380px){.news-mode .news-thumb-link,.saved-mode .news-thumb-link,.news-mode .news-thumb,.saved-mode .news-thumb{width:48px;height:48px;flex-basis:48px}.news-mode .news-card-head,.saved-mode .news-card-head{min-height:50px}}
+
+
+/* VyROX brand refresh: colores vivos y movimiento sutil, sin distraer del contenido. */
+.brand{gap:9px;letter-spacing:.2px}
+.brand-word{display:block;font:800 16px/1 "Space Grotesk",system-ui,sans-serif;letter-spacing:.35px;color:#fff}
+.brand-word small{font:700 6px/1.8 "DM Sans",system-ui,sans-serif;letter-spacing:1px;color:#e1dff2;margin-top:4px}
+.brand-y{display:inline-block;background:linear-gradient(120deg,var(--cyan),var(--hot),var(--sun),var(--cyan));background-size:260% 260%;background-clip:text;-webkit-background-clip:text;color:transparent;animation:vyrox-letter-flow 3.8s ease-in-out infinite,vyrox-letter-bob 2.8s ease-in-out infinite;transform-origin:50% 75%}
+.brand-v{color:var(--sun)}
+.brand-orbit{position:relative;isolation:isolate;overflow:visible;background:linear-gradient(135deg,var(--hot),var(--purple) 48%,var(--cyan));box-shadow:0 0 18px #c2adff42;animation:vyrox-logo-pulse 3s ease-in-out infinite}
+.brand-orbit::before{content:"";position:absolute;inset:-4px;border:1px solid #8be8ee80;border-radius:13px;transform:rotate(-18deg);animation:vyrox-orbit-spin 8s linear infinite;pointer-events:none}
+.brand-orbit::after{content:"";position:absolute;width:5px;height:5px;right:-3px;top:2px;border-radius:50%;background:var(--sun);box-shadow:0 0 9px var(--sun)}
+.orbit-core{display:block;animation:vyrox-core-spin 6s linear infinite}
+@keyframes vyrox-letter-flow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes vyrox-letter-bob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-2px) rotate(-5deg)}}
+@keyframes vyrox-logo-pulse{0%,100%{filter:saturate(1);box-shadow:0 0 14px #c2adff35}50%{filter:saturate(1.45);box-shadow:0 0 22px #ff70c85c}}
+@keyframes vyrox-orbit-spin{to{transform:rotate(342deg)}}
+@keyframes vyrox-core-spin{to{transform:rotate(360deg)}}
+.story-action.primary,.menu-chip.active,.pick-videos,.empty-state button{background:linear-gradient(110deg,var(--hot),var(--purple) 42%,var(--cyan) 75%,var(--sun));background-size:220% 220%;animation:vyrox-letter-flow 7s ease-in-out infinite}
+.story-source .source-dot{background:var(--hot);box-shadow:0 0 12px #ff70c8}
+.news-filter.active{background:linear-gradient(110deg,var(--cyan),var(--sun));border-color:transparent;color:#171426}
+@media(prefers-reduced-motion:reduce){.brand-y,.brand-orbit,.brand-orbit::before,.orbit-core,.story-action.primary,.menu-chip.active,.pick-videos,.empty-state button{animation:none!important}}
