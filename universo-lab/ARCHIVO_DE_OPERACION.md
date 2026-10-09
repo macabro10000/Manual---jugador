@@ -78,3 +78,13 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - No se añadió backend, servicio de pago ni scraping. Producción (manual-jugador en main) sigue separada; cambios solo en lab/universo-frontend.
 - Commits del rediseño: HTML a90c6045cebff84c24e7fe3102a73f8171d0efb8, CSS 8bac48c320c8a697fc4636f788705386728ca5ab, JS 23f08a496e058827682e246d05818c7578113cdb.
 - Pendiente: confirmar el despliegue automático de Render y revisar el flujo visual en navegador móvil real. La confirmación de despliegue no sustituye una prueba visual táctil.
+
+## Navegación por gestos y título dinámico — 2026-10-09
+- Se añadió el nombre de la categoría activa en la barra superior, con transición corta al cambiar.
+- Gesto vertical sobre el feed: el contenedor usa scroll-snap por pantalla para avanzar o volver entre tarjetas.
+- Gesto horizontal sobre el feed: izquierda avanza a la siguiente categoría; derecha vuelve a la categoría anterior, sin abrir el menú.
+- El menú inferior sigue disponible mediante la rayita; se puede abrir/cerrar con toque y arrastre vertical en la rayita.
+- La fila de categorías conserva desplazamiento horizontal y centra la categoría activa al navegar.
+- Validación técnica: JavaScript pasó compilación sintáctica con `new Function`; se verificaron IDs de interfaz y se guardó el código solo en la rama lab/universo-frontend.
+- Commits de esta iteración: HTML 28f3b5ba22be1bb71e4c7f50e5bc11553c31fd2a, CSS 09d0244abd1f56ff09e2a8e0aa1af65af78643d3, JS 84d4c3798da344eb7b055847bd10a1dd3c65cd84.
+- Pendiente de esta iteración: confirmar el despliegue del último commit en Render y validar los gestos en el navegador táctil. La prueba sintáctica no sustituye la comprobación en dispositivo real.
