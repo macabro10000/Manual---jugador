@@ -308,3 +308,69 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Prueba de autenticación: no aplicable todavía; no existe implementación que probar.
 - Próximo paso: diseñar y revisar en laboratorio la arquitectura mínima del backend independiente de VyROX (autenticación Google, sesiones, perfil con `@usuario` único y base para mensajería), incluyendo archivos, variables de entorno y límites del plan gratuito antes de crear recursos o desplegar. Mantener la rama `lab/universo-frontend` y no tocar `main` ni Libres1.
 
+
+
+## Proceso 3 — Diseño de arquitectura del backend independiente de VyROX — 2026-10-09
+
+### Alcance y aislamiento
+- Se inspeccionó de nuevo el árbol recursivo de `lab/universo-frontend`: la raíz contiene el proyecto estático histórico y `universo-lab/`; el sitio `vyrox` publica únicamente `universo-lab`. No existe todavía carpeta ni paquete de backend.
+- Decisión de laboratorio: cuando se autorice implementar, ubicar el servidor en `vyrox-server/` en la raíz del repositorio. El servicio web de Render deberá configurar `Root Directory = vyrox-server`, instalar dependencias allí y ejecutar el servidor allí. El servicio estático actual conserva `Publish Directory = universo-lab`; así el código del backend no queda dentro del directorio publicado por el sitio.
+- El backend y sus datos serán exclusivamente de VyROX. No se reutilizan las rutas, cuentas, cookies, credenciales OAuth, secretos, base de datos ni colecciones de Libres1. No se modifica `main`, `manual-jugador` ni el servicio viejo `universo-explorador`.
+- Este proceso es solo diseño y documentación: no crea archivos de aplicación, OAuth, base de datos ni servicios Render.
+
+### Arquitectura propuesta para la primera versión
+- Frontend estático: `https://vyrox.onrender.com`.
+- API independiente: servicio web Node.js + Express dentro de `vyrox-server/`, con ruta de salud `GET /api/health`. Nombre/dominio final del API queda pendiente de disponibilidad y configuración del servicio; no se presupone que ya exista.
+- Persistencia: base de datos exclusiva de VyROX, con índices únicos para identidad Google y `handle`. No usar memoria del proceso ni el disco efímero del contenedor para usuarios, sesiones o mensajes. Antes de elegir/provisionar proveedor, verificar cuota gratuita vigente, límites, política de suspensión, copias de seguridad y si exige tarjeta; no crear recursos facturables sin permiso.
+- Dependencias iniciales previstas: `express`, `google-auth-library`, `helmet`, un limitador de peticiones mantenido y el controlador oficial de la base de datos que se seleccione. Fijar versiones compatibles y lockfile durante implementación; no instalar ni desplegar todavía.
+
+### Inicio de sesión con Google
+1. El frontend carga Google Identity Services y presenta el botón real de acceso.
+2. El navegador recibe la credencial de Google y la envía por HTTPS a `POST /api/auth/google`; no guardar el ID token en `localStorage` ni en `sessionStorage`.
+3. El backend verifica firma, emisor, caducidad, `audience` igual al OAuth Client ID exclusivo de VyROX y `email_verified === true`. No confiar en nombre, correo ni identificadores enviados por el navegador sin verificar.
+4. El backend identifica la cuenta por el `sub` estable de Google y crea/actualiza el perfil mínimo. El `sub` no se expone como identificador público.
+5. La sesión usa un token opaco aleatorio de alta entropía; la base de datos guarda solo su hash, fecha de expiración, revocación y metadatos mínimos. Cookie propuesta: `HttpOnly; Secure; SameSite=Lax; Path=/`, sin atributo `Domain`; validar el comportamiento real del navegador Android y el origen del API antes de darlo por probado. Las llamadas autenticadas usan `credentials: "include"`, CORS permite solo el origen exacto del frontend y credenciales, y se valida `Origin` en operaciones mutables. No usar `Access-Control-Allow-Origin: *` con credenciales.
+6. `POST /api/auth/logout` revoca la sesión del servidor y elimina la cookie con los mismos atributos; `GET /api/me` devuelve solo el perfil autorizado.
+
+### Identidad pública `@usuario`
+- El handle se guarda normalizado sin el carácter `@`; la interfaz lo muestra con `@`.
+- Propuesta de validación inicial: 3–20 caracteres, minúsculas ASCII, números y guion bajo; normalizar a minúsculas antes de comprobar. Definir y documentar palabras reservadas antes de habilitar cambios.
+- La unicidad no se resuelve con una consulta previa solamente: debe existir un índice único en la base de datos y el backend debe manejar colisiones concurrentes.
+- Tras el primer acceso, si la cuenta no tiene handle, el usuario pasa a una pantalla para elegirlo. `POST /api/handles/check` sirve únicamente para dar una indicación preliminar; `PUT /api/me/handle` realiza la asignación definitiva autenticada y maneja la respuesta de conflicto. No usar el correo de Google como handle automático.
+
+### Modelo de datos inicial (diseño, no creado)
+- `users`: `id` interno UUID, `googleSub` único, correo normalizado, nombre visible, avatar HTTPS opcional, `handle` normalizado único cuando esté asignado, estado y marcas de tiempo.
+- `sessions`: hash del token único, `userId`, expiración, revocación, creación y último uso; retención acotada y limpieza de sesiones expiradas.
+- Fase de mensajería posterior: `conversations`, `conversation_members` y `messages`, con pertenencia comprobada en cada lectura/escritura, paginación por cursor, límite de tamaño de mensaje y validación del remitente en el servidor. No aceptar un `senderId` elegido por el cliente.
+- La mensajería en tiempo real, notificaciones, bloqueo/reportes, límites antiabuso y políticas de retención se diseñan después de probar y asegurar la autenticación básica.
+
+### Contrato de API propuesto
+- `GET /api/health`: estado técnico sin secretos ni datos personales.
+- `GET /api/auth/google-config`: expone únicamente el Client ID público y estado de configuración; nunca el client secret.
+- `POST /api/auth/google`: verifica credencial, registra/actualiza identidad y establece sesión.
+- `GET /api/me`: perfil de la sesión válida.
+- `POST /api/handles/check`: valida formato y disponibilidad aproximada.
+- `PUT /api/me/handle`: asigna handle único a la cuenta autenticada.
+- `POST /api/auth/logout`: revoca sesión.
+- Futuro, fuera del MVP de autenticación: `GET/POST /api/conversations`, `GET /api/conversations/:id/messages`, `POST /api/conversations/:id/messages`; todas las rutas requieren autorización por miembro.
+
+### Variables de entorno previstas
+- `PORT`: puerto proporcionado por Render.
+- `NODE_ENV=production` en el servicio publicado.
+- `GOOGLE_CLIENT_ID`: Client ID exclusivo de VyROX; puede mostrarse en frontend, pero se configura y valida en backend.
+- `MONGODB_URI` o la variable equivalente del proveedor que se elija: secreto privado, solo para el servicio API.
+- `SESSION_SECRET`: secreto aleatorio de servidor para funciones criptográficas adicionales si se necesitan; nunca sustituye tokens aleatorios de sesión.
+- `FRONTEND_ORIGIN=https://vyrox.onrender.com`: allowlist exacta.
+- No incluir valores secretos en Git, archivos frontend, logs, respuestas API ni documentación. El nombre del proveedor y variables finales se decidirán tras verificar costes y límites.
+
+### Controles mínimos antes de permitir cuentas reales
+- HTTPS; CORS de origen exacto; Helmet; validación estricta del cuerpo y tamaño máximo; límites de frecuencia por IP y cuenta; errores sin stack traces; logs sin credenciales ni contenido privado; expiración y revocación de sesión; índices únicos; validación de `Origin`; protección contra abuso; comprobación de dependencias y lockfile.
+- Probar en navegador Android: acceso, recarga, persistencia de sesión, cierre de sesión, cuenta sin handle, colisión de handle, credencial inválida/expirada, API dormida y errores de red. Verificar cookies en el contexto real de dos subdominios Render antes de decidir si se requiere un dominio propio.
+- No declarar compatibilidad, seguridad ni disponibilidad de producción hasta ejecutar esas pruebas. Los planes gratuitos pueden tener límites o suspensión; no se promete gratuidad permanente.
+
+### Resultado del Proceso 3
+- Diseño de arquitectura documentado en este archivo operativo.
+- Archivos de aplicación cambiados: ninguno.
+- Servicios, base de datos y cliente OAuth creados: ninguno.
+- Pruebas de autenticación: todavía no aplican.
+- Siguiente paso exacto: implementar en la rama de laboratorio solo el esqueleto del backend en `vyrox-server/` (`package.json`, servidor Express, configuración validada y `GET /api/health`), sin conectar todavía Google ni una base de datos. Después probar localmente/CI y revisar el diff antes de crear el servicio API en Render.
