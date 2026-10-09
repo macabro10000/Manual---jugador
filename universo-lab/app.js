@@ -105,15 +105,24 @@
   $("#searchInput").addEventListener("input",e=>{search=e.target.value.trim();render()});
   $$("#drawerBody input[type=checkbox]").forEach(input=>{input.checked=tastes.includes(input.value);input.addEventListener("change",()=>{tastes=$$("#drawerBody input[type=checkbox]:checked").map(x=>x.value);persist(KEYS.tastes,tastes);render()})});
   $("#storyFeed").addEventListener("click",e=>{const card=e.target.closest("[data-story]");if(card&&!e.target.closest("button,a")){const sig=signals[card.dataset.story]||{};sig.open=(sig.open||0)+1;signals[card.dataset.story]=sig;persist(KEYS.signals,signals)}});
+  // Evita cambiar de pantalla con movimientos diagonales o desplazamientos pequeños.
   let touchStart=null;
-  $("#storyFeed").addEventListener("touchstart",e=>{if(e.touches.length===1)touchStart={x:e.touches[0].clientX,y:e.touches[0].clientY};},{passive:true});
+  $("#storyFeed").addEventListener("touchstart",e=>{
+    if(e.touches.length!==1){touchStart=null;return}
+    if(e.target.closest("button,a,input,video,.news-filter-rail")){touchStart=null;return}
+    touchStart={x:e.touches[0].clientX,y:e.touches[0].clientY};
+  },{passive:true});
   $("#storyFeed").addEventListener("touchend",e=>{
     if(!touchStart||!e.changedTouches.length)return;
-    const dx=e.changedTouches[0].clientX-touchStart.x,dy=e.changedTouches[0].clientY-touchStart.y;touchStart=null;
-    if(Math.abs(dx)<65||Math.abs(dx)<Math.abs(dy)*1.35)return;
+    const dx=e.changedTouches[0].clientX-touchStart.x;
+    const dy=e.changedTouches[0].clientY-touchStart.y;
+    touchStart=null;
+    if(Math.abs(dx)<100||Math.abs(dx)<Math.abs(dy)*1.8)return;
     const index=SWIPE_ORDER.indexOf(category);if(index<0)return;
-    const next=dx<0?index+1:index-1;if(next>=0&&next<SWIPE_ORDER.length)setCategory(SWIPE_ORDER[next]);
+    const next=dx<0?index+1:index-1;
+    if(next>=0&&next<SWIPE_ORDER.length)setCategory(SWIPE_ORDER[next]);
   },{passive:true});
+  $("#storyFeed").addEventListener("touchcancel",()=>{touchStart=null},{passive:true});
   document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(drawerOpen)closeDrawer();else $("#searchPanel").hidden=true}});
   async function loadContent(){try{const r=await fetch("./content.json",{cache:"no-store"});if(!r.ok)throw Error("HTTP "+r.status);const data=await r.json();if(!data||!Array.isArray(data.items))throw Error("Formato de catálogo inválido");const seen=new Set();items=data.items.filter(x=>x&&typeof x.id==="string"&&typeof x.title==="string"&&x.contentStatus!=="demo"&&!seen.has(x.id)&&seen.add(x.id));render()}catch(error){items=[];render();console.error("UNIVERSO catalog error",error)}}
   loadContent();
