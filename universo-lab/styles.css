@@ -128,3 +128,14 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 
 /* Noticias sin imagen: eliminar el pictograma de reserva que parece una caja rayada y compite con el texto. */
 .news-mode .story-fallback,.saved-mode .story-fallback{display:none!important}
+
+
+/* Miniaturas circulares discretas en el encabezado de cada noticia. */
+.news-mode .news-card-head,.saved-mode .news-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:58px;margin:0 0 10px}
+.news-mode .news-card-head .story-source,.saved-mode .news-card-head .story-source{flex:1;min-width:0;margin:0;display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:9px;letter-spacing:.7px}
+.news-mode .news-thumb-link,.saved-mode .news-thumb-link{display:block;flex:0 0 54px;width:54px;height:54px;border-radius:50%;padding:2px;background:linear-gradient(145deg,var(--purple),var(--cyan));box-shadow:0 3px 13px #0007;overflow:hidden}
+.news-mode .news-thumb,.saved-mode .news-thumb{display:block;flex:0 0 54px;width:54px;height:54px;border-radius:50%;object-fit:cover;border:2px solid #171925;background:#222436}
+.news-mode .news-thumb-video,.saved-mode .news-thumb-video{border:2px solid var(--cyan);object-fit:cover}
+.news-mode .news-card-head h2,.saved-mode .news-card-head h2{margin-top:0}
+.news-mode .story-content h2,.saved-mode .story-content h2{overflow-wrap:anywhere}
+@media(max-width:380px){.news-mode .news-thumb-link,.saved-mode .news-thumb-link,.news-mode .news-thumb,.saved-mode .news-thumb{width:48px;height:48px;flex-basis:48px}.news-mode .news-card-head,.saved-mode .news-card-head{min-height:50px}}
