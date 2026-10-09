@@ -115,30 +115,43 @@
   function openDrawer(){drawerOpen=true;$("#drawerBody").hidden=false;$("#drawerToggle").setAttribute("aria-expanded","true");$("#handleLabel").textContent="CERRAR MENÚ · TOCA LA RAYITA";$("#bottomDrawer").classList.add("expanded")}
   function closeDrawer(){drawerOpen=false;$("#drawerBody").hidden=true;$("#drawerToggle").setAttribute("aria-expanded","false");$("#handleLabel").textContent="MENÚ · DESLIZA O TOCA";$("#bottomDrawer").classList.remove("expanded")}
   $("#drawerToggle").addEventListener("click",()=>drawerOpen?closeDrawer():openDrawer());
-  // Gestos sobre el contenido: vertical = siguiente/anterior por scroll-snap nativo;
-  // horizontal = cambiar categoría sin abrir el menú.
+  // Gestos explícitos con Pointer Events: funciona con dedo y ratón.
+  // Se excluyen botones/enlaces para no romper sus acciones.
   const feed=$("#storyFeed");feed.classList.add("gesture-enabled");
-  let touchStart=null, lastGestureAt=0;
-  feed.addEventListener("touchstart",event=>{
-    if(event.touches.length!==1)return;
-    const t=event.touches[0];touchStart={x:t.clientX,y:t.clientY};
-  },{passive:true});
-  feed.addEventListener("touchend",event=>{
-    if(!touchStart||event.changedTouches.length!==1)return;
-    const t=event.changedTouches[0],dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;touchStart=null;
-    if(Math.abs(dx)<65||Math.abs(dx)<Math.abs(dy)*1.25)return;
-    const now=Date.now();if(now-lastGestureAt<320)return;lastGestureAt=now;
-    // Izquierda avanza por categorías; derecha retrocede.
-    changeCategoryBySwipe(dx<0?1:-1);
-  },{passive:true});
-  // La rayita también responde al arrastre vertical para abrir/cerrar el menú.
+  let pointerStart=null,lastGestureAt=0;
+  feed.addEventListener("pointerdown",event=>{
+    if(event.button!==undefined&&event.button!==0)return;
+    if(event.target.closest("button,a,input,label"))return;
+    pointerStart={id:event.pointerId,x:event.clientX,y:event.clientY,target:event.target};
+  });
+  feed.addEventListener("pointerup",event=>{
+    if(!pointerStart||event.pointerId!==pointerStart.id)return;
+    const origin=pointerStart,dx=event.clientX-origin.x,dy=event.clientY-origin.y;pointerStart=null;
+    const ax=Math.abs(dx),ay=Math.abs(dy);
+    if(Math.max(ax,ay)<45)return;
+    const now=Date.now();if(now-lastGestureAt<260)return;lastGestureAt=now;
+    if(ax>ay*1.2&&ax>55){
+      changeCategoryBySwipe(dx<0?1:-1);
+    }else if(ay>ax*1.15&&ay>45){
+      const cards=$$(".story-card",feed);if(!cards.length)return;
+      const current=origin.target.closest(".story-card");
+      let index=current?cards.indexOf(current):Math.round(feed.scrollTop/Math.max(feed.clientHeight,1));
+      if(index<0)index=0;
+      const nextIndex=Math.max(0,Math.min(cards.length-1,index+(dy<0?1:-1)));
+      if(nextIndex!==index){cards[nextIndex].scrollIntoView({behavior:"smooth",block:"start"});recordOpen(cards[nextIndex].dataset.story)}
+    }
+  });
+  feed.addEventListener("pointercancel",()=>{pointerStart=null});
+  function recordOpen(id){
+    if(!id)return;const signal=signals[id]||{open:0,like:0,skip:0,save:0};
+    signal.open=(signal.open||0)+1;signals[id]=signal;persist(KEYS.signals,signals);
+  }
   let handleStartY=null;
-  $("#drawerToggle").addEventListener("touchstart",event=>{if(event.touches.length===1)handleStartY=event.touches[0].clientY},{passive:true});
-  $("#drawerToggle").addEventListener("touchend",event=>{
-    if(handleStartY===null||!event.changedTouches.length)return;
-    const dy=event.changedTouches[0].clientY-handleStartY;handleStartY=null;
+  $("#drawerToggle").addEventListener("pointerdown",event=>{handleStartY=event.clientY});
+  $("#drawerToggle").addEventListener("pointerup",event=>{
+    if(handleStartY===null)return;const dy=event.clientY-handleStartY;handleStartY=null;
     if(dy < -18)openDrawer();else if(dy > 18)closeDrawer();
-  },{passive:true});
+  });
   $("#drawerClose").addEventListener("click",closeDrawer);
   $(".menu-chip").forEach(button=>button.addEventListener("click",()=>{
     setCategory(button.dataset.category);closeDrawer();
