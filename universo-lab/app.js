@@ -64,7 +64,7 @@
       const imageUrl=safeUrl(item.image);
       const image=imageUrl?'<a class="news-thumb-link" href="'+esc(safeUrl(item.canonicalUrl))+'" target="_blank" rel="noopener noreferrer" aria-label="Abrir noticia original"><img class="news-thumb" src="'+esc(imageUrl)+'" alt="Imagen relacionada con la noticia" loading="lazy" onerror="this.closest(\'.news-thumb-link\').hidden=true"></a>':'';
       const videoUrl=safeUrl(item.videoUrl);
-      const media=videoUrl&&/\\.(mp4|webm|ogg)(?:[?#]|$)/i.test(videoUrl)?'<video class="news-thumb news-thumb-video" src="'+esc(videoUrl)+'" muted playsinline loop preload="none" controls aria-label="Video relacionado con la noticia"></video>':image;
+      const media=videoUrl&&/\.(mp4|webm|ogg)(?:[?#]|$)/i.test(videoUrl)?'<video class="news-thumb news-thumb-video" src="'+esc(videoUrl)+'" muted playsinline loop preload="none" controls aria-label="Video relacionado con la noticia"></video>':image;
       const url=safeUrl(item.canonicalUrl);
       const source=esc(item.sourceLabel||"Fuente");
       const date=item.publishedAt?'<time>'+esc(item.publishedAt)+'</time>':"";
