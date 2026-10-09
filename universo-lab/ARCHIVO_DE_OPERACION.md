@@ -172,3 +172,11 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Se preparó soporte opcional para un video directo `.mp4`, `.webm` u `.ogg` en el campo `videoUrl`. No se añadieron videos porque no se verificó una URL directa de video para estas noticias; no se incrustan videos inventados ni reproductores vacíos.
 - Verificación técnica: `app.js` pasa compilación sintáctica con `new Function` y `content.json` se puede analizar como JSON. No se ha comprobado la visualización física en Android.
 - Cambios solo en `lab/universo-frontend`; no se modificó `main` ni producción. Commits de esta mejora: catálogo `498fe5265d0fbcdb56933aa11e39ac97978b00ab`, CSS `c1de4250887992ff788045e0d08955f3665f3572`, JS `efe852b6e3be81ec17584c45e81be6d3bb0bc2da`.
+
+
+## Corrección de miniatura de la última noticia — 2026-10-09
+- Incidencia: la miniatura de la noticia sobre el robot de Westcol podía no cargar porque se había usado una URL de imagen de otro medio que no estaba verificada como la imagen principal de Minuto60.
+- Corrección: se reemplazó por la imagen enlazada directamente desde la noticia original de Minuto60 (`d33tk5b80rpokn.cloudfront.net/images/westcol-20261009-104502_20261009_104502_350.webp`) y se actualizó el crédito descriptivo.
+- Verificación: `content.json` vuelve a analizarse correctamente como JSON y el registro `news-westcol-robot-20261009` contiene la nueva URL. La página original identifica esa imagen como foto del robot de Westcol. No se ha verificado todavía en el navegador Android que el CDN la entregue en el dispositivo.
+- Commit de catálogo: `3f9004a4addb31a8a80c1187e6acbc793027f35c`.
+- Solo rama `lab/universo-frontend`; producción (`main`) intacta.
