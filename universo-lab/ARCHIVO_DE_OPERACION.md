@@ -164,3 +164,11 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Cambio únicamente en `lab/universo-frontend`; no se modificó `main` ni producción.
 - Commit CSS: `f163fd0e99b9168e81513f2016b88ab87169db74`.
 - Pendiente: comprobar que Render publique este commit y revisar visualmente en el navegador Android; no se afirma que la pantalla física ya haya sido verificada.
+
+
+## Miniaturas de noticias y soporte de video — 2026-10-09
+- Las tarjetas de Noticias y Guardados muestran una miniatura circular discreta a la derecha de la fuente/fecha; la imagen se enlaza con la noticia original. Si falla la carga, la miniatura se oculta sin tapar el texto.
+- El catálogo incorpora URLs de imágenes relacionadas y sus créditos descriptivos para las cinco noticias iniciales. Las imágenes se cargan de forma diferida.
+- Se preparó soporte opcional para un video directo `.mp4`, `.webm` u `.ogg` en el campo `videoUrl`. No se añadieron videos porque no se verificó una URL directa de video para estas noticias; no se incrustan videos inventados ni reproductores vacíos.
+- Verificación técnica: `app.js` pasa compilación sintáctica con `new Function` y `content.json` se puede analizar como JSON. No se ha comprobado la visualización física en Android.
+- Cambios solo en `lab/universo-frontend`; no se modificó `main` ni producción. Commits de esta mejora: catálogo `498fe5265d0fbcdb56933aa11e39ac97978b00ab`, CSS `c1de4250887992ff788045e0d08955f3665f3572`, JS `efe852b6e3be81ec17584c45e81be6d3bb0bc2da`.
