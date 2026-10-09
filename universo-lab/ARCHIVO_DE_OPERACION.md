@@ -49,3 +49,12 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Commit de catálogo: `200335f70fd66b6627e8a984c5a4d4d2f3aa21c0`.
 - Commit de carga del catálogo: `099cd32b99a4970c8082f16524691167da4b6719`.
 - Render confirmó como exitoso el despliegue del commit `099cd32b99a4970c8082f16524691167da4b6719` (carga del catálogo). La actualización de este archivo operativo también dispara el despliegue automático del nuevo commit.
+
+
+## Rediseño de navegación — 2026-10-09
+- Se reorganizó el catálogo como carrusel horizontal: las tarjetas no se apilan en una columna larga.
+- Se añadieron controles anterior/siguiente y desplazamiento lateral con ajuste de tarjeta (scroll snap).
+- En móvil se compactaron portada y encabezado para que la exploración principal aparezca antes y requiera menos desplazamiento vertical.
+- Se mantiene búsqueda, categorías, guardados y enlaces externos; no se añadieron APIs ni costos.
+- Commits: HTML `61fbec55fef35bffa333886b36a0447344e6b0a6`, CSS `88a667039d2febe42a33df1adefe2e690e7b08fc`, JS `0b45b019308d442a84a342e8a9b58a6f86e09068`.
+- Pendiente: confirmar el despliegue final y hacer revisión visual en el navegador móvil; el chequeo de eventos no sustituye esa inspección visual.
