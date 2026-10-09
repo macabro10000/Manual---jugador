@@ -67,3 +67,14 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - El campo de popularidad solo se considerará para registros verificados con una métrica de viralidad disponible. En el catálogo actual no existen métricas reales ni feeds conectados; no se debe afirmar que ya encuentra lo más viral de YouTube, TikTok, Instagram o Facebook.
 - Nuevos commits: HTML `4cb95590e5ce2d33fe9d34fe1c565a270a8925d7`, CSS `c387c9ecb571d235fb7ff5718cd7fb15d2bc14fb`, JS `6e5023fcdc7a5b858071139e0a32f578c45ffc98`.
 - Verificación parcial: elementos de menú y visor presentes; llaves JS balanceadas; Render inició despliegue de los cambios. Pendiente confirmar el despliegue final y probar el flujo visual en móvil.
+
+## Navegación de una sola pantalla — 2026-10-09
+- Se sustituyó el diseño de página larga por una vista de exploración a pantalla completa.
+- El contenido se recorre verticalmente con ajuste por escena; el menú inferior abre desde la rayita/asa.
+- Dentro del menú, las categorías y plataformas se recorren horizontalmente: Principal, YouTube, TikTok, Facebook, Instagram, Curiosidades, Noticias, Retos y Guardados.
+- Las preferencias de gustos viven en el mismo menú y se guardan localmente en el dispositivo.
+- Principal prioriza primero registros que tengan una métrica de viralidad disponible y verificada; luego aplica señales locales y gustos. No se fabrican vistas ni posiciones virales.
+- Limitación importante: el catálogo todavía contiene nueve ejemplos, varios con enlaces genéricos. YouTube/TikTok/Instagram/Facebook aún no tienen feeds reales conectados, por lo que el distintivo informa que es una muestra y las categorías sin registros muestran un estado vacío honesto.
+- No se añadió backend, servicio de pago ni scraping. Producción (manual-jugador en main) sigue separada; cambios solo en lab/universo-frontend.
+- Commits del rediseño: HTML a90c6045cebff84c24e7fe3102a73f8171d0efb8, CSS 8bac48c320c8a697fc4636f788705386728ca5ab, JS 23f08a496e058827682e246d05818c7578113cdb.
+- Pendiente: confirmar el despliegue automático de Render y revisar el flujo visual en navegador móvil real. La confirmación de despliegue no sustituye una prueba visual táctil.
