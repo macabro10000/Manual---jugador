@@ -403,3 +403,10 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 
 ### Siguiente paso exacto
 Comprobar el resultado real de GitHub Actions para `vyrox-server-tests.yml`. Si falla, inspeccionar el log y corregir la causa antes de seguir. Si pasa, revisar/fijar las dependencias y generar un lockfile reproducible; todavía no desplegar ni conectar OAuth/base de datos.
+
+
+### Seguimiento CI — 2026-10-09
+- Tras publicar el workflow, se consultó GitHub Actions para la rama `lab/universo-frontend`; la API devolvió `total_count: 0` para las últimas ejecuciones consultadas. Por tanto, **no hay evidencia de que GitHub Actions haya ejecutado las pruebas todavía**.
+- Se verificó por lectura en GitHub que `vyrox-server/src/server.js`, `vyrox-server/test/server.test.js` y esta sección de continuidad están guardados en la rama.
+- No se declara que las pruebas pasaron. Antes de continuar, hay que conseguir una ejecución real de CI o un entorno Node.js disponible para correr `npm install` y `npm test`.
+- Siguiente paso exacto: investigar por qué no aparece una ejecución del workflow y conseguir una prueba ejecutada; no crear todavía el servicio API de Render.
