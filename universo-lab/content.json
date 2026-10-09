@@ -19,7 +19,9 @@
         "agua",
         "energía"
       ],
-      "addedAt": "2026-10-09T21:12:00Z"
+      "addedAt": "2026-10-09T21:12:00Z",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Embalse%20San%20Rafael.jpg",
+      "imageCredit": "Embalse San Rafael · Wikimedia Commons"
     },
     {
       "id": "news-imf-20261008",
@@ -38,7 +40,9 @@
         "FMI",
         "presupuesto"
       ],
-      "addedAt": "2026-10-09T21:12:00Z"
+      "addedAt": "2026-10-09T21:12:00Z",
+      "image": "https://derechadiario.com.ar/filesedc/uploads/image/post/fmi-ajusta-a-la-baja-su-proyeccion-de-crecimiento-para-colombia-24-en-2025_1200_800.webp",
+      "imageCredit": "Imagen ilustrativa del FMI y Colombia"
     },
     {
       "id": "news-robot-luka-20261009",
@@ -56,7 +60,9 @@
         "inteligencia artificial",
         "innovación"
       ],
-      "addedAt": "2026-10-09T21:12:00Z"
+      "addedAt": "2026-10-09T21:12:00Z",
+      "image": "https://shop.vaultbots.com/cdn/shop/files/437b321b-7e49-4c21-89f5-0a9e4d148891.png?v=1778891617",
+      "imageCredit": "VaultBots · imagen de producto"
     },
     {
       "id": "news-paz-onu-20261009",
@@ -75,7 +81,9 @@
         "paz",
         "actualidad"
       ],
-      "addedAt": "2026-10-09T21:12:00Z"
+      "addedAt": "2026-10-09T21:12:00Z",
+      "image": "https://imagenes2.eltiempo.com/files/og_thumbnail/uploads/2023/09/18/65087ab175acc.jpeg",
+      "imageCredit": "Archivo fotográfico · El Tiempo"
     },
     {
       "id": "news-westcol-robot-20261009",
@@ -95,7 +103,9 @@
         "robots",
         "Stream Fighters"
       ],
-      "addedAt": "2026-10-09T21:12:00Z"
+      "addedAt": "2026-10-09T21:12:00Z",
+      "image": "https://imagenes.noticiasrcn.com/cms/2026/09/27081353/robot-westcol-video-peleando.webp?w=960",
+      "imageCredit": "Noticias RCN"
     }
   ]
 }
