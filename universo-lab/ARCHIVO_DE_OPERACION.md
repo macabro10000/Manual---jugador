@@ -122,3 +122,11 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Cambios aplicados únicamente en `lab/universo-frontend`; no se modificó `main` ni el servicio `manual-jugador`.
 - Commits de esta etapa: HTML `2ff0fbc28764e13d04f847b0b1b84c716eb89217`, JS `88b1b5427fc5939f46c0f79f63f0fa227a5042cb`, CSS `57d4bd6f7bb5cc85f946729b721501c74d7e25c7`.
 - Verificación técnica: `app.js` pasó compilación sintáctica con `new Function`; se confirmó presencia del gesto horizontal y del selector local de videos. Pendiente: confirmar despliegue final y probar el gesto y reproducción en el navegador Android real.
+
+
+## Retiro de preferencias «Mis gustos» — 2026-10-09
+- Se quitó del menú la sección «Mis gustos» y sus casillas de temas, tal como se pidió. El menú conserva Principal · Videos, Noticias, Estados y Guardados.
+- Se mantiene la barra de filtros dentro de Noticias: Todos, Economía, Entretenimiento, Ciencia, Tecnología, Mundo y Virales.
+- Cambio realizado únicamente en `lab/universo-frontend`; producción `main` no se modificó.
+- Commit HTML: `3be60497e7cfccef20cfa626c74e4c0654241af2`.
+- Pendiente: confirmar despliegue automático de este cambio en Render.
