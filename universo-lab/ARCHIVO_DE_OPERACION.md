@@ -1,6 +1,8 @@
-# ARCHIVO DE OPERACIÓN — UNIVERSO
+# ARCHIVO DE OPERACIÓN — VyROX (antes UNIVERSO)
 
 Última actualización: 2026-10-09
+
+> **Documento maestro de continuidad:** antes de cambiar código, abrir una tarea nueva o continuar en otro chat, leer primero la sección **Estado actual y continuidad entre chats** al final de este archivo. Después de cada tarea, actualizar estado, verificaciones y siguiente paso en este mismo archivo y guardar el cambio en esta rama.
 
 ## Objetivo
 Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidades y retos en un solo lugar, usando enlaces, identificadores, categorías y preferencias. No descargar ni almacenar copias de videos de terceros.
@@ -225,3 +227,59 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Las animaciones respetan `prefers-reduced-motion` para usuarios que reducen movimiento.
 - Se mantuvieron los nombres técnicos internos, rutas, archivos, almacenamiento local y el servicio de laboratorio para no romper compatibilidad. El proyecto continúa en `lab/universo-frontend`; no se modificó `main` ni el servicio de producción.
 - Estado: cambios de código aplicados; queda pendiente validar el despliegue en Render y comprobar visualmente la animación en Android. El nombre VyROX es un candidato de marca; su disponibilidad legal todavía debe investigarse.
+
+
+## Estado actual y continuidad entre chats — 2026-10-09 (fuente de verdad)
+
+### Identidad y ubicación del proyecto
+- Marca visible vigente: **VyROX** (se escribe exactamente así: V mayúscula, y minúscula, ROX mayúsculas). El nombre anterior era UNIVERSO; no volver a presentarlo como marca visible.
+- Repositorio: `macabro10000/Manual---jugador`.
+- Rama de trabajo permitida: `lab/universo-frontend`.
+- Carpeta del frontend: `universo-lab/`.
+- Archivos principales: `index.html`, `styles.css`, `app.js`, `content.json`.
+- Archivo de continuidad: `universo-lab/ARCHIVO_DE_OPERACION.md` (este documento).
+- Auditoría RSS de solo lectura: `universo-lab/scripts/rss-audit.mjs`.
+- Workflow manual RSS: `.github/workflows/universo-rss-audit.yml`.
+- La ruta técnica `universo-lab`, los nombres internos de almacenamiento local `universo_*` y nombres de archivos/workflow se mantienen por compatibilidad; no confundirlos con la marca visible.
+
+### Servicios Render: distinguir el anterior del nuevo
+- **Servicio nuevo VyROX:** nombre `vyrox`, ID `srv-db4msvjbc2fs73c07uig`, URL `https://vyrox.onrender.com`, rama `lab/universo-frontend`, publish path `universo-lab`, auto deploy activado. Dashboard: `https://dashboard.render.com/static/srv-db4msvjbc2fs73c07uig`.
+- **Verificación del nuevo servicio:** Render devolvió estado de deploy `live` para deploy `dep-db4mt03bc2fs73c08000`, basado en commit `81cdae9e37eb660b641098b33f512939c4c3fae1`. Esto confirma el despliegue de Render, pero no reemplaza una comprobación visual de la página desde Android.
+- **Servicio anterior conservado:** `universo-explorador`, ID `srv-db4js3id0e5s73ckoed0`, URL `https://universo-explorador.onrender.com`. Se conserva temporalmente para no perder la versión anterior. No eliminarlo hasta verificar el nuevo enlace con el usuario.
+- **Producción ajena al laboratorio:** `manual-jugador`, rama `main`, URL `https://manual-jugador.onrender.com`. No modificarla para el desarrollo de VyROX.
+- **Importante:** los dos servicios de laboratorio apuntan al mismo repositorio/rama/carpeta; el nuevo dominio no crea un proyecto de código distinto.
+
+### Trabajo completado y límites reales
+- Se actualizó el nombre visible a VyROX en título HTML, metadatos, marca superior, textos de accesibilidad y textos de interfaz.
+- Se añadieron efectos visuales: gradiente animado en la letra «y», órbita/símbolo, brillo y acentos multicolor; se contempla `prefers-reduced-motion`.
+- El despliegue con esos cambios está `live` en el servicio nuevo `vyrox`.
+- Frontend actual: pantalla Principal · Videos, Noticias, Estados y Guardados; videos elegidos desde el teléfono solo se reproducen localmente, no se publican a otros usuarios.
+- Noticias actuales: catálogo estático `content.json` con cinco resúmenes editoriales y enlaces a fuentes. El frontend oculta registros tras 24 horas desde `addedAt`; el catálogo versionado no se borra automáticamente.
+- **No está implementado aún:** búsqueda/publicación automática cada 30 minutos, deduplicación avanzada de eventos, backend/base de datos para noticias, cuentas comunitarias, almacenamiento central, notificaciones push. No afirmar que esas funciones ya existen.
+- Auditoría RSS creada en modo de solo lectura y workflow manual creados, pero su ejecución satisfactoria todavía no se ha confirmado. No habilitar escritura automática hasta validar feeds y deduplicación.
+- No hay permiso para crear servicios facturables ni usar APIs pagas. No publicar artículos completos de terceros ni medios sin autorización; usar resúmenes propios y fuentes atribuidas.
+
+### Reglas obligatorias de trabajo para cualquier chat nuevo
+1. Leer esta sección completa y luego las secciones históricas pertinentes antes de editar.
+2. Continuar desde el estado documentado; no reiniciar ni repetir tareas ya verificadas.
+3. Trabajar en `lab/universo-frontend`; nunca tocar `main` ni `manual-jugador` sin una autorización explícita.
+4. Un objetivo principal por iteración. Inspeccionar archivos actuales y causa raíz antes de modificar; no hacer parches especulativos.
+5. No declarar algo terminado por haber escrito código: diferenciar **código cambiado**, **prueba técnica**, **deploy live** y **prueba real en Android**.
+6. No crear otro servicio, eliminar servicios, cambiar dominios ni tocar configuración de producción sin revisar consecuencias y evitar duplicados. El servicio anterior se conserva por ahora.
+7. Tras cada tarea, actualizar este archivo en el mismo branch, registrando fecha, cambios, archivos, commit, verificaciones reales, limitaciones y siguiente paso. Esa actualización es parte obligatoria de terminar la tarea.
+8. Si hay error o se descubre una causa nueva, registrar evidencia y la corrección; no borrar el historial previo.
+9. Preferir soluciones gratuitas. No activar recursos potencialmente facturables sin permiso.
+10. En las instrucciones al usuario, ser directo, en español, una tarea a la vez; pedir acción manual solo cuando las herramientas disponibles no permitan ejecutarla.
+
+### Siguiente paso exacto
+1. Abrir `https://vyrox.onrender.com` en el teléfono Android y comprobar si carga, si la marca dice VyROX y si la animación de la «y»/órbita se ve correctamente. Si falla, registrar el síntoma concreto antes de editar.
+2. No borrar ni desactivar `universo-explorador` hasta que el usuario confirme que el nuevo dominio funciona.
+3. Después, continuar la auditoría RSS manual en modo de solo lectura; averiguar cómo ejecutar el workflow y revisar el artefacto real. Si no existe una herramienta de ejecución disponible, pedir al usuario únicamente la acción manual necesaria y explicar los pasos exactos.
+4. Antes de terminar cada una de esas tareas, actualizar este documento y guardar un commit en `lab/universo-frontend`.
+
+### Registro de continuidad — cambio de dominio y respaldo
+- Fecha: 2026-10-09.
+- Se creó el servicio estático Render `vyrox` (ID `srv-db4msvjbc2fs73c07uig`) con auto deploy desde `lab/universo-frontend`, publish path `universo-lab`.
+- Render confirmó el deploy `dep-db4mt03bc2fs73c08000` como `live`, commit desplegado `81cdae9e37eb660b641098b33f512939c4c3fae1`.
+- El servicio viejo `universo-explorador` sigue existiendo y no se eliminó.
+- Esta actualización deja explícito que este archivo es el registro de estado para reanudar el trabajo en un chat nuevo.
