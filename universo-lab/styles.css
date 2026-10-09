@@ -109,3 +109,11 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .add-video-row .pick-videos{margin:0 0 5px}
 .bottom-drawer.expanded{max-height:min(76dvh,680px)}
 @media(max-width:380px){.video-mode .local-video-card{min-height:400px}.video-mode .empty-state{padding-inline:20px}.story-feed.news-mode,.story-feed.saved-mode{padding-inline:9px}}
+
+
+/* Filtros de categorías para el feed de noticias. */
+.news-filter-rail{position:sticky;top:0;z-index:12;display:flex;gap:7px;overflow-x:auto;overscroll-behavior-x:contain;padding:8px 2px 12px;margin:0 0 8px;background:#0b0c13;scrollbar-width:none}
+.news-filter-rail::-webkit-scrollbar{display:none}
+.news-filter{flex:0 0 auto;min-height:36px;border:1px solid #343648;border-radius:999px;padding:0 14px;background:#171925;color:#d9dbea;font-size:11px;font-weight:700;white-space:nowrap;cursor:pointer}
+.news-filter.active{background:#eeeaff;color:#211a38;border-color:#eeeaff;box-shadow:0 3px 12px #0003}
+.news-mode .discover-empty{min-height:55vh}
