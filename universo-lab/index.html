@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#10111a">
-  <meta name="description" content="Universo: descubre videos, noticias, curiosidades y retos en un solo lugar.">
-  <title>Universo — descubre algo nuevo</title>
+  <meta name="description" content="UNIVERSO: explora videos, noticias y curiosidades en una sola pantalla.">
+  <title>UNIVERSO — Principal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -13,74 +13,55 @@
   <script src="app.js" defer></script>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#" aria-label="Universo inicio"><span class="brand-orbit">✦</span><span>UNIVERSO<small>DESCUBRE ALGO NUEVO</small></span></a>
-    <label class="search"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Busca videos, noticias, ideas…" aria-label="Buscar contenido"><kbd>↵</kbd></label>
-    <div class="taste-wrap">
-      <button class="taste-button" id="tasteToggle" aria-expanded="false" aria-controls="tasteMenu">☷ <span>Mis gustos</span></button>
-      <section class="taste-menu" id="tasteMenu" hidden>
-        <div class="taste-menu-head"><div><strong>Tu universo personal</strong><small>Elige qué quieres descubrir</small></div><button id="tasteClose" class="taste-close" aria-label="Cerrar preferencias">×</button></div>
-        <p class="taste-caption">Temas que te interesan</p>
-        <div class="taste-options">
-          <label><input type="checkbox" value="ciencia"><span>🔬 Ciencia</span></label>
-          <label><input type="checkbox" value="humor"><span>😂 Humor</span></label>
-          <label><input type="checkbox" value="animales"><span>🐾 Animales</span></label>
-          <label><input type="checkbox" value="tecnologia"><span>🤖 Tecnología</span></label>
-          <label><input type="checkbox" value="mundo"><span>🌍 Mundo</span></label>
-          <label><input type="checkbox" value="deportes"><span>⚽ Deportes</span></label>
-          <label><input type="checkbox" value="musica"><span>🎵 Música</span></label>
-          <label><input type="checkbox" value="curiosidades"><span>✨ Curiosidades</span></label>
-          <label><input type="checkbox" value="retos"><span>🧩 Retos</span></label>
+  <main class="universe-app" id="universeApp">
+    <header class="app-top">
+      <a class="brand" href="#" aria-label="UNIVERSO Principal"><span class="brand-orbit">✦</span><span>UNIVERSO<small>UN SOLO LUGAR, MUCHOS MUNDOS</small></span></a>
+      <div class="top-status" id="feedStatus">MUESTRA DE EXPLORACIÓN</div>
+      <button class="icon-button" id="searchToggle" aria-label="Buscar contenido">⌕</button>
+    </header>
+    <form class="search-panel" id="searchPanel" hidden>
+      <input id="searchInput" type="search" placeholder="Buscar videos, noticias, temas…" aria-label="Buscar contenido">
+      <button type="button" id="searchClose" aria-label="Cerrar búsqueda">×</button>
+    </form>
+    <section class="story-feed" id="storyFeed" aria-label="Contenido para explorar">
+      <div class="loading-state" id="loadingState">Preparando tu universo…</div>
+    </section>
+    <div class="screen-shade" aria-hidden="true"></div>
+    <section class="bottom-drawer" id="bottomDrawer" aria-label="Menú de exploración">
+      <button class="drawer-handle" id="drawerToggle" aria-expanded="false" aria-controls="drawerBody" aria-label="Abrir menú de categorías">
+        <span class="handle-line"></span><span class="handle-label" id="handleLabel">MENÚ · DESLIZA O TOCA</span>
+      </button>
+      <div class="drawer-body" id="drawerBody" hidden>
+        <div class="drawer-title-row"><div><strong>Explora por mundos</strong><small>Desliza hacia los lados para cambiar de menú</small></div><button class="icon-button drawer-close" id="drawerClose" aria-label="Cerrar menú">×</button></div>
+        <nav class="menu-rail" id="menuRail" aria-label="Categorías">
+          <button class="menu-chip active" data-category="principal">✦ Principal</button>
+          <button class="menu-chip" data-category="youtube">▶ YouTube</button>
+          <button class="menu-chip" data-category="tiktok">♪ TikTok</button>
+          <button class="menu-chip" data-category="facebook">f Facebook</button>
+          <button class="menu-chip" data-category="instagram">◎ Instagram</button>
+          <button class="menu-chip" data-category="curiosidades">✧ Curiosidades</button>
+          <button class="menu-chip" data-category="noticias">◉ Noticias</button>
+          <button class="menu-chip" data-category="retos">▦ Retos</button>
+          <button class="menu-chip" data-category="guardados">♡ Guardados <span id="savedCount">0</span></button>
+        </nav>
+        <div class="taste-section">
+          <div class="drawer-title-row"><div><strong>Mis gustos</strong><small>Ayudan a personalizar el orden</small></div><span class="local-tag">SOLO EN ESTE DISPOSITIVO</span></div>
+          <div class="taste-options">
+            <label><input type="checkbox" value="ciencia"><span>🔬 Ciencia</span></label>
+            <label><input type="checkbox" value="humor"><span>😂 Humor</span></label>
+            <label><input type="checkbox" value="animales"><span>🐾 Animales</span></label>
+            <label><input type="checkbox" value="tecnologia"><span>🤖 Tecnología</span></label>
+            <label><input type="checkbox" value="mundo"><span>🌍 Mundo</span></label>
+            <label><input type="checkbox" value="deportes"><span>⚽ Deportes</span></label>
+            <label><input type="checkbox" value="musica"><span>🎵 Música</span></label>
+            <label><input type="checkbox" value="curiosidades"><span>✨ Curiosidades</span></label>
+            <label><input type="checkbox" value="retos"><span>🧩 Retos</span></label>
+          </div>
+          <p class="drawer-note">“Principal” solo podrá ordenar por más vistos del día cuando una fuente autorizada entregue métricas reales. Esta versión usa contenido de demostración; no inventa cifras de viralidad.</p>
         </div>
-        <div class="taste-menu-foot"><span id="tasteStatus">Preferencias guardadas en este dispositivo</span><button class="primary-btn" id="tasteApply">Personalizar mi universo →</button></div>
-      </section>
-    </div>
-    <button class="round-btn" id="themeButton" aria-label="Cambiar tema" title="Cambiar tema">◐</button>
-  </header>
-
-  <main class="page">
-    <section class="intro">
-      <div class="intro-copy">
-        <div class="eyebrow"><span class="pulse"></span> TU VENTANA AL MUNDO</div>
-        <h1>La próxima cosa<br>que te <span>va a sorprender.</span></h1>
-        <p>Videos, historias, noticias y curiosidades para explorar sin saber qué vas a encontrar.</p>
-        <a class="primary-btn" href="#feed">Entrar a explorar <span>→</span></a>
-        <div class="trust-note"><span>↗</span> Los videos se reproducen desde sus plataformas originales.</div>
       </div>
-      <a class="hero-art" href="#feed" aria-label="Explorar descubrimiento destacado">
-        <img src="assets/hero-aurora.webp" alt="Aurora boreal sobre montañas" onerror="this.style.display='none'">
-        <div class="hero-art-fallback"><span>✧</span><small>EL UNIVERSO AÚN GUARDA<br>MUCHAS SORPRESAS</small></div>
-        <div class="hero-overlay"></div>
-        <div class="hero-label"><span>DESCUBRIMIENTO DESTACADO</span><strong>Hay lugares en la Tierra que parecen de otro planeta.</strong><small>Curiosidad · 3 min de exploración</small></div>
-        <span class="hero-play">↗</span>
-      </a>
     </section>
-
-    <nav class="categories" aria-label="Filtrar contenido">
-      <button class="category active" data-category="todos">✦ Para ti</button>
-      <button class="category" data-category="videos">▷ Videos</button>
-      <button class="category" data-category="noticias">◉ Noticias</button>
-      <button class="category" data-category="curiosidades">✧ Curiosidades</button>
-      <button class="category" data-category="retos">▦ Retos</button>
-      <button class="category" data-category="guardados">♡ Guardados <span id="savedCount">0</span></button>
-    </nav>
-
-    <section class="feed-section" id="feed">
-      <div class="section-head"><div><div class="eyebrow">EXPLORA A TU MANERA · SIN FEED INFINITO</div><h2 id="feedTitle">Tu universo, en una mirada</h2><p class="section-hint">Desliza hacia los lados para descubrir. Tú decides qué abrir.</p></div><div class="rail-controls"><span class="result-count" id="resultCount">Contenido de muestra</span><button class="rail-arrow" id="railPrev" aria-label="Contenido anterior">←</button><button class="rail-arrow" id="railNext" aria-label="Contenido siguiente">→</button></div></div>
-      <div class="feed-grid" id="feedGrid" aria-live="polite"></div>
-      <div class="empty-state" id="emptyState" hidden><span>◌</span><h3>Aún no hay contenido aquí</h3><p>Prueba otra categoría o guarda alguna publicación para verla después.</p><button class="secondary-btn" id="showAll">Volver a Para ti</button></div>
-    </section>
-
-    <section class="source-strip">
-      <div><div class="eyebrow">CONTENIDO EN SU ORIGEN</div><h2>Un solo lugar para explorar.<br><span>Los creadores siguen en casa.</span></h2><p>No descargamos copias de los videos. Cuando una publicación admite inserción, se muestra con el reproductor oficial; si no, abrimos su fuente original.</p></div>
-      <div class="platforms" aria-label="Plataformas previstas"><span class="platform yt">▶ <b>YouTube</b></span><span class="platform tt">♪ <b>TikTok</b></span><span class="platform fb">f <b>Facebook</b></span><span class="platform ig">◎ <b>Instagram</b></span></div>
-    </section>
-    <footer><a class="brand footer-brand" href="#"><span class="brand-orbit">✦</span><span>UNIVERSO<small>DESCUBRE ALGO NUEVO</small></span></a><p>Una experiencia independiente de descubrimiento. Las marcas y contenidos pertenecen a sus respectivos titulares.</p><span>LABORATORIO · VERSIÓN DE PRUEBA</span></footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </main>
-  <section class="immersive" id="immersive" role="dialog" aria-modal="true" aria-labelledby="immersiveTitle" hidden>
-    <button class="immersive-close" id="immersiveClose" aria-label="Cerrar pantalla completa">× <span>Salir</span></button>
-    <div class="immersive-stage" id="immersiveStage"><div class="immersive-orbit">✦</div><span class="immersive-kicker">UNIVERSO · DESCUBRIMIENTO</span><h2 id="immersiveTitle">Descubre algo nuevo</h2><p id="immersiveDescription"></p><div class="immersive-tags" id="immersiveTags"></div><div class="immersive-actions"><button class="immersive-action" id="immersiveLike">♡ Me interesa</button><button class="immersive-action" id="immersiveSkip">↗ Muéstrame otro</button><a class="immersive-action immersive-source" id="immersiveSource" href="#" target="_blank" rel="noopener noreferrer">Abrir fuente original ↗</a></div><small class="immersive-note">La personalización aprende de tus elecciones en este dispositivo. Las tendencias reales de cada plataforma se conectarán mediante fuentes oficiales cuando estén disponibles.</small></div>
-  </section>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
