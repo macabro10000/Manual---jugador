@@ -90,7 +90,7 @@
   function renderVideos(){
     $("#feedStatus").textContent=localVideos.length?"PRUEBA LOCAL":"VIDEOS PROPIOS";
     if(!localVideos.length){
-      $("#storyFeed").innerHTML='<section class="empty-state video-empty"><span class="empty-symbol">▶</span><h2>Nuestros videos</h2><p>Esta es la pantalla principal de UNIVERSO. Para probar la reproducción, elige dos o tres videos que ya tengas en tu teléfono. Se reproducirán aquí solo como prueba local; todavía no estarán publicados para otras personas.</p><label class="pick-videos" for="localVideoPicker">Elegir videos del teléfono</label><input id="localVideoPicker" class="file-picker" type="file" accept="video/*" multiple><small class="empty-note">PRUEBA LOCAL · NO SE SUBE NADA A INTERNET</small></section>';
+      $("#storyFeed").innerHTML='<section class="empty-state video-empty"><span class="empty-symbol">▶</span><h2>Nuestros videos</h2><p>Esta es la pantalla principal de VyROX. Para probar la reproducción, elige dos o tres videos que ya tengas en tu teléfono. Se reproducirán aquí solo como prueba local; todavía no estarán publicados para otras personas.</p><label class="pick-videos" for="localVideoPicker">Elegir videos del teléfono</label><input id="localVideoPicker" class="file-picker" type="file" accept="video/*" multiple><small class="empty-note">PRUEBA LOCAL · NO SE SUBE NADA A INTERNET</small></section>';
       $("#localVideoPicker")?.addEventListener("change",handleLocalVideos);
       return;
     }
@@ -111,7 +111,7 @@
     $("#statePlan")?.addEventListener("click",()=>toast("La pantalla de estados queda preparada para la siguiente etapa"));
   }
   function toast(message){const t=$("#toast");t.textContent=message;t.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove("show"),2300)}
-  function updateCategory(){const label=$("#topCategoryName");if(label)label.textContent=NAMES[category]||NAMES.principal;document.title="UNIVERSO — "+(NAMES[category]||NAMES.principal);$$(".menu-chip").forEach(b=>b.setAttribute("aria-current",b.dataset.category===category?"page":"false"))}
+  function updateCategory(){const label=$("#topCategoryName");if(label)label.textContent=NAMES[category]||NAMES.principal;document.title="VyROX — "+(NAMES[category]||NAMES.principal);$$(".menu-chip").forEach(b=>b.setAttribute("aria-current",b.dataset.category===category?"page":"false"))}
   function setCategory(next){if(!CATEGORIES.includes(next))return;category=next;render();$("#storyFeed").scrollTo({top:0,behavior:"smooth"})}
   function openDrawer(){drawerOpen=true;$("#drawerBody").hidden=false;$("#drawerToggle").setAttribute("aria-expanded","true");$("#handleLabel").textContent="CERRAR MENÚ";$("#bottomDrawer").classList.add("expanded")}
   function closeDrawer(){drawerOpen=false;$("#drawerBody").hidden=true;$("#drawerToggle").setAttribute("aria-expanded","false");$("#handleLabel").textContent="MENÚ · TOCA PARA EXPLORAR";$("#bottomDrawer").classList.remove("expanded")}
@@ -142,6 +142,6 @@
   },{passive:true});
   $("#storyFeed").addEventListener("touchcancel",()=>{touchStart=null},{passive:true});
   document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(drawerOpen)closeDrawer();else $("#searchPanel").hidden=true}});
-  async function loadContent(){try{const r=await fetch("./content.json",{cache:"no-store"});if(!r.ok)throw Error("HTTP "+r.status);const data=await r.json();if(!data||!Array.isArray(data.items))throw Error("Formato de catálogo inválido");const seen=new Set();items=data.items.filter(x=>x&&typeof x.id==="string"&&typeof x.title==="string"&&x.contentStatus!=="demo"&&!seen.has(x.id)&&seen.add(x.id));render()}catch(error){items=[];render();console.error("UNIVERSO catalog error",error)}}
+  async function loadContent(){try{const r=await fetch("./content.json",{cache:"no-store"});if(!r.ok)throw Error("HTTP "+r.status);const data=await r.json();if(!data||!Array.isArray(data.items))throw Error("Formato de catálogo inválido");const seen=new Set();items=data.items.filter(x=>x&&typeof x.id==="string"&&typeof x.title==="string"&&x.contentStatus!=="demo"&&!seen.has(x.id)&&seen.add(x.id));render()}catch(error){items=[];render();console.error("VyROX catalog error",error)}}
   loadContent();
 })();
