@@ -209,3 +209,11 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Riesgo de datos: no guardar estado crítico solo en el filesystem de un servicio Render gratuito, porque es efímero. El catálogo versionado en GitHub es recuperable; las suscripciones Web Push contienen datos privados y no deben guardarse como contenido público del repositorio.
 - Decisión por ahora: no crear servicios ni base de datos, no tocar `main`, no introducir secretos ni activar publicación automática. Próxima implementación segura: preparar un colector RSS de prueba que solo lea fuentes permitidas y genere un informe de candidatos sin modificar el catálogo; probar parseo, fechas, URL canónica y deduplicación antes de habilitar publicación.
 - Fuentes oficiales consultadas: página de precios de Render y documentación de planes/servicios. Esta auditoría no crea cargos ni modifica servicios.
+
+
+## Prototipo de auditoría RSS en solo lectura — 2026-10-09
+- Se añadió `universo-lab/scripts/rss-audit.mjs`: consulta dos feeds públicos candidatos (BBC Mundo y DW Español), aplica límite de tiempo, valida título/fecha/URL HTTPS, normaliza parámetros de seguimiento y cuenta duplicados por URL canónica.
+- El script genera `rss-audit-report.json` con el modo `READ_ONLY_DRY_RUN`; no modifica `content.json`, no publica noticias y no envía notificaciones. La existencia de un enlace RSS no se interpreta como prueba de veracidad.
+- Se añadió `.github/workflows/universo-rss-audit.yml` con disparador manual (`workflow_dispatch`), permisos de contenido de solo lectura y retención del informe como artefacto durante 7 días.
+- La ejecución programada cada 30 minutos NO se activó todavía. Primero hay que ejecutar la auditoría manual y revisar los resultados reales de los feeds. El workflow no se ha declarado probado hasta observar una ejecución satisfactoria.
+- Cambios realizados exclusivamente en `lab/universo-frontend`; sin cambios a `main`, producción, catálogo ni servicios de Render. No se agregaron secretos ni recursos de pago.
