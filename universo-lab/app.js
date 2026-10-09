@@ -56,7 +56,7 @@
     if(category==="principal")list=sortPrincipal(list);
     else list.sort((a,b)=>score(b)-score(a));
     $("#savedCount").textContent=String(saved.length);
-    $$(".menu-chip").forEach(button=>button.classList.toggle("active",button.dataset.category===category));
+    $$$(".menu-chip").forEach(button=>button.classList.toggle("active",button.dataset.category===category));
     $("#feedStatus").textContent=list.some(verifiedViral)?"TENDENCIAS CON MÉTRICAS DISPONIBLES":"MUESTRA · SIN MÉTRICAS VIRALES";
     if(!list.length){
       $("#storyFeed").innerHTML='<section class="empty-state"><span class="empty-symbol">✧</span><h2>'+esc(emptyTitle())+'</h2><p>'+esc(emptyMessage())+'</p><button type="button" id="clearFilter">Volver a Principal</button></section>';
@@ -93,7 +93,7 @@
     const label=$("#topCategoryName");if(!label)return;
     const next=CATEGORY_NAMES[category]||category;
     if(label.textContent!==next){const pill=$("#topCategory");pill?.classList.add("changing");label.textContent=next;document.title="UNIVERSO — "+next;window.setTimeout(()=>pill?.classList.remove("changing"),180)}
-    $(".menu-chip").forEach(button=>button.setAttribute("aria-current",button.dataset.category===category?"page":"false"));
+    $$(".menu-chip").forEach(button=>button.setAttribute("aria-current",button.dataset.category===category?"page":"false"));
     const active=$(".menu-chip.active");if(active&&drawerOpen)active.scrollIntoView({block:"nearest",inline:"nearest",behavior:"smooth"});
   }
   function setCategory(next){
@@ -153,7 +153,7 @@
     if(dy < -18)openDrawer();else if(dy > 18)closeDrawer();
   });
   $("#drawerClose").addEventListener("click",closeDrawer);
-  $(".menu-chip").forEach(button=>button.addEventListener("click",()=>{
+  $$(".menu-chip").forEach(button=>button.addEventListener("click",()=>{
     setCategory(button.dataset.category);closeDrawer();
   }));
   $("#searchToggle").addEventListener("click",()=>{const panel=$("#searchPanel");panel.hidden=!panel.hidden;if(!panel.hidden)$("#searchInput").focus()});
