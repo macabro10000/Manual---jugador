@@ -283,3 +283,28 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Render confirmó el deploy `dep-db4mt03bc2fs73c08000` como `live`, commit desplegado `81cdae9e37eb660b641098b33f512939c4c3fae1`.
 - El servicio viejo `universo-explorador` sigue existiendo y no se eliminó.
 - Esta actualización deja explícito que este archivo es el registro de estado para reanudar el trabajo en un chat nuevo.
+
+## Auditoría de estructura y autenticación VyROX — 2026-10-09
+
+### Evidencia inspeccionada
+- Se inspeccionó el árbol completo del commit de la rama `lab/universo-frontend` (HEAD observado durante esta auditoría: `650a9ce50faa8bfd877943f3c5be495317bfd20a`). La aplicación publicada por el servicio `vyrox` está en `universo-lab/`.
+- Dentro de `universo-lab/` solo existen HTML, CSS, JavaScript, catálogo JSON, documentación, assets y el prototipo RSS. No hay `package.json`, servidor Node/Express, rutas API, modelos de usuario, base de datos ni endpoints de autenticación.
+- `universo-lab/index.html` no incluye el cliente de Google Identity Services ni un botón de inicio de sesión.
+- `universo-lab/app.js` carga el catálogo desde `./content.json` y mantiene preferencias/guardados localmente en el navegador. No implementa autenticación ni sesiones remotas.
+- Se inspeccionó, como referencia técnica separada, el repositorio `macabro10000/Librex1` en `main`: `package.json`, `server/routes/passenger.js`, `server/routes/driver.js`, `server/routes/admin.js`, `server/models/session.js`, `server/models/admin-session.js`, `server/server.js` y la configuración de Render.
+- El patrón de autenticación existente en Libres1 utiliza Google Identity Services en el frontend, envía el ID token al backend, verifica la credencial en el servidor con `google-auth-library` y el `audience` correspondiente, exige `email_verified === true`, y crea una sesión del servidor mediante cookie. El servidor también contempla revocación de sesiones y separación por rol. Es una referencia de implementación, no una autorización para conectar VyROX a los datos o backend de Libres1.
+
+### Conclusión técnica
+- La autenticación con Google **no está implementada** en VyROX. Añadir solo un botón visual no sería suficiente ni seguro.
+- Para mantener los proyectos aislados, la arquitectura recomendada para la siguiente fase es reutilizar el patrón técnico de verificación Google + sesión segura, pero crear para VyROX sus propias rutas, usuarios, sesiones, configuración OAuth y persistencia; no reutilizar la base de datos, las cookies, las identidades ni las rutas de Libres1.
+- El identificador público `@usuario` debe ser un campo único propio de VyROX, separado del correo y del identificador interno de Google (`sub`). La asignación y comprobación de unicidad debe hacerse en el backend y en la base de datos, no solo en el navegador.
+- La mensajería tipo WhatsApp requerirá cuentas verificadas, contactos/identidades, persistencia de conversaciones y mensajes, autorización por conversación y controles contra abuso. No está presente en el frontend actual.
+- Antes de activar el inicio de sesión se deberá configurar el origen autorizado de VyROX en Google Cloud y las variables de entorno del backend independiente. No copiar secretos ni reutilizar automáticamente el cliente OAuth de otro proyecto.
+- No se creó backend, base de datos, cliente OAuth ni servicio Render en esta auditoría. No se cambiaron archivos de la aplicación ni se modificó `main` o el servicio de producción.
+
+### Estado y siguiente paso exacto
+- Auditoría de estructura y método anterior: completada mediante lectura de archivos y metadatos de GitHub.
+- Cambios de código: ninguno.
+- Prueba de autenticación: no aplicable todavía; no existe implementación que probar.
+- Próximo paso: diseñar y revisar en laboratorio la arquitectura mínima del backend independiente de VyROX (autenticación Google, sesiones, perfil con `@usuario` único y base para mensajería), incluyendo archivos, variables de entorno y límites del plan gratuito antes de crear recursos o desplegar. Mantener la rama `lab/universo-frontend` y no tocar `main` ni Libres1.
+
