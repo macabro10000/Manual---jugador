@@ -180,3 +180,14 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Verificación: `content.json` vuelve a analizarse correctamente como JSON y el registro `news-westcol-robot-20261009` contiene la nueva URL. La página original identifica esa imagen como foto del robot de Westcol. No se ha verificado todavía en el navegador Android que el CDN la entregue en el dispositivo.
 - Commit de catálogo: `3f9004a4addb31a8a80c1187e6acbc793027f35c`.
 - Solo rama `lab/universo-frontend`; producción (`main`) intacta.
+
+
+## Regla nueva: revisión automática y notificaciones — 2026-10-09
+- El sistema debe revisar fuentes de noticias cada 30 minutos.
+- Debe detectar publicaciones nuevas, evitar duplicados, comprobar fecha y enlace original, clasificar por categoría y registrar la fuente.
+- Solo debe publicar automáticamente noticias que superen las comprobaciones definidas; si no hay corroboración suficiente, deben quedar pendientes y no presentarse como verificadas.
+- Cuando se publique una noticia nueva, debe intentar enviar una notificación al teléfono del usuario. Para notificación web push real se necesitarán permiso explícito en el navegador y una suscripción activa del dispositivo; no basta con que la página esté abierta.
+- Mantener imágenes de la publicación original cuando se puedan obtener legalmente y comprobar que cargan. Si solo hay imagen ilustrativa, indicarlo expresamente. No descargar ni republicar videos de terceros; enlazar o insertar reproductores oficiales cuando esté permitido.
+- Mantener la regla existente de ocultar del feed las noticias después de 24 horas desde su incorporación, sin borrar el histórico automáticamente.
+- Restricción técnica: la interfaz actual sigue siendo estática y aún no tiene colector RSS, tarea programada, almacenamiento central de deduplicación ni servicio de notificaciones. Esta regla queda registrada como requisito pendiente; no afirmar que ya funciona hasta desplegar y probar cada componente.
+- Diseño previsto: tarea programada separada en laboratorio cada 30 minutos, empezando por RSS/fuentes públicas gratuitas; validación de fecha/URL y deduplicación; salida controlada al catálogo; notificación web push con claves y suscripción configuradas. No modificar producción ni contratar APIs de pago sin aprobación.
