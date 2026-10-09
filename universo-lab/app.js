@@ -14,6 +14,8 @@
     curiosidades:["curiosidad","curiosidades","sorprendente","pregunta","formas en las nubes","parecen de otro planeta"],
     retos:["reto","retos","resolver","patrón","patron","prueba"]
   };
+  const CATEGORY_ORDER=["principal","youtube","tiktok","facebook","instagram","curiosidades","noticias","retos","guardados"];
+  const CATEGORY_NAMES={principal:"Principal",youtube:"YouTube",tiktok:"TikTok",facebook:"Facebook",instagram:"Instagram",curiosidades:"Curiosidades",noticias:"Noticias",retos:"Retos",guardados:"Guardados"};
   let items=[], category="principal", search="", saved=readArray(KEYS.saved,[]), tastes=readArray(KEYS.tastes,[]), signals=readObject(KEYS.signals,{}), drawerOpen=false;
   function readArray(key,fallback){try{const value=JSON.parse(localStorage.getItem(key)||"null");return Array.isArray(value)?value:fallback}catch{return fallback}}
   function readObject(key,fallback){try{const value=JSON.parse(localStorage.getItem(key)||"null");return value&&typeof value==="object"&&!Array.isArray(value)?value:fallback}catch{return fallback}}
@@ -49,6 +51,7 @@
   }
   function itemIsVideo(item){return ["youtube","tiktok","facebook","instagram"].includes(normalized(item.sourcePlatform))||normalized(item.contentType).includes("video")}
   function render(){
+    updateTopCategory();
     let list=items.filter(item=>categoryMatches(item)&&textOf(item).includes(normalized(search)));
     if(category==="principal")list=sortPrincipal(list);
     else list.sort((a,b)=>score(b)-score(a));
@@ -86,6 +89,23 @@
       if(next)next.scrollIntoView({behavior:"smooth",block:"start"});else toast("Llegaste al final de esta selección.");
     }));
   }
+  function updateTopCategory(){
+    const label=$("#topCategoryName");if(!label)return;
+    const next=CATEGORY_NAMES[category]||category;
+    if(label.textContent!==next){const pill=$("#topCategory");pill?.classList.add("changing");label.textContent=next;document.title="UNIVERSO — "+next;window.setTimeout(()=>pill?.classList.remove("changing"),180)}
+    $(".menu-chip").forEach(button=>button.setAttribute("aria-current",button.dataset.category===category?"page":"false"));
+    const active=$(".menu-chip.active");if(active&&drawerOpen)active.scrollIntoView({block:"nearest",inline:"nearest",behavior:"smooth"});
+  }
+  function setCategory(next){
+    const index=CATEGORY_ORDER.indexOf(category);const target=CATEGORY_ORDER.indexOf(next);
+    if(target<0)return;category=next;render();scrollToFirst();
+    const active=$(".menu-chip.active");if(active)active.scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"});
+    toast(CATEGORY_NAMES[category]||category);
+  }
+  function changeCategoryBySwipe(direction){
+    const index=CATEGORY_ORDER.indexOf(category);const nextIndex=Math.max(0,Math.min(CATEGORY_ORDER.length-1,index+direction));
+    if(nextIndex!==index)setCategory(CATEGORY_ORDER[nextIndex]);
+  }
   function renderKeepPosition(id){const old=$("#storyFeed [data-story='"+CSS.escape(id)+"']");const index=old?Array.from(old.parentElement.children).indexOf(old):0;render();const card=$("#storyFeed").children[Math.max(0,index)];if(card)card.scrollIntoView({behavior:"auto",block:"start"})}
   function safeUrl(value){try{const url=new URL(value);return ["https:","http:"].includes(url.protocol)?url.href:""}catch{return""}}
   function emptyTitle(){return category==="facebook"?"Facebook todavía no tiene fuentes conectadas":category==="instagram"?"Instagram todavía no tiene publicaciones conectadas":category==="youtube"?"YouTube: faltan publicaciones verificadas":category==="tiktok"?"TikTok: faltan publicaciones verificadas":category==="guardados"?"Todavía no has guardado nada":"No encontramos contenido para este filtro"}
@@ -95,9 +115,33 @@
   function openDrawer(){drawerOpen=true;$("#drawerBody").hidden=false;$("#drawerToggle").setAttribute("aria-expanded","true");$("#handleLabel").textContent="CERRAR MENÚ · TOCA LA RAYITA";$("#bottomDrawer").classList.add("expanded")}
   function closeDrawer(){drawerOpen=false;$("#drawerBody").hidden=true;$("#drawerToggle").setAttribute("aria-expanded","false");$("#handleLabel").textContent="MENÚ · DESLIZA O TOCA";$("#bottomDrawer").classList.remove("expanded")}
   $("#drawerToggle").addEventListener("click",()=>drawerOpen?closeDrawer():openDrawer());
+  // Gestos sobre el contenido: vertical = siguiente/anterior por scroll-snap nativo;
+  // horizontal = cambiar categoría sin abrir el menú.
+  const feed=$("#storyFeed");feed.classList.add("gesture-enabled");
+  let touchStart=null, lastGestureAt=0;
+  feed.addEventListener("touchstart",event=>{
+    if(event.touches.length!==1)return;
+    const t=event.touches[0];touchStart={x:t.clientX,y:t.clientY};
+  },{passive:true});
+  feed.addEventListener("touchend",event=>{
+    if(!touchStart||event.changedTouches.length!==1)return;
+    const t=event.changedTouches[0],dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;touchStart=null;
+    if(Math.abs(dx)<65||Math.abs(dx)<Math.abs(dy)*1.25)return;
+    const now=Date.now();if(now-lastGestureAt<320)return;lastGestureAt=now;
+    // Izquierda avanza por categorías; derecha retrocede.
+    changeCategoryBySwipe(dx<0?1:-1);
+  },{passive:true});
+  // La rayita también responde al arrastre vertical para abrir/cerrar el menú.
+  let handleStartY=null;
+  $("#drawerToggle").addEventListener("touchstart",event=>{if(event.touches.length===1)handleStartY=event.touches[0].clientY},{passive:true});
+  $("#drawerToggle").addEventListener("touchend",event=>{
+    if(handleStartY===null||!event.changedTouches.length)return;
+    const dy=event.changedTouches[0].clientY-handleStartY;handleStartY=null;
+    if(dy < -18)openDrawer();else if(dy > 18)closeDrawer();
+  },{passive:true});
   $("#drawerClose").addEventListener("click",closeDrawer);
-  $$(".menu-chip").forEach(button=>button.addEventListener("click",()=>{
-    category=button.dataset.category;render();closeDrawer();scrollToFirst();
+  $(".menu-chip").forEach(button=>button.addEventListener("click",()=>{
+    setCategory(button.dataset.category);closeDrawer();
   }));
   $("#searchToggle").addEventListener("click",()=>{const panel=$("#searchPanel");panel.hidden=!panel.hidden;if(!panel.hidden)$("#searchInput").focus()});
   $("#searchClose").addEventListener("click",()=>{search="";$("#searchInput").value="";$("#searchPanel").hidden=true;render()});
