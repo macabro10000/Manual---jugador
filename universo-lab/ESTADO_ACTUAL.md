@@ -3,7 +3,7 @@
 **Actualizado:** 2026-10-09  
 **Repositorio:** `macabro10000/Manual---jugador`  
 **Rama de trabajo:** `lab/universo-frontend`  
-**Último HEAD verificado antes de este archivo:** `0f4681328a261a5a815d6dd1fbbe145517a0f0ca`
+**Último HEAD verificado antes de esta actualización documental:** `0f4681328a261a5a815d6dd1fbbe145517a0f0ca`
 
 > Este archivo es el resumen rápido para recuperar el proyecto al cambiar de chat. No reemplaza la bitácora histórica: el detalle completo sigue temporalmente en `ARCHIVO_DE_OPERACION.md`. No borrar ni recortar ese archivo hasta terminar la migración y verificar que todo el contenido importante se haya conservado.
 
