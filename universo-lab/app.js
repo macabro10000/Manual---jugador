@@ -34,10 +34,13 @@
   function filterBar(){
     return '<nav class="news-filter-rail" aria-label="Filtrar noticias">'+NEWS_FILTERS.map(([id,label])=>'<button type="button" class="news-filter '+(newsFilter===id?'active':'')+'" data-news-filter="'+id+'" aria-pressed="'+(newsFilter===id?'true':'false')+'">'+label+'</button>').join("")+'</nav>';
   }
+  function newsTimestamp(item){const value=item.addedAt||item.publishedAt;const time=Date.parse(value||"");return Number.isFinite(time)?time:0}
+  function isFreshNews(item,now=Date.now()){const added=newsTimestamp(item);return added>0&&now-added<24*60*60*1000}
   function filteredItems(){
-    let list=items.filter(x=>category==="guardados"?saved.includes(x.id):isNews(x)&&category==="descubrimientos"&&itemMatchesFilter(x));
+    const now=Date.now();
+    let list=items.filter(x=>category==="guardados"?saved.includes(x.id):isNews(x)&&category==="descubrimientos"&&isFreshNews(x,now)&&itemMatchesFilter(x));
     list=list.filter(x=>searchable(x).includes(norm(search)));
-    return list.sort((a,b)=>score(b)-score(a));
+    return list.sort((a,b)=>newsTimestamp(b)-newsTimestamp(a)||score(b)-score(a));
   }
   function render(){
     updateCategory();
