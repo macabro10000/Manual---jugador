@@ -74,3 +74,50 @@
  .source-strip{grid-template-columns:1fr}
  footer{padding-bottom:24px}
 }
+
+
+/* Personalización por intereses y exploración inmersiva */
+.taste-wrap{position:relative;flex-shrink:0}
+.taste-button{height:40px;display:flex;align-items:center;gap:7px;padding:0 12px;border:1px solid var(--line);border-radius:13px;background:var(--panel);color:var(--text);font-size:12px;font-weight:700;white-space:nowrap}
+.taste-menu{position:absolute;right:0;top:calc(100% + 12px);width:min(355px,92vw);padding:18px;background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:0 22px 80px #0009;z-index:60}
+.taste-menu-head{display:flex;justify-content:space-between;gap:12px;align-items:start}
+.taste-menu-head strong,.taste-menu-head small{display:block}
+.taste-menu-head strong{font:600 17px "Space Grotesk",sans-serif}
+.taste-menu-head small,.taste-caption,.taste-menu-foot>span{font-size:11px;color:var(--muted)}
+.taste-close{border:0;background:var(--panel2);color:var(--text);border-radius:9px;width:30px;height:30px;font-size:20px}
+.taste-caption{margin:17px 0 9px}
+.taste-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.taste-options label{position:relative;cursor:pointer}
+.taste-options input{position:absolute;opacity:0}
+.taste-options label span{display:block;padding:10px;border:1px solid var(--line);border-radius:11px;font-size:12px}
+.taste-options input:checked+span{border-color:var(--purple);background:#b9a4ff20;box-shadow:inset 0 0 0 1px var(--purple)}
+.taste-menu-foot{display:grid;gap:9px;margin-top:14px}
+.taste-menu-foot .primary-btn{margin:0;width:100%;justify-content:space-between}
+.immersive{position:fixed;inset:0;z-index:100;background:radial-gradient(ellipse at 50% 20%,#3e3266,#10111a 65%);color:#fff;display:grid;place-items:center;padding:70px 20px 25px;overflow:auto}
+.immersive-close{position:fixed;top:calc(14px + env(safe-area-inset-top));right:16px;z-index:2;border:1px solid #ffffff35;border-radius:99px;background:#171725;color:#fff;padding:9px 13px;font-size:12px}
+.immersive-stage{width:min(720px,100%);text-align:center;margin:auto}
+.immersive-orbit{width:76px;height:76px;display:grid;place-items:center;border-radius:26px;margin:0 auto 22px;background:linear-gradient(145deg,var(--purple),var(--cyan));color:#171526;font-size:42px;box-shadow:0 0 75px #b9a4ff40}
+.immersive-kicker{font-size:10px;letter-spacing:2.5px;color:var(--cyan);font-weight:700}
+.immersive-stage h2{font:700 clamp(32px,7vw,58px)/1.08 "Space Grotesk",sans-serif;letter-spacing:-1.8px;margin:16px 0}
+.immersive-stage p{color:#c1c2d2;font-size:15px;line-height:1.8;max-width:560px;margin:0 auto}
+.immersive-tags{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:20px 0}
+.immersive-tags span{padding:6px 10px;border:1px solid #ffffff26;border-radius:99px;color:#ded8ff;font-size:11px}
+.immersive-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:9px;margin:28px 0 18px}
+.immersive-action{border:1px solid #ffffff30;border-radius:12px;padding:12px 15px;background:#ffffff0d;color:#fff;font-size:12px;font-weight:700}
+.immersive-action.liked{background:#b9a4ff;color:#191429;border-color:transparent}
+.immersive-source{background:linear-gradient(100deg,var(--purple),var(--cyan));color:#171526;border:0}
+.immersive-note{display:block;color:#a4a8bc;font-size:10px;line-height:1.6;max-width:520px;margin:24px auto 0}
+.card-link.immersive-open{border:1px solid #ffffff16}
+body.immersive-open{overflow:hidden}
+@media(max-width:600px){
+ .topbar{gap:6px;padding-inline:3%}
+ .taste-button{width:38px;height:38px;justify-content:center;padding:0;font-size:18px}
+ .taste-button span{display:none}
+ .taste-menu{position:fixed;top:70px;right:4vw}
+ .immersive{padding:65px 18px 20px}
+ .immersive-orbit{width:64px;height:64px;font-size:35px;margin-bottom:18px}
+ .immersive-stage h2{font-size:34px}
+ .immersive-stage p{font-size:13px}
+ .immersive-actions{display:grid;grid-template-columns:1fr}
+ .immersive-action{width:100%}
+}
