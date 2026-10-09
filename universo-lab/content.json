@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "note": "Selección editorial inicial de noticias verificadas consultadas el 9 de octubre de 2026. Son resúmenes originales de UNIVERSO con enlace a cada fuente. La actualización automática aún no está conectada; no se atribuyen cifras de visualizaciones cuando la fuente no las publica.",
+  "note": "Selección editorial inicial de noticias verificadas consultadas el 9 de octubre de 2026. Cada noticia se muestra durante un máximo de 24 horas desde addedAt y luego desaparece del feed; las noticias vigentes se ordenan de más reciente a más antigua. La actualización automática aún no está conectada; no se atribuyen cifras de visualizaciones cuando la fuente no las publica.",
   "items": [
     {
       "id": "news-elnino-20261009",
@@ -18,7 +18,8 @@
         "clima",
         "agua",
         "energía"
-      ]
+      ],
+      "addedAt": "2026-10-09T21:12:00Z"
     },
     {
       "id": "news-imf-20261008",
@@ -36,7 +37,8 @@
         "finanzas",
         "FMI",
         "presupuesto"
-      ]
+      ],
+      "addedAt": "2026-10-09T21:12:00Z"
     },
     {
       "id": "news-robot-luka-20261009",
@@ -53,7 +55,8 @@
         "robot",
         "inteligencia artificial",
         "innovación"
-      ]
+      ],
+      "addedAt": "2026-10-09T21:12:00Z"
     },
     {
       "id": "news-paz-onu-20261009",
@@ -71,7 +74,8 @@
         "Colombia",
         "paz",
         "actualidad"
-      ]
+      ],
+      "addedAt": "2026-10-09T21:12:00Z"
     },
     {
       "id": "news-westcol-robot-20261009",
@@ -90,7 +94,8 @@
         "viral",
         "robots",
         "Stream Fighters"
-      ]
+      ],
+      "addedAt": "2026-10-09T21:12:00Z"
     }
   ]
 }
