@@ -61,12 +61,15 @@
     }
     feed.innerHTML=list.map(item=>{
       const sig=signals[item.id]||{};
-      const image=item.image?'<img class="story-image" src="'+esc(item.image)+'" alt="" loading="lazy" onerror="this.hidden=true">':'';
+      const imageUrl=safeUrl(item.image);
+      const image=imageUrl?'<a class="news-thumb-link" href="'+esc(safeUrl(item.canonicalUrl))+'" target="_blank" rel="noopener noreferrer" aria-label="Abrir noticia original"><img class="news-thumb" src="'+esc(imageUrl)+'" alt="Imagen relacionada con la noticia" loading="lazy" onerror="this.closest(\'.news-thumb-link\').hidden=true"></a>':'';
+      const videoUrl=safeUrl(item.videoUrl);
+      const media=videoUrl&&/\\.(mp4|webm|ogg)(?:[?#]|$)/i.test(videoUrl)?'<video class="news-thumb news-thumb-video" src="'+esc(videoUrl)+'" muted playsinline loop preload="none" controls aria-label="Video relacionado con la noticia"></video>':image;
       const url=safeUrl(item.canonicalUrl);
       const source=esc(item.sourceLabel||"Fuente");
       const date=item.publishedAt?'<time>'+esc(item.publishedAt)+'</time>':"";
       const link=url?'<a class="story-action primary" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Ver noticia original ↗</a>':"";
-      return '<article class="story-card discover-card" data-story="'+esc(item.id)+'">'+image+'<div class="story-fallback" '+(image?'hidden':'')+'>▤</div><div class="story-content"><div class="story-source"><span class="source-dot"></span>'+source+' '+date+'</div><h2>'+esc(item.title)+'</h2><p>'+esc(item.description)+'</p><div class="story-tags"><span>'+esc(item.category||"noticias")+'</span><span>RESUMEN VERIFICADO</span></div><div class="story-actions"><button type="button" class="story-action" data-speak="'+esc(item.id)+'">▶ Escuchar</button><button class="story-action '+(sig.like?"liked":"")+'" data-like="'+esc(item.id)+'">'+(sig.like?"♥ Me interesa":"♡ Me interesa")+'</button><button class="story-action '+(saved.includes(item.id)?"saved":"")+'" data-save="'+esc(item.id)+'">'+(saved.includes(item.id)?"♥ Guardado":"＋ Guardar")+'</button>'+link+'</div></div></article>';
+      return '<article class="story-card discover-card" data-story="'+esc(item.id)+'"><div class="story-content"><div class="news-card-head"><div class="story-source"><span class="source-dot"></span>'+source+' '+date+'</div>'+media+'</div><h2>'+esc(item.title)+'</h2><p>'+esc(item.description)+'</p><div class="story-tags"><span>'+esc(item.category||"noticias")+'</span><span>RESUMEN VERIFICADO</span></div><div class="story-actions"><button type="button" class="story-action" data-speak="'+esc(item.id)+'">▶ Escuchar</button><button class="story-action '+(sig.like?"liked":"")+'" data-like="'+esc(item.id)+'">'+(sig.like?"♥ Me interesa":"♡ Me interesa")+'</button><button class="story-action '+(saved.includes(item.id)?"saved":"")+'" data-save="'+esc(item.id)+'">'+(saved.includes(item.id)?"♥ Guardado":"＋ Guardar")+'</button>'+link+'</div></div></article>';
     }).join("");
     $("[data-speak]").forEach(btn=>btn.addEventListener("click",()=>{
       const item=items.find(x=>x.id===btn.dataset.speak);
