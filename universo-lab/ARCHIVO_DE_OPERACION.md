@@ -410,3 +410,11 @@ Comprobar el resultado real de GitHub Actions para `vyrox-server-tests.yml`. Si 
 - Se verificó por lectura en GitHub que `vyrox-server/src/server.js`, `vyrox-server/test/server.test.js` y esta sección de continuidad están guardados en la rama.
 - No se declara que las pruebas pasaron. Antes de continuar, hay que conseguir una ejecución real de CI o un entorno Node.js disponible para correr `npm install` y `npm test`.
 - Siguiente paso exacto: investigar por qué no aparece una ejecución del workflow y conseguir una prueba ejecutada; no crear todavía el servicio API de Render.
+
+
+### Resultado real de CI — actualización 2026-10-09
+- La consulta posterior encontró la ejecución de GitHub Actions **VyROX API tests**, run ID `38005322983`, para el commit `69f965be53b35813b1b0de5dc2ff75d043c0d284`.
+- Resultado del workflow: `success`. El job `test` terminó en `success`; los pasos `Install dependencies` y `Run tests` también terminaron en `success`.
+- La consulta anterior se hizo antes de que la ejecución apareciera en la lista; la nota previa queda como registro temporal de esa consulta y no como el estado final.
+- Confirmación: las cinco pruebas automatizadas del esqueleto inicial pasaron en GitHub Actions con Node.js 20. No equivale a prueba de despliegue ni a prueba física en Android.
+- Siguiente paso exacto: fijar dependencias con un lockfile reproducible y volver a ejecutar CI. Mantener sin cambios el servicio Render hasta completar esa revisión.
