@@ -14,8 +14,8 @@
     curiosidades:["curiosidad","curiosidades","sorprendente","pregunta","formas en las nubes","parecen de otro planeta"],
     retos:["reto","retos","resolver","patrón","patron","prueba"]
   };
-  const CATEGORY_ORDER=["principal","youtube","tiktok","facebook","instagram","curiosidades","noticias","retos","guardados"];
-  const CATEGORY_NAMES={principal:"Principal",youtube:"YouTube",tiktok:"TikTok",facebook:"Facebook",instagram:"Instagram",curiosidades:"Curiosidades",noticias:"Noticias",retos:"Retos",guardados:"Guardados"};
+  const CATEGORY_ORDER=["principal","youtube","tiktok","facebook","instagram","entretenimiento","infantil","adultos","dramas-chinos","comedia","anime","peliculas","musica","deportes","videojuegos","ciencia","animales","curiosidades","noticias","retos","guardados"];
+  const CATEGORY_NAMES={principal:"Principal",youtube:"YouTube",tiktok:"TikTok",facebook:"Facebook",instagram:"Instagram",entretenimiento:"Entretenimiento",infantil:"Infantil",adultos:"Adultos","dramas-chinos":"Dramas chinos",comedia:"Comedia",anime:"Anime",peliculas:"Películas",musica:"Música",deportes:"Deportes",videojuegos:"Videojuegos",ciencia:"Ciencia",animales:"Animales",curiosidades:"Curiosidades",noticias:"Noticias",retos:"Retos",guardados:"Guardados"};
   let items=[], category="principal", search="", saved=readArray(KEYS.saved,[]), tastes=readArray(KEYS.tastes,[]), signals=readObject(KEYS.signals,{}), drawerOpen=false;
   function readArray(key,fallback){try{const value=JSON.parse(localStorage.getItem(key)||"null");return Array.isArray(value)?value:fallback}catch{return fallback}}
   function readObject(key,fallback){try{const value=JSON.parse(localStorage.getItem(key)||"null");return value&&typeof value==="object"&&!Array.isArray(value)?value:fallback}catch{return fallback}}
@@ -47,7 +47,8 @@
     if(category==="principal")return true;
     if(category==="guardados")return saved.includes(item.id);
     if(["youtube","tiktok","facebook","instagram"].includes(category))return normalized(item.sourcePlatform)===category;
-    return item.category===category;
+    if(category==="entretenimiento")return ["infantil","adultos","dramas-chinos","comedia","anime","peliculas"].includes(normalized(item.category));
+    return normalized(item.category)===category;
   }
   function itemIsVideo(item){return ["youtube","tiktok","facebook","instagram"].includes(normalized(item.sourcePlatform))||normalized(item.contentType).includes("video")}
   function render(){
@@ -71,8 +72,10 @@
       const topic=esc(item.category||"descubrimiento");
       const source=esc(item.sourceLabel||item.sourcePlatform||"Fuente");
       const href=safeUrl(item.canonicalUrl);
+      const playerUrl=inAppVideo(item);
+      const player=playerUrl?'<div class="inapp-player"><iframe src="'+esc(playerUrl)+'" title="'+esc(item.title)+'" loading="lazy" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>':'';
       const link=href?'<a class="story-action primary" href="'+esc(href)+'" target="_blank" rel="noopener noreferrer">Abrir fuente original ↗</a>':'';
-      return '<article class="story-card" data-story="'+esc(item.id)+'">'+image+'<div class="story-fallback" '+(image?'hidden':'')+'>'+esc(item.symbol||"✦")+'</div><div class="story-vignette"></div><div class="story-count" aria-hidden="true">'+list.map((_,dot)=>'<span class="'+(dot===index?"active":"")+'"></span>').join("")+'</div><div class="story-content"><div class="story-source"><span class="source-dot"></span>'+source+' <span class="demo-badge">'+status+'</span></div><h1>'+esc(item.title)+'</h1><p>'+esc(item.description)+'</p><div class="story-tags"><span>'+topic+'</span><span>'+esc(item.contentType||"DESCUBRIMIENTO")+'</span>'+(item.publishedAt?'<span>'+esc(item.publishedAt)+'</span>':'')+'</div><div class="story-actions"><button class="story-action '+(s.like?"liked":"")+'" data-like="'+esc(item.id)+'">'+(s.like?"♥ Te interesa":"♡ Me interesa")+'</button><button class="story-action '+(isSaved?"saved":"")+'" data-save="'+esc(item.id)+'">'+(isSaved?"♥ Guardado":"＋ Guardar")+'</button><button class="story-action" data-next="'+esc(item.id)+'">Siguiente ↓</button>'+link+'</div></div></article>';
+      return '<article class="story-card" data-story="'+esc(item.id)+'">'+player+image+'<div class="story-fallback" '+(image?'hidden':'')+'>'+esc(item.symbol||"✦")+'</div><div class="story-vignette"></div><div class="story-count" aria-hidden="true">'+list.map((_,dot)=>'<span class="'+(dot===index?"active":"")+'"></span>').join("")+'</div><div class="story-content"><div class="story-source"><span class="source-dot"></span>'+source+' <span class="demo-badge">'+status+'</span></div><h1>'+esc(item.title)+'</h1><p>'+esc(item.description)+'</p><div class="story-tags"><span>'+topic+'</span><span>'+esc(item.contentType||"DESCUBRIMIENTO")+'</span>'+(item.publishedAt?'<span>'+esc(item.publishedAt)+'</span>':'')+'</div><div class="story-actions"><button class="story-action '+(s.like?"liked":"")+'" data-like="'+esc(item.id)+'">'+(s.like?"♥ Te interesa":"♡ Me interesa")+'</button><button class="story-action '+(isSaved?"saved":"")+'" data-save="'+esc(item.id)+'">'+(isSaved?"♥ Guardado":"＋ Guardar")+'</button><button class="story-action" data-next="'+esc(item.id)+'">Siguiente ↓</button>'+link+'</div></div></article>';
     }).join("");
     $$("[data-like]").forEach(button=>button.addEventListener("click",()=>{
       const id=button.dataset.like;const signal=signals[id]||{open:0,like:0,skip:0,save:0};signal.like=signal.like?0:1;signals[id]=signal;persist(KEYS.signals,signals);toast(signal.like?"Preferencia guardada":"Preferencia retirada");renderKeepPosition(id);
@@ -108,6 +111,14 @@
   }
   function renderKeepPosition(id){const old=$("#storyFeed [data-story='"+CSS.escape(id)+"']");const index=old?Array.from(old.parentElement.children).indexOf(old):0;render();const card=$("#storyFeed").children[Math.max(0,index)];if(card)card.scrollIntoView({behavior:"auto",block:"start"})}
   function safeUrl(value){try{const url=new URL(value);return ["https:","http:"].includes(url.protocol)?url.href:""}catch{return""}}
+  function inAppVideo(item){
+    const explicit=safeUrl(item.embedUrl||"");
+    if(explicit){try{if(["www.youtube-nocookie.com","www.youtube.com","player.vimeo.com","www.tiktok.com"].includes(new URL(explicit).hostname))return explicit}catch{}}
+    const platform=normalized(item.sourcePlatform),url=safeUrl(item.canonicalUrl||"");
+    if(platform==="youtube"&&url){try{const u=new URL(url);let id=u.searchParams.get("v");if(u.hostname==="youtu.be")id=u.pathname.slice(1);if(u.pathname.startsWith("/shorts/"))id=u.pathname.split("/")[2];if(id&&/^[A-Za-z0-9_-]{6,20}$/.test(id))return "https://www.youtube-nocookie.com/embed/"+id+"?playsinline=1&rel=0"}catch{}}
+    if(platform==="tiktok"&&item.embedId&&/^[0-9]{10,25}$/.test(String(item.embedId)))return "https://www.tiktok.com/player/v1/"+item.embedId;
+    return "";
+  }
   function emptyTitle(){return category==="facebook"?"Facebook todavía no tiene fuentes conectadas":category==="instagram"?"Instagram todavía no tiene publicaciones conectadas":category==="youtube"?"YouTube: faltan publicaciones verificadas":category==="tiktok"?"TikTok: faltan publicaciones verificadas":category==="guardados"?"Todavía no has guardado nada":"No encontramos contenido para este filtro"}
   function emptyMessage(){return search?"Prueba con otra palabra o vuelve a Principal.":"Esta versión no inventa publicaciones. La categoría aparecerá cuando haya enlaces concretos y fuentes autorizadas disponibles."}
   function scrollToFirst(){const first=$("#storyFeed").firstElementChild;if(first)first.scrollIntoView({behavior:"smooth",block:"start"})}
