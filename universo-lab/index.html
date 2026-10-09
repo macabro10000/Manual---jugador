@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10111a">
+  <meta name="description" content="Universo: descubre videos, noticias, curiosidades y retos en un solo lugar.">
+  <title>Universo — descubre algo nuevo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Universo inicio"><span class="brand-orbit">✦</span><span>UNIVERSO<small>DESCUBRE ALGO NUEVO</small></span></a>
+    <label class="search"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Busca videos, noticias, ideas…" aria-label="Buscar contenido"><kbd>↵</kbd></label>
+    <button class="round-btn" id="themeButton" aria-label="Cambiar tema" title="Cambiar tema">◐</button>
+  </header>
+
+  <main class="page">
+    <section class="intro">
+      <div class="intro-copy">
+        <div class="eyebrow"><span class="pulse"></span> TU VENTANA AL MUNDO</div>
+        <h1>La próxima cosa<br>que te <span>va a sorprender.</span></h1>
+        <p>Videos, historias, noticias y curiosidades para explorar sin saber qué vas a encontrar.</p>
+        <a class="primary-btn" href="#feed">Empezar a descubrir <span>↘</span></a>
+        <div class="trust-note"><span>↗</span> Los videos se reproducen desde sus plataformas originales.</div>
+      </div>
+      <a class="hero-art" href="#feed" aria-label="Explorar descubrimiento destacado">
+        <img src="assets/hero-aurora.webp" alt="Aurora boreal sobre montañas" onerror="this.style.display='none'">
+        <div class="hero-art-fallback"><span>✧</span><small>EL UNIVERSO AÚN GUARDA<br>MUCHAS SORPRESAS</small></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-label"><span>DESCUBRIMIENTO DESTACADO</span><strong>Hay lugares en la Tierra que parecen de otro planeta.</strong><small>Curiosidad · 3 min de exploración</small></div>
+        <span class="hero-play">↗</span>
+      </a>
+    </section>
+
+    <nav class="categories" aria-label="Filtrar contenido">
+      <button class="category active" data-category="todos">✦ Para ti</button>
+      <button class="category" data-category="videos">▷ Videos</button>
+      <button class="category" data-category="noticias">◉ Noticias</button>
+      <button class="category" data-category="curiosidades">✧ Curiosidades</button>
+      <button class="category" data-category="retos">▦ Retos</button>
+      <button class="category" data-category="guardados">♡ Guardados <span id="savedCount">0</span></button>
+    </nav>
+
+    <section class="feed-section" id="feed">
+      <div class="section-head"><div><div class="eyebrow">SELECCIONADO PARA DESPERTAR TU CURIOSIDAD</div><h2 id="feedTitle">Tu feed de descubrimientos</h2></div><span class="result-count" id="resultCount">Contenido de muestra</span></div>
+      <div class="feed-grid" id="feedGrid" aria-live="polite"></div>
+      <div class="empty-state" id="emptyState" hidden><span>◌</span><h3>Aún no hay contenido aquí</h3><p>Prueba otra categoría o guarda alguna publicación para verla después.</p><button class="secondary-btn" id="showAll">Volver a Para ti</button></div>
+    </section>
+
+    <section class="source-strip">
+      <div><div class="eyebrow">CONTENIDO EN SU ORIGEN</div><h2>Un solo lugar para explorar.<br><span>Los creadores siguen en casa.</span></h2><p>No descargamos copias de los videos. Cuando una publicación admite inserción, se muestra con el reproductor oficial; si no, abrimos su fuente original.</p></div>
+      <div class="platforms" aria-label="Plataformas previstas"><span class="platform yt">▶ <b>YouTube</b></span><span class="platform tt">♪ <b>TikTok</b></span><span class="platform fb">f <b>Facebook</b></span><span class="platform ig">◎ <b>Instagram</b></span></div>
+    </section>
+    <footer><a class="brand footer-brand" href="#"><span class="brand-orbit">✦</span><span>UNIVERSO<small>DESCUBRE ALGO NUEVO</small></span></a><p>Una experiencia independiente de descubrimiento. Las marcas y contenidos pertenecen a sus respectivos titulares.</p><span>LABORATORIO · VERSIÓN DE PRUEBA</span></footer>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
