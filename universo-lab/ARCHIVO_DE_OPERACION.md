@@ -418,3 +418,28 @@ Comprobar el resultado real de GitHub Actions para `vyrox-server-tests.yml`. Si 
 - La consulta anterior se hizo antes de que la ejecución apareciera en la lista; la nota previa queda como registro temporal de esa consulta y no como el estado final.
 - Confirmación: las cinco pruebas automatizadas del esqueleto inicial pasaron en GitHub Actions con Node.js 20. No equivale a prueba de despliegue ni a prueba física en Android.
 - Siguiente paso exacto: fijar dependencias con un lockfile reproducible y volver a ejecutar CI. Mantener sin cambios el servicio Render hasta completar esa revisión.
+
+
+## Requisito pendiente de producto — sesión persistente y cambio sencillo de cuenta — 2026-10-09
+
+### Comportamiento esperado
+- Después de iniciar sesión correctamente con Google, VyROX debe mantener la sesión iniciada entre aperturas y recargas normales, hasta que la sesión expire por seguridad, sea revocada o el usuario elija cerrar sesión.
+- No pedir al usuario que vuelva a autenticarse cada vez que abre la aplicación si su sesión sigue siendo válida.
+- Mostrar dentro del perfil/menú una opción clara como **Cambiar de cuenta**, separada de **Cerrar sesión**.
+- Al elegir **Cambiar de cuenta**, finalizar la sesión actual de VyROX de forma segura y abrir el flujo de Google que permita escoger otra cuenta; no quedarse usando silenciosamente la cuenta anterior. Debe funcionar para una persona que cambia a otra cuenta propia o para otro miembro de la familia que usa el mismo teléfono.
+- Tras elegir la nueva cuenta, verificarla en el backend y cargar el perfil y el `@usuario` correspondientes a esa cuenta. No mezclar conversaciones, datos ni sesiones entre cuentas.
+- **Cerrar sesión** debe revocar la sesión de VyROX y volver a la pantalla inicial. El siguiente acceso debe permitir seleccionar una cuenta de Google sin quedar atrapado en la cuenta anterior.
+- La interfaz debe indicar qué cuenta está activa de forma prudente (por ejemplo, nombre/correo en el perfil), sin exponer tokens ni datos privados en almacenamiento local.
+
+### Requisitos técnicos para implementar y probar
+- Al arrancar, consultar `GET /api/me` para recuperar la sesión del servidor; mostrar la pantalla de acceso solo si la sesión no es válida.
+- La persistencia debe depender de una cookie de sesión segura y de la validación del backend, no de guardar un ID token de Google en `localStorage`.
+- El flujo de cambio de cuenta debe pedir selección explícita en Google Identity Services y verificar que la nueva identidad sea la que termina vinculada a la sesión recién creada. No asumir que mostrar el botón Google obliga por sí solo a elegir otra cuenta.
+- Probar en Android/Chrome: cerrar y volver a abrir la página, recargar, cambiar de la cuenta A a la B, cerrar sesión y entrar de nuevo, cancelar el selector, y simular sesión expirada o revocada.
+- Antes de cerrar la implementación, comprobar cómo se comportan las cookies entre el origen estático y el origen API en Render; no declarar persistencia correcta hasta validar en el navegador real.
+- Las pruebas deben confirmar que al cambiar de cuenta no se muestran datos del usuario anterior ni se conservan permisos/conversaciones de la sesión anterior.
+
+### Estado
+- Este requisito queda registrado para la fase de autenticación del backend y la integración del frontend.
+- No se implementó en este paso ni se modificó código funcional.
+- Orden de trabajo: primero completar y verificar el esqueleto del backend y su lockfile; luego implementar autenticación Google y sesión persistente; después integrar interfaz de acceso/perfil/cambio de cuenta y probar el ciclo completo en Android; mensajería después.
