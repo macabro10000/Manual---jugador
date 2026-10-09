@@ -1,12 +1,18 @@
-# Manual - jugador
+# SmartDaily & Tools
 
-**Manual - jugador** es una plataforma interactiva de estilo futurista para organizar objetivos, revisar protocolos y completar misiones desde el teléfono.
+Aplicación web estática, mobile-first y sin registro: desafío diario IA vs humano, kit de microherramientas y quiz de perfil digital. Funciona en el navegador y no requiere backend.
 
-## Contenido
-- `index.html`: sitio estático autocontenido y adaptable a móvil.
-- `ARCHIVO_DE_OPERACION.md`: estado del proyecto, alcance y pasos de despliegue/verificación.
+## Archivos
+- `index.html`: estructura semántica, SEO básico, componentes y espacios reservados para anuncios.
+- `styles.css`: diseño responsive, tema oscuro, modo claro, accesibilidad y animaciones reducidas.
+- `app.js`: desafío rotativo por fecha, racha local, compartir resultados, mejorador de prompts, limpiador de texto, simulador de métricas y quiz.
+- `ARCHIVO_DE_OPERACION.md`: alcance, decisiones técnicas, despliegue y verificaciones.
 
-## Publicación en Render
-Crear un servicio nuevo de tipo **Static Site** desde este repositorio, rama `main`. Dejar **Build Command** vacío y usar `.` como **Publish Directory**. No requiere variables de entorno.
+## Despliegue en Render
+Static Site desde este repositorio, rama `main`, **Build Command vacío** y **Publish Directory** `.`. No requiere variables de entorno.
 
-Los contadores y las misiones son controles manuales locales; no representan ingresos verificados ni conexión real con servicios externos.
+## Publicidad
+Los contenedores `.ad-banner-top`, `.ad-in-content`, `.ad-reward-result` y `.ad-sticky-footer` son marcadores visuales, no anuncios reales. Para monetizar, sustituirlos por el código oficial del proveedor solo después de aprobación. Revisar políticas, consentimiento aplicable, Core Web Vitals y que los anuncios no se confundan con botones ni interrumpan acciones.
+
+## Privacidad y límites
+No hay registro ni envío de datos a un servidor. La racha, el tema y las respuestas se almacenan localmente en el navegador. La clasificación IA/humano es un juego educativo y no una herramienta científica de detección. La calculadora de ingresos ofrece escenarios hipotéticos, no garantías. Las fuentes web externas se limitan a Google Fonts; si se busca máxima independencia y privacidad, alojar fuentes localmente o eliminar esa importación.
