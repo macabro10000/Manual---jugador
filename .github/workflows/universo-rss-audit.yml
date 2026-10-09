@@ -1,0 +1,35 @@
+name: UNIVERSO RSS audit (read-only)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: universo-rss-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    name: Fetch feeds and validate candidates
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout laboratory branch
+        uses: actions/checkout@v4
+        with:
+          ref: lab/universo-frontend
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run read-only RSS audit
+        run: node universo-lab/scripts/rss-audit.mjs
+      - name: Preserve audit report as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: universo-rss-audit-report
+          path: rss-audit-report.json
+          if-no-files-found: error
+          retention-days: 7
