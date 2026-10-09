@@ -124,3 +124,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .news-mode .story-action{min-height:40px}
 .news-mode .story-content h2{font-size:clamp(21px,5.8vw,28px);line-height:1.18;letter-spacing:-.35px}
 .news-mode .story-tags span{font-size:9px;letter-spacing:.4px}
+
+
+/* Noticias sin imagen: eliminar el pictograma de reserva que parece una caja rayada y compite con el texto. */
+.news-mode .story-fallback,.saved-mode .story-fallback{display:none!important}
