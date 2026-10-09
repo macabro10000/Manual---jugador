@@ -160,3 +160,13 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .story-source .source-dot{background:var(--hot);box-shadow:0 0 12px #ff70c8}
 .news-filter.active{background:linear-gradient(110deg,var(--cyan),var(--sun));border-color:transparent;color:#171426}
 @media(prefers-reduced-motion:reduce){.brand-y,.brand-orbit,.brand-orbit::before,.orbit-core,.story-action.primary,.menu-chip.active,.pick-videos,.empty-state button{animation:none!important}}
+
+
+/* Instalación local de VyROX: no crea cuentas ni transmite los guardados. */
+.device-connect{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 2px 5px;padding:13px;border:1px solid #ffffff1a;border-radius:16px;background:linear-gradient(115deg,#ff70c812,#8f7cff12,#54d9e512)}
+.device-connect-copy{display:grid;gap:5px;min-width:0}
+.device-connect-copy strong{font-size:13px;color:#fff}
+.device-connect-copy small{font-size:11px;line-height:1.45;color:#c5c3d8}
+.install-app-button{flex:0 0 auto;border:0;border-radius:12px;padding:10px 12px;background:linear-gradient(110deg,var(--hot),var(--purple),var(--cyan));color:#151322;font-size:11px;font-weight:800}
+.install-app-button[hidden]{display:none}
+@media(max-width:360px){.device-connect{align-items:stretch;flex-direction:column}.install-app-button{width:100%}}
