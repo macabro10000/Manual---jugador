@@ -85,5 +85,7 @@ Hasta terminar esa migración, `ARCHIVO_DE_OPERACION.md` es la fuente histórica
 - Se amplió `REGLAS_DE_SEGURIDAD.md` con un estándar obligatorio contra parches cosméticos, con diagnóstico de causa raíz, pruebas de regresión, evidencia por entorno, dependencias reproducibles y documentación de cierre.
 - Commit documental verificado: `6b626a9fce8497bb5cec82455c2030b25363d3d8`.
 - Se comprobó que `vyrox-server/package-lock.json` no existe todavía en la rama.
-- Se intentó generar el lockfile con npm 10.9.2 y Node 22.16.0 en un entorno temporal; el comando excedió el límite de ejecución y no produjo `package-lock.json`. Por tanto, NO se afirma que exista un lockfile válido ni que VYR-004 esté completada.
+- Primer intento documentado: la generación del lockfile excedió el límite de ejecución y no produjo `package-lock.json`.
+- Reintento independiente con Node `v22.16.0` y npm `10.9.0`: falló con `EAI_AGAIN` al resolver `registry.npmjs.org`; tampoco produjo el archivo. Evidencia registrada en `BITACORA.md`, commit `66147ac0fbc4bb506f022642c7f88ba63e7bbd53`.
+- VYR-004 permanece bloqueada por conectividad al registro npm desde el entorno disponible. No cambiar CI a `npm ci` sin un lockfile real versionado.
 - Siguiente acción: obtener el lockfile mediante una ejecución npm real con acceso funcional al registro, guardarlo en la rama de laboratorio, cambiar CI a `npm ci` y verificar la ejecución de Actions. No desplegar backend ni tocar producción.
