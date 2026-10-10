@@ -266,3 +266,12 @@ Comprobar el resultado real de GitHub Actions para `vyrox-server-tests.yml`. Si 
 - La consulta anterior se hizo antes de que la ejecución apareciera en la lista; la nota previa queda como registro temporal de esa consulta y no como el estado final.
 - Confirmación: las cinco pruebas automatizadas del esqueleto inicial pasaron en GitHub Actions con Node.js 20. No equivale a prueba de despliegue ni a prueba física en Android.
 - Siguiente paso exacto: fijar dependencias con un lockfile reproducible y volver a ejecutar CI. Mantener sin cambios el servicio Render hasta completar esa revisión.
+
+## Estándar de ingeniería y verificación de dependencias — 2026-10-09
+
+- Se reforzó `REGLAS_DE_SEGURIDAD.md`: causa raíz antes de editar; prohibición de presentar parches provisionales como solución; pruebas de regresión; evidencia separada para CI, despliegue y Android; seguridad por defecto; no declarar éxito sin evidencia; y registro obligatorio de cierre.
+- Commit de reglas: `6b626a9fce8497bb5cec82455c2030b25363d3d8`.
+- Auditoría VYR-004: el `package.json` declara `express: ^5.1.0` y `helmet: ^8.1.0`; el archivo `vyrox-server/package-lock.json` devuelve NOT_FOUND en GitHub.
+- Se intentó generar el lockfile usando Node `v22.16.0` y npm `10.9.2` en un directorio temporal. La ejecución excedió el límite y no generó el archivo. No se cambió `package.json`, no se fabricó lockfile y no se modificó el workflow CI.
+- Estado honesto: reglas actualizadas; VYR-004 continúa pendiente/bloqueada hasta poder ejecutar npm con acceso funcional al registro, versionar el lockfile real, migrar CI a `npm ci` y verificar GitHub Actions.
+- Sin despliegue de backend, sin OAuth/DB y sin cambios en producción.
