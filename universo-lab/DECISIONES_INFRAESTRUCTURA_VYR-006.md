@@ -134,3 +134,15 @@ Commits de implementación:
 ### Bloqueo de despliegue que requiere decisión explícita
 
 Para probar la arquitectura integrada sin interrumpir el sitio actual, se necesita un Web Service de laboratorio con nombre temporal y URL propia, por ejemplo `vyrox-app-lab`. Eso cambia el origen usado durante la prueba y, más adelante, el Client ID OAuth debe registrar el origen que realmente se apruebe. No se debe renombrar ni retirar el Static Site actual hasta pasar CI y pruebas funcionales. La eventual migración del nombre/URL público es una operación separada con plan de rollback.
+
+
+## 11. Servicio de laboratorio creado y pruebas — 2026-10-10
+
+- Se creó el Web Service gratuito de laboratorio `vyrox-app-lab`, ID `srv-db4ov00473hc738jkft0`, URL `https://vyrox-app-lab.onrender.com`, rama `lab/universo-frontend`, región Ohio.
+- El primer despliegue completó build y arrancó el servidor. El log confirma `VyROX application listening on port 10000` y que el servicio quedó live.
+- Se detectó que Render seleccionaba Node.js 26.11.1 por el rango `>=20`, mientras CI usa Node 20. Se fijó `engines.node` a `20.x` en `package.json` y `package-lock.json` para alinear ambos entornos. El build de esta actualización está en curso al registrar esta nota.
+- CI: run `38011806491` pasó después de corregir la prueba para cubrir solo los assets presentes; run `38011892531` pasó para el cambio de runtime; run `38011895817` pasó para el lockfile Node 20.
+- **No se ha verificado aún una solicitud HTTP externa real desde este entorno**, ni la experiencia visual en Android/Chrome. Los logs de Render demuestran que el proceso arrancó, pero no sustituyen la prueba de navegación/códigos HTTP desde el teléfono.
+- Hallazgo separado: `index.html` referencia `manifest.webmanifest` e `icon.svg`, pero esos archivos no existen en `universo-lab/`. No se corrigieron aquí porque no forman parte de la integración de origen único; registrar como defecto del frontend para una tarea acotada antes de aceptar la instalación PWA.
+
+El Static Site original `vyrox.onrender.com` sigue intacto como referencia y rollback. No se creó OAuth ni base de datos.
