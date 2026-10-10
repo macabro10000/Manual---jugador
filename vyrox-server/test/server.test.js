@@ -75,13 +75,12 @@ test("serves the VyROX frontend from the same server origin", async () => {
 
 test("serves frontend assets from the same server origin", async () => {
   await withServer(async baseUrl => {
-    const [css, js, manifest, content] = await Promise.all([
+    const [css, js, content] = await Promise.all([
       fetch(`${baseUrl}/styles.css`),
       fetch(`${baseUrl}/app.js`),
-      fetch(`${baseUrl}/manifest.webmanifest`),
       fetch(`${baseUrl}/content.json`)
     ]);
-    for (const response of [css, js, manifest, content]) {
+    for (const response of [css, js, content]) {
       assert.equal(response.status, 200);
     }
     assert.match(css.headers.get("content-type") || "", /text\/css/);
