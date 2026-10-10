@@ -109,3 +109,8 @@ Hasta terminar esa migración, `ARCHIVO_DE_OPERACION.md` es la fuente histórica
 - `ARCHIVO_DE_OPERACION.md` sigue siendo archivo histórico maestro; no borrarlo durante la reorganización documental.
 - **Nota de evidencia:** los párrafos anteriores de esta bitácora que registran el fallo inicial al generar el lockfile son históricos. El estado vigente indicado en la sección VYR-004 es `PRUEBAS_OK`; comprobar siempre los commits y ejecuciones CI citados antes de reutilizar estados antiguos.
 - VYR-006 no autoriza cambios de infraestructura: primero debe resolver decisiones y criterios en documentación, sin crear servicios, credenciales ni bases de datos.
+
+
+## Actualización VYR-006 — 2026-10-10
+
+Se añadió `universo-lab/DECISIONES_INFRAESTRUCTURA_VYR-006.md` con una propuesta de origen único HTTPS para frontend/API, evaluación de persistencia gratuita, OAuth exclusivo de VyROX, sesión revocable y criterios de aceptación. La candidata de laboratorio es Neon Free Postgres, sujeta a comprobar cuotas y recuperación en el momento de crearla. No se creó ningún recurso ni se implementó autenticación. VYR-006 permanece **PENDIENTE DE VALIDACIÓN PRÁCTICA**: en especial, la arquitectura de despliegue que mantenga `/api/*` en el mismo origen y el comportamiento real de cookies en Chrome Android.
