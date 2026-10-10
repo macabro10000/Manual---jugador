@@ -47,23 +47,26 @@
 - No guardar tokens de Google en `localStorage`; validar sesión en el backend mediante cookie segura y endpoint `GET /api/me`.
 - Implementar mensajería solo después de verificar autenticación, sesión y aislamiento entre cuentas.
 
-## 5. Próxima tarea exacta
+## 5. Estado de autenticación y siguiente tarea
 
-**VYR-004 — Dependencias reproducibles y CI: COMPLETADA.**
+**VYR-004 — Dependencias reproducibles y CI: COMPLETADA / PRUEBAS_OK.**  
+Lockfile real generado por npm y versionado; workflow final con Node.js 20, `npm ci` y `npm test`. Runs `38009516378` y `38009544895` concluyeron en `success`. Esto no verifica despliegue ni Android.
 
-- Lockfile real generado por npm en GitHub Actions y versionado.
-- Workflow `.github/workflows/vyrox-server-tests.yml` usa Node.js 20, caché npm ligada al lockfile, `npm ci --no-audit --no-fund` y `npm test`.
-- Run `38009516378` terminó en `success` con generación/commit del lockfile, instalación reproducible y pruebas.
-- Run `38009544895` terminó en `success` con el workflow final limpio usando `npm ci` y `npm test`.
-- Commits relevantes: lockfile `7d96ddb5e771ed1ce9edea32a05fe5221b4f1be7`; workflow final `061cc2858897493eff22b9ff4b2b1d7ca45c6d3e`.
-- Esto confirma CI reproducible; no confirma despliegue de backend, OAuth ni prueba en Android.
+**VYR-005 — Auditoría estática y contrato de autenticación/sesiones: DISEÑO DOCUMENTADO.**
 
-**Siguiente tarea: VYR-005 — Auditar y definir el contrato de autenticación Google y sesiones antes de implementarlo.**
+- Nuevo documento: `universo-lab/AUTENTICACION_Y_SESIONES.md`.
+- Se confirmó que el HTML no tiene botón/login Google y el JavaScript no mantiene sesiones remotas.
+- La API solo ofrece `GET /api/health`; su CORS actual permite `GET, OPTIONS` y no credenciales. No existe autenticación, persistencia de usuarios/sesiones ni OAuth VyROX.
+- El contrato especifica verificación de ID token en servidor, cookie protegida, CORS/CSRF, `GET /api/me`, logout con revocación, `@usuario` único y cambio de cuenta sin mezclar perfiles.
+- No se implementó login ni se crearon credenciales, secretos, base de datos o servicio API. No se hicieron pruebas de autenticación porque la función no existe.
 
-1. Inspeccionar frontend, backend, dependencias y pruebas existentes.
-2. Definir OAuth, validación de identidad en servidor, cookie segura, CSRF, orígenes y revocación/cambio de cuenta.
-3. Documentar contratos de inicio de sesión, `GET /api/me` y cierre de sesión, junto con pruebas de seguridad.
-4. No crear credenciales OAuth, secretos ni base de datos, y no desplegar backend hasta revisar el diseño.
+**Siguiente tarea: VYR-006 — Resolver las decisiones de infraestructura antes de implementar autenticación.**
+
+1. Determinar dominio/origen final de API y comprobar la política real de cookies entre frontend y API en Android/Chrome.
+2. Comparar persistencia duradera con plan gratuito, cuotas, suspensión, copias de seguridad y requisito de tarjeta; no crear recursos aún.
+3. Definir Client ID OAuth exclusivo de VyROX, expiración de sesión y nombres de handles reservados; no exponer ni reutilizar secretos de otros proyectos.
+4. Preparar criterios de aceptación y plan de pruebas antes de implementar rutas o interfaz.
+5. Mantener laboratorio; no tocar `main` ni producción.
 
 ## 6. Protocolo de cada tarea
 
