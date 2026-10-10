@@ -3,7 +3,7 @@
 **Actualizado:** 2026-10-09  
 **Repositorio:** `macabro10000/Manual---jugador`  
 **Rama de trabajo:** `lab/universo-frontend`  
-**Último HEAD verificado antes de esta actualización documental:** `0f4681328a261a5a815d6dd1fbbe145517a0f0ca`
+**Última actualización de reglas verificada:** `6b626a9fce8497bb5cec82455c2030b25363d3d8` (reglas de ingeniería; confirmar HEAD de rama antes de la siguiente modificación).
 
 > Este archivo es el resumen rápido para recuperar el proyecto al cambiar de chat. No reemplaza la bitácora histórica: el detalle completo sigue temporalmente en `ARCHIVO_DE_OPERACION.md`. No borrar ni recortar ese archivo hasta terminar la migración y verificar que todo el contenido importante se haya conservado.
 
@@ -78,3 +78,12 @@ El documento histórico `ARCHIVO_DE_OPERACION.md` tiene aproximadamente 54 KB y 
 - `BITACORA.md`: historia de cambios, commits, pruebas y decisiones.
 
 Hasta terminar esa migración, `ARCHIVO_DE_OPERACION.md` es la fuente histórica completa y no se debe borrar. Cada hecho técnico debe conservar su nivel de evidencia y sus limitaciones.
+
+
+## Actualización de reglas de ingeniería — 2026-10-09
+
+- Se amplió `REGLAS_DE_SEGURIDAD.md` con un estándar obligatorio contra parches cosméticos, con diagnóstico de causa raíz, pruebas de regresión, evidencia por entorno, dependencias reproducibles y documentación de cierre.
+- Commit documental verificado: `6b626a9fce8497bb5cec82455c2030b25363d3d8`.
+- Se comprobó que `vyrox-server/package-lock.json` no existe todavía en la rama.
+- Se intentó generar el lockfile con npm 10.9.2 y Node 22.16.0 en un entorno temporal; el comando excedió el límite de ejecución y no produjo `package-lock.json`. Por tanto, NO se afirma que exista un lockfile válido ni que VYR-004 esté completada.
+- Siguiente acción: obtener el lockfile mediante una ejecución npm real con acceso funcional al registro, guardarlo en la rama de laboratorio, cambiar CI a `npm ci` y verificar la ejecución de Actions. No desplegar backend ni tocar producción.
