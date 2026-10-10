@@ -11,13 +11,20 @@
 
 ## Próxima tarea técnica
 
-**VYR-005 — Auditar y definir el contrato de autenticación Google y sesiones.**
-1. Inspeccionar frontend, backend, dependencias y pruebas existentes antes de modificar código.
-2. Diseñar autenticación con validación de identidad en servidor, sin confiar en datos del cliente.
-3. Definir cookies de sesión seguras, protección CSRF, allowlist de orígenes, expiración, revocación y cambio de cuenta.
-4. Especificar contratos y pruebas para inicio de sesión, `GET /api/me` y cierre de sesión.
-5. Registrar decisiones y criterios de aceptación antes de implementar.
-6. No crear credenciales OAuth, secretos, base de datos ni desplegar el backend sin revisión explícita.
+**VYR-006 — Resolver decisiones de infraestructura previas a autenticación.**
+1. Determinar el dominio/origen final de la API y validar el comportamiento de cookies entre frontend/API en Android/Chrome.
+2. Comparar opciones de persistencia duradera con límites gratuitos actuales, suspensión, copias de seguridad y requisito de tarjeta; no crear recursos todavía.
+3. Definir el Client ID OAuth exclusivo de VyROX, la política de expiración de sesión y los nombres de handle reservados.
+4. Cerrar criterios de aceptación y plan de pruebas antes de implementar rutas o interfaz.
+5. Mantener la rama de laboratorio; no tocar `main`, producción ni proyectos ajenos.
+
+## VYR-005 — Auditoría estática y contrato documentado
+
+- Documento nuevo: `universo-lab/AUTENTICACION_Y_SESIONES.md`.
+- Se verificó que no existe login Google ni sesión remota en el frontend.
+- El backend actual solo implementa `GET /api/health`; CORS aún no habilita operaciones mutables ni credenciales.
+- Se definieron contratos de login, `GET /api/me`, logout/revocación, `@usuario`, CSRF/CORS y cambio de cuenta.
+- Estado: **DISEÑO DOCUMENTADO**, no implementación. Sin OAuth, base de datos, secretos, despliegue ni prueba Android.
 
 ## Tarea completada
 
