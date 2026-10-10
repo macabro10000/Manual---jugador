@@ -298,3 +298,29 @@ Comprobar el resultado real de GitHub Actions para `vyrox-server-tests.yml`. Si 
 - Sin cambios en `main`, sin despliegue de backend, sin OAuth, sin base de datos y sin secretos.
 - Resultado: VYR-004 **COMPLETADA / PRUEBAS_OK**. No se declara autenticación implementada ni prueba en Android.
 - Siguiente paso exacto: VYR-005, auditar frontend/backend y documentar el contrato de autenticación Google y sesiones antes de escribir la implementación.
+
+
+## VYR-005 — Auditoría de autenticación y contrato — 2026-10-10
+
+### Inspección y causa/alcance
+- Se confirmó HEAD de la rama de laboratorio antes de la auditoría. El commit previo a esta tarea era `006a8014d9725e329e8ba773b90232e42e09d1ce`.
+- Se leyeron el HTML/JS del frontend, `package.json`, `src/config.js`, `src/server.js`, pruebas y workflow CI.
+- El HTML no contiene botón Google ni pantalla de cuenta. El JS solo persiste preferencias/guardados locales; no hay sesión remota.
+- La API solo tiene `GET /api/health`; el CORS actual permite `GET, OPTIONS`, no credenciales ni métodos mutables. No hay verificación Google, persistencia de usuarios/sesiones ni proveedor de base de datos configurado.
+- Por tanto, la autenticación no está implementada y no puede probarse todavía. Añadir solo un botón sería una falsa apariencia de funcionalidad.
+
+### Entregable
+- Creado `universo-lab/AUTENTICACION_Y_SESIONES.md`, contrato de diseño con endpoints, validación server-side de ID token, cookie/sesión, CSRF/CORS, logout/revocación, perfil `@usuario`, cambio de cuenta, criterios de aceptación y decisiones pendientes.
+- Commit de creación del documento: `382418e13c609789e2d739513a33d3931c26e513`.
+- Estado actualizado en commit `9b9ab964c65541277d77a5b34dbeb6abf2e66a79`.
+- Plan actualizado en commit `cc3713747c772140d7a44ba898afc1e763488147`.
+
+### Límites y riesgos
+- El documento es un contrato de diseño; no es código funcional ni auditoría dinámica.
+- No se crearon OAuth, secretos, base de datos ni servicio API; no hubo cambios en `main` ni producción.
+- No se ejecutaron pruebas de autenticación ni pruebas en Android. Queda por resolver el dominio/origen real de la API y la política de cookies entre dominios; el proveedor de persistencia y sus condiciones gratuitas siguen sin seleccionarse.
+- La arquitectura histórica de `ARQUITECTURA.md` contiene propuestas previas y se debe leer junto al nuevo contrato; no asumir que esos elementos están implementados.
+
+### Resultado
+- VYR-005: **DISEÑO DOCUMENTADO**. El objetivo de auditoría estática y definición de contrato quedó cubierto; implementación y validación dinámica quedan fuera de esta tarea.
+- Siguiente paso exacto: VYR-006, resolver dominio/cookies, persistencia y configuración OAuth antes de escribir rutas de autenticación.
