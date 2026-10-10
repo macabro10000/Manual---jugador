@@ -1,6 +1,6 @@
 # VyROX — Estado actual y punto de recuperación
 
-**Actualizado:** 2026-10-09  
+**Actualizado:** 2026-10-10  
 **Repositorio:** `macabro10000/Manual---jugador`  
 **Rama de trabajo:** `lab/universo-frontend`  
 **Última actualización de reglas verificada:** `6b626a9fce8497bb5cec82455c2030b25363d3d8` (reglas de ingeniería; confirmar HEAD de rama antes de la siguiente modificación).
@@ -33,7 +33,7 @@
 - GitHub Actions workflow: `.github/workflows/vyrox-server-tests.yml`.
 - GitHub Actions run `38005322983`, commit `69f965be53b35813b1b0de5dc2ff75d043c0d284`: estado reportado `success`; job `test` y pasos de instalación/pruebas exitosos; cinco pruebas automatizadas pasaron.
 - Esto valida el esqueleto inicial en CI. **No** valida autenticación real, base de datos, despliegue del backend ni funcionamiento en Android.
-- `vyrox-server/package.json` aún declara rangos `^5.1.0` para Express y `^8.1.0` para Helmet. No se ha verificado un `package-lock.json` versionado.
+- `vyrox-server/package.json` declara `express: ^5.1.0` y `helmet: ^8.1.0`. `vyrox-server/package-lock.json` fue generado por npm en GitHub Actions y quedó versionado en el commit `7d96ddb5e771ed1ce9edea32a05fe5221b4f1be7` (lockfileVersion 3; 66 paquetes registrados).
 - No hay autenticación Google implementada, sesiones persistentes, usuarios, `@usuario`, conversaciones ni mensajería.
 - No existe todavía un backend VyROX desplegado en Render; no se han añadido secretos ni credenciales OAuth de VyROX.
 
@@ -49,14 +49,21 @@
 
 ## 5. Próxima tarea exacta
 
-**VYR-004 — Dependencias reproducibles y CI.**
+**VYR-004 — Dependencias reproducibles y CI: COMPLETADA.**
 
-1. Inspeccionar workflow y estado real de la rama antes de cambiar nada.
-2. Obtener un `package-lock.json` real generado por npm; no escribirlo manualmente ni afirmar que existe si no está versionado.
-3. Ajustar CI para usar instalación reproducible con `npm ci` cuando el lockfile esté disponible.
-4. Volver a ejecutar GitHub Actions y revisar el resultado real.
-5. Registrar commit y evidencia en la bitácora.
-6. No desplegar el backend ni integrar OAuth/base de datos todavía.
+- Lockfile real generado por npm en GitHub Actions y versionado.
+- Workflow `.github/workflows/vyrox-server-tests.yml` usa Node.js 20, caché npm ligada al lockfile, `npm ci --no-audit --no-fund` y `npm test`.
+- Run `38009516378` terminó en `success` con generación/commit del lockfile, instalación reproducible y pruebas.
+- Run `38009544895` terminó en `success` con el workflow final limpio usando `npm ci` y `npm test`.
+- Commits relevantes: lockfile `7d96ddb5e771ed1ce9edea32a05fe5221b4f1be7`; workflow final `061cc2858897493eff22b9ff4b2b1d7ca45c6d3e`.
+- Esto confirma CI reproducible; no confirma despliegue de backend, OAuth ni prueba en Android.
+
+**Siguiente tarea: VYR-005 — Auditar y definir el contrato de autenticación Google y sesiones antes de implementarlo.**
+
+1. Inspeccionar frontend, backend, dependencias y pruebas existentes.
+2. Definir OAuth, validación de identidad en servidor, cookie segura, CSRF, orígenes y revocación/cambio de cuenta.
+3. Documentar contratos de inicio de sesión, `GET /api/me` y cierre de sesión, junto con pruebas de seguridad.
+4. No crear credenciales OAuth, secretos ni base de datos, y no desplegar backend hasta revisar el diseño.
 
 ## 6. Protocolo de cada tarea
 
