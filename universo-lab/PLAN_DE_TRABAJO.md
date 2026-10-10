@@ -10,13 +10,22 @@
 - `BLOQUEADO`: existe un impedimento sin resolver.
 
 ## Próxima tarea técnica
-**VYR-004 — Dependencias reproducibles y CI.**
-1. Verificar HEAD, workflow y estado actual antes de editar.
-2. Obtener un `package-lock.json` real generado por npm; no fabricarlo manualmente.
-3. Configurar CI para usar `npm ci` cuando exista lockfile versionado.
-4. Ejecutar GitHub Actions y comprobar el resultado real.
-5. Registrar commit y evidencia en la bitácora.
-6. No desplegar el backend ni integrar OAuth/base de datos todavía.
+
+**VYR-005 — Auditar y definir el contrato de autenticación Google y sesiones.**
+1. Inspeccionar frontend, backend, dependencias y pruebas existentes antes de modificar código.
+2. Diseñar autenticación con validación de identidad en servidor, sin confiar en datos del cliente.
+3. Definir cookies de sesión seguras, protección CSRF, allowlist de orígenes, expiración, revocación y cambio de cuenta.
+4. Especificar contratos y pruebas para inicio de sesión, `GET /api/me` y cierre de sesión.
+5. Registrar decisiones y criterios de aceptación antes de implementar.
+6. No crear credenciales OAuth, secretos, base de datos ni desplegar el backend sin revisión explícita.
+
+## Tarea completada
+
+**VYR-004 — Dependencias reproducibles y CI: PRUEBAS_OK.**
+- Lockfile real generado por npm en GitHub Actions y versionado: commit `7d96ddb5e771ed1ce9edea32a05fe5221b4f1be7`.
+- Workflow final usa Node.js 20, caché npm y `npm ci --no-audit --no-fund`.
+- Run `38009544895`: `success`; instalación desde lockfile y `npm test` exitosos.
+- CI no demuestra despliegue ni funcionamiento en Android.
 
 ## Orden posterior previsto
 1. Implementar y verificar autenticación Google en el backend independiente.
