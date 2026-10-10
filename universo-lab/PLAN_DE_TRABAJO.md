@@ -99,3 +99,12 @@ Antes de ejecutar VYR-006, aplicar `NOMENCLATURA.md`:
 - No hacer reemplazos globales ni renombrar carpetas, ramas o servicios como parte de VYR-006.
 - Mantener intactos `main`, `manual-jugador` y los demás proyectos.
 - VYR-006 empieza por análisis/documentación de dominios, cookies, persistencia y OAuth. No crear recursos, secretos, credenciales ni servicios durante la fase de decisión.
+
+
+## VYR-006 — Decisiones de infraestructura previas a autenticación
+
+- Documento: `universo-lab/DECISIONES_INFRAESTRUCTURA_VYR-006.md`.
+- Propuesta: presentar interfaz y `/api/*` bajo un único origen HTTPS para reducir riesgos de cookies cross-site en Android/Chrome.
+- Persistencia candidata para laboratorio: Neon Free Postgres; condiciones y límites deben revalidarse al crearla. Render Postgres Free se descarta para persistencia duradera por vencimiento a 30 días; Supabase Free queda como alternativa con pausa tras inactividad.
+- Se documentaron OAuth Google exclusivo de VyROX, sesiones opacas revocables, política inicial de expiración, handles reservados y criterios de aceptación.
+- Estado: **DISEÑO PROPUESTO / PENDIENTE DE VALIDACIÓN PRÁCTICA**. No se creó infraestructura, OAuth, secreto, base de datos ni ruta de autenticación.
