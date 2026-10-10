@@ -48,3 +48,11 @@ Estas reglas son obligatorias para todo cambio de VyROX. No se consideran opcion
 INSPECCIONAR → REPRODUCIR/AUDITAR → IDENTIFICAR CAUSA RAÍZ → DEFINIR CRITERIOS → IMPLEMENTAR → PROBAR REGRESIONES → VERIFICAR EVIDENCIA → DOCUMENTAR.
 
 Si las pruebas fallan, se investiga la causa y no se avanza a la siguiente fase dependiente.
+
+
+## Control de nomenclatura
+
+- `NOMENCLATURA.md` define el nombre canónico del producto y los identificadores heredados que deben conservarse.
+- El producto se denomina **VyROX**; «UNIVERSO» solo puede aparecer como contexto histórico.
+- No renombrar ni sustituir globalmente el repositorio, la rama, la carpeta del frontend o servicios heredados sin una tarea de migración independiente y una auditoría de dependencias.
+- VYR-006 no incluye migraciones de nombres ni cambios de infraestructura.
