@@ -25,7 +25,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+      - name: Generate dependency lockfile using npm
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
       - name: Install dependencies
         run: npm install --no-audit --no-fund
       - name: Run tests
         run: npm test
+      - name: Publish generated lockfile for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: vyrox-package-lock
+          path: vyrox-server/package-lock.json
+          if-no-files-found: error
+          retention-days: 1
