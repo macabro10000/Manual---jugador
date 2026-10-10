@@ -99,3 +99,13 @@ Hasta terminar esa migración, `ARCHIVO_DE_OPERACION.md` es la fuente histórica
 - Reintento independiente con Node `v22.16.0` y npm `10.9.0`: falló con `EAI_AGAIN` al resolver `registry.npmjs.org`; tampoco produjo el archivo. Evidencia registrada en `BITACORA.md`, commit `66147ac0fbc4bb506f022642c7f88ba63e7bbd53`.
 - VYR-004 permanece bloqueada por conectividad al registro npm desde el entorno disponible. No cambiar CI a `npm ci` sin un lockfile real versionado.
 - Siguiente acción: obtener el lockfile mediante una ejecución npm real con acceso funcional al registro, guardarlo en la rama de laboratorio, cambiar CI a `npm ci` y verificar la ejecución de Actions. No desplegar backend ni tocar producción.
+
+
+## Auditoría de nomenclatura — 2026-10-10
+
+- Norma canónica: consultar `NOMENCLATURA.md` antes de cambiar nombres, rutas o referencias.
+- El producto se llama **VyROX**. `universo-lab/`, `lab/universo-frontend` y `universo-explorador` son identificadores técnicos heredados que se conservan temporalmente; no son nombres del producto.
+- El repositorio `macabro10000/Manual---jugador` y el servicio `manual-jugador` pertenecen a una separación técnica/histórica y quedan protegidos. No renombrar ni tocar durante VYR-006.
+- `ARCHIVO_DE_OPERACION.md` sigue siendo archivo histórico maestro; no borrarlo durante la reorganización documental.
+- **Nota de evidencia:** los párrafos anteriores de esta bitácora que registran el fallo inicial al generar el lockfile son históricos. El estado vigente indicado en la sección VYR-004 es `PRUEBAS_OK`; comprobar siempre los commits y ejecuciones CI citados antes de reutilizar estados antiguos.
+- VYR-006 no autoriza cambios de infraestructura: primero debe resolver decisiones y criterios en documentación, sin crear servicios, credenciales ni bases de datos.
