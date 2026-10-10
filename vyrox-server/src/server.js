@@ -1,6 +1,11 @@
 import express from "express";
 import helmet from "helmet";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { loadConfig } from "./config.js";
+
+const SERVER_DIR = path.dirname(fileURLToPath(import.meta.url));
+const FRONTEND_DIR = path.resolve(SERVER_DIR, "../../universo-lab");
 
 export function createApp(config = loadConfig()) {
   const app = express();
@@ -40,6 +45,23 @@ export function createApp(config = loadConfig()) {
     });
   });
 
+  // API paths must never fall through to the static frontend.
+  app.use("/api", (_req, res) => {
+    res.status(404).json({ error: "Ruta de API no encontrada." });
+  });
+
+  // Serve the frontend and API from the same web-service origin. This avoids
+  // relying on cross-site cookies between separate *.onrender.com services.
+  app.get("/", (_req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, "index.html"));
+  });
+  app.use(express.static(FRONTEND_DIR, {
+    dotfiles: "deny",
+    fallthrough: true,
+    index: false,
+    maxAge: 0
+  }));
+
   app.use((_req, res) => {
     res.status(404).json({ error: "Ruta no encontrada." });
   });
@@ -61,6 +83,6 @@ if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).
   const config = loadConfig();
   const app = createApp(config);
   app.listen(config.port, "0.0.0.0", () => {
-    console.log(`VyROX API listening on port ${config.port}`);
+    console.log(`VyROX application listening on port ${config.port}`);
   });
 }
