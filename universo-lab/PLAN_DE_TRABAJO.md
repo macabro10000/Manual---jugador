@@ -117,3 +117,12 @@ Antes de ejecutar VYR-006, aplicar `NOMENCLATURA.md`:
 3. **PENDIENTE DE AUTORIZACIÓN:** crear un Web Service gratuito temporal de laboratorio; tendrá un subdominio distinto al Static Site actual. No modificar el Static Site `vyrox`, no renombrar servicios y no tocar `main`.
 4. **PENDIENTE:** probar desde la URL temporal que HTML/assets y `/api/health` responden desde el mismo origen; después probar cookie de ensayo sin identidad real en Chrome Android.
 5. **BLOQUEADO HASTA LAS PRUEBAS:** configurar OAuth, base de datos y endpoints de autenticación. No se permite avanzar a login con evidencia solo de CI.
+
+
+### Resultado de ejecución VYR-006 — 2026-10-10
+
+- Se creó `vyrox-app-lab` como Web Service gratuito en Render, URL `https://vyrox-app-lab.onrender.com`, ID `srv-db4ov00473hc738jkft0`, rama de laboratorio. El Static Site original no se modificó.
+- El servidor se desplegó inicialmente y Render registró que quedó live. Se fijó Node.js a `20.x` para alinear CI y Render; CI de código y lockfile pasó. Confirmar el evento final del despliegue Node 20 antes de darlo por cerrado.
+- **Próxima prueba:** verificar la URL desde navegador real en Android y comprobar que `/`, `/styles.css`, `/app.js`, `/content.json` y `/api/health` responden correctamente. No iniciar sesión ni introducir datos personales; no existe autenticación todavía.
+- Hallazgo de frontend fuera de alcance: `index.html` solicita `manifest.webmanifest` y `icon.svg`, pero no existen; crear tarea específica para resolver esas referencias, no un parche dentro de autenticación.
+- OAuth, persistencia y rutas de autenticación siguen bloqueados hasta validar despliegue y origen real.
