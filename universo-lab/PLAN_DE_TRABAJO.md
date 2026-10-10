@@ -88,3 +88,14 @@
 
 ## Condición de cierre de tarea
 Una tarea solo se marca como completada cuando la prueba adecuada para su alcance tiene evidencia registrada. Si no se pudo ejecutar una prueba, debe quedar explícitamente pendiente.
+
+
+## Puerta previa a VYR-006 — nomenclatura auditada
+
+Antes de ejecutar VYR-006, aplicar `NOMENCLATURA.md`:
+- Nombre del producto: **VyROX**.
+- Identificadores heredados conservados temporalmente: repositorio `macabro10000/Manual---jugador`, rama `lab/universo-frontend`, carpeta `universo-lab/` y servicio de laboratorio anterior `universo-explorador`.
+- Backend independiente: `vyrox-server/`.
+- No hacer reemplazos globales ni renombrar carpetas, ramas o servicios como parte de VYR-006.
+- Mantener intactos `main`, `manual-jugador` y los demás proyectos.
+- VYR-006 empieza por análisis/documentación de dominios, cookies, persistencia y OAuth. No crear recursos, secretos, credenciales ni servicios durante la fase de decisión.
