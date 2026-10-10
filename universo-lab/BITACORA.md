@@ -275,3 +275,12 @@ Comprobar el resultado real de GitHub Actions para `vyrox-server-tests.yml`. Si 
 - Se intentó generar el lockfile usando Node `v22.16.0` y npm `10.9.2` en un directorio temporal. La ejecución excedió el límite y no generó el archivo. No se cambió `package.json`, no se fabricó lockfile y no se modificó el workflow CI.
 - Estado honesto: reglas actualizadas; VYR-004 continúa pendiente/bloqueada hasta poder ejecutar npm con acceso funcional al registro, versionar el lockfile real, migrar CI a `npm ci` y verificar GitHub Actions.
 - Sin despliegue de backend, sin OAuth/DB y sin cambios en producción.
+
+## Reintento VYR-004: registro npm inaccesible desde entorno de ejecución — 2026-10-09/10
+
+- Antes de operar se volvieron a leer `vyrox-server/package.json`, `.github/workflows/vyrox-server-tests.yml`, `REGLAS_DE_SEGURIDAD.md`, `ESTADO_ACTUAL.md` y esta bitácora en `lab/universo-frontend`.
+- Confirmación: `vyrox-server/package-lock.json` sigue ausente en GitHub. `package.json` conserva `express: ^5.1.0` y `helmet: ^8.1.0`; el workflow sigue usando `npm install`, no `npm ci`.
+- Segundo intento de generación real en un directorio temporal: Node `v22.16.0`, npm `10.9.0`, `npm install --package-lock-only --ignore-scripts --no-audit --no-fund --fetch-retries=1 --fetch-timeout=20000`.
+- Resultado observado: fallo de red `EAI_AGAIN`, `getaddrinfo` al resolver `registry.npmjs.org`. No se creó `package-lock.json`.
+- Decisión técnica: no inventar un lockfile, no sustituirlo por versiones fijadas a mano y no cambiar CI a `npm ci` mientras no exista un lockfile real. No se modificó código funcional, dependencias ni workflow.
+- Estado: VYR-004 continúa BLOQUEADA por falta de acceso al registro npm desde este entorno. Para completar, ejecutar npm en un entorno con acceso DNS/red al registro, versionar el lockfile resultante y después migrar CI a `npm ci` y comprobar una ejecución nueva de Actions.
