@@ -114,3 +114,12 @@ Hasta terminar esa migración, `ARCHIVO_DE_OPERACION.md` es la fuente histórica
 ## Actualización VYR-006 — 2026-10-10
 
 Se añadió `universo-lab/DECISIONES_INFRAESTRUCTURA_VYR-006.md` con una propuesta de origen único HTTPS para frontend/API, evaluación de persistencia gratuita, OAuth exclusivo de VyROX, sesión revocable y criterios de aceptación. La candidata de laboratorio es Neon Free Postgres, sujeta a comprobar cuotas y recuperación en el momento de crearla. No se creó ningún recurso ni se implementó autenticación. VYR-006 permanece **PENDIENTE DE VALIDACIÓN PRÁCTICA**: en especial, la arquitectura de despliegue que mantenga `/api/*` en el mismo origen y el comportamiento real de cookies en Chrome Android.
+
+
+## VYR-006 — auditoría de Render y código integrado (2026-10-10)
+
+- Render confirma que `vyrox.onrender.com` es Static Site; no hay Web Service VyROX desplegado. Los Static Sites no ejecutan el backend Node. `manual-jugador` en `main` sigue protegido y sin cambios.
+- Se modificó `vyrox-server/src/server.js` para servir el frontend desde `universo-lab/` y la API desde el mismo proceso/origen. Se ampliaron pruebas de integración para raíz, assets, salud y 404 de API.
+- Commits: `46716fc10056941014183dd1507e14595ae6db11` (servidor) y `ee639a7e4ab43c7f913d5b6be55c4a3e47f01d6a` (pruebas). Después se documentó la auditoría Render en `32805c8d936c68cfe42d1081261bb11a26419216`.
+- Estado: **IMPLEMENTADO EN RAMA; CI PENDIENTE DE CONFIRMACIÓN; SIN DESPLIEGUE NI PRUEBA ANDROID**. El Static Site actual permanece intacto.
+- El siguiente gate es confirmar CI. Solo si pasa, crear (con aprobación antes de ejecutar la creación) un Web Service gratuito temporal para probar el origen único; el subdominio será distinto y el servicio gratuito se duerme por inactividad. No cambiar la URL actual ni crear OAuth/base de datos todavía.
