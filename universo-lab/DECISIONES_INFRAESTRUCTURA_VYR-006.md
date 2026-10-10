@@ -108,3 +108,29 @@ Este documento no crea servicios, base de datos, OAuth, secretos ni rutas. No ca
 ## 9. Estado de la decisión
 
 **Propuesta para revisión:** origen único HTTPS; Neon Free Postgres como candidata de laboratorio con backups externos; OAuth Google exclusivo de VyROX; sesiones opacas con revocación; handle único con lista de reservas. Las condiciones del proveedor y la cookie quedan pendientes de verificación práctica antes de declarar autenticación funcional.
+
+
+## 10. Auditoría real de Render y avance de implementación — 2026-10-10
+
+La consulta de servicios de Render del workspace confirmó:
+
+- `vyrox` (`srv-db4msvjbc2fs73c07uig`) es un **Static Site**, rama `lab/universo-frontend`, URL `https://vyrox.onrender.com`, publish path `universo-lab`.
+- `universo-explorador` es otro Static Site de laboratorio. Se conserva sin cambios.
+- `manual-jugador` es el Static Site separado conectado a `main`; queda fuera de alcance.
+- No existe actualmente un Web Service de VyROX que ejecute `vyrox-server`.
+
+La documentación de Render confirma que un Static Site sirve archivos y no ejecuta el servidor Node de la API. Un Web Service gratuito tiene su propio subdominio `onrender.com`, se suspende tras inactividad y no permite dominios personalizados en el plan gratuito. Por ello, el origen único no se consigue añadiendo rutas a la configuración actual del Static Site.
+
+### Cambio de código en laboratorio
+
+Se modificó `vyrox-server/src/server.js` para que el proceso Node pueda servir tanto la interfaz `universo-lab/` como `/api/health` bajo el mismo origen. Se ampliaron pruebas para verificar HTML, CSS, JavaScript, manifest, `content.json`, rechazo de orígenes no autorizados y 404 separado para rutas API inexistentes.
+
+Commits de implementación:
+- `46716fc10056941014183dd1507e14595ae6db11` — servidor sirve frontend y API en un origen.
+- `ee639a7e4ab43c7f913d5b6be55c4a3e47f01d6a` — pruebas de integración del servidor.
+
+**Límite de evidencia:** los commits existen, pero el estado CI aún debe confirmarse; no se ha creado ni desplegado un Web Service y no se ha probado en Android. El Static Site actual no se ha cambiado y permanece como referencia/rollback.
+
+### Bloqueo de despliegue que requiere decisión explícita
+
+Para probar la arquitectura integrada sin interrumpir el sitio actual, se necesita un Web Service de laboratorio con nombre temporal y URL propia, por ejemplo `vyrox-app-lab`. Eso cambia el origen usado durante la prueba y, más adelante, el Client ID OAuth debe registrar el origen que realmente se apruebe. No se debe renombrar ni retirar el Static Site actual hasta pasar CI y pruebas funcionales. La eventual migración del nombre/URL público es una operación separada con plan de rollback.
