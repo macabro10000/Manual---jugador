@@ -284,3 +284,17 @@ Comprobar el resultado real de GitHub Actions para `vyrox-server-tests.yml`. Si 
 - Resultado observado: fallo de red `EAI_AGAIN`, `getaddrinfo` al resolver `registry.npmjs.org`. No se creó `package-lock.json`.
 - Decisión técnica: no inventar un lockfile, no sustituirlo por versiones fijadas a mano y no cambiar CI a `npm ci` mientras no exista un lockfile real. No se modificó código funcional, dependencias ni workflow.
 - Estado: VYR-004 continúa BLOQUEADA por falta de acceso al registro npm desde este entorno. Para completar, ejecutar npm en un entorno con acceso DNS/red al registro, versionar el lockfile resultante y después migrar CI a `npm ci` y comprobar una ejecución nueva de Actions.
+
+
+## Cierre VYR-004 — Dependencias reproducibles y CI — 2026-10-10
+
+- La generación local del lockfile fallaba por DNS (`EAI_AGAIN` al resolver `registry.npmjs.org`). En vez de fabricar versiones o el lockfile, se trasladó la generación a un runner real de GitHub Actions.
+- Run `38009458100` generó el lockfile con npm, instaló dependencias y pasó `npm test`; artefacto temporal de revisión: `vyrox-package-lock`.
+- Se versionó el archivo generado por npm: `vyrox-server/package-lock.json`, lockfileVersion 3, 66 paquetes registrados. Commit: `7d96ddb5e771ed1ce9edea32a05fe5221b4f1be7`.
+- Run `38009516378`: éxito al comprobar `npm ci --no-audit --no-fund` y `npm test` con el lockfile ya versionado.
+- Se eliminó del workflow la lógica temporal de generación/auto-commit y se dejó la configuración final: Node.js 20, caché npm vinculada a `vyrox-server/package-lock.json`, `npm ci` y `npm test`; los permisos del workflow volvieron a `contents: read`.
+- Verificación final del workflow limpio: run `38009544895`, conclusión `success`; los pasos de instalación desde lockfile y pruebas terminaron en `success`.
+- Commit del workflow final: `061cc2858897493eff22b9ff4b2b1d7ca45c6d3e`.
+- Sin cambios en `main`, sin despliegue de backend, sin OAuth, sin base de datos y sin secretos.
+- Resultado: VYR-004 **COMPLETADA / PRUEBAS_OK**. No se declara autenticación implementada ni prueba en Android.
+- Siguiente paso exacto: VYR-005, auditar frontend/backend y documentar el contrato de autenticación Google y sesiones antes de escribir la implementación.
