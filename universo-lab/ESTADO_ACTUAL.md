@@ -123,3 +123,13 @@ Se añadió `universo-lab/DECISIONES_INFRAESTRUCTURA_VYR-006.md` con una propues
 - Commits: `46716fc10056941014183dd1507e14595ae6db11` (servidor) y `ee639a7e4ab43c7f913d5b6be55c4a3e47f01d6a` (pruebas). Después se documentó la auditoría Render en `32805c8d936c68cfe42d1081261bb11a26419216`.
 - Estado: **IMPLEMENTADO EN RAMA; CI PENDIENTE DE CONFIRMACIÓN; SIN DESPLIEGUE NI PRUEBA ANDROID**. El Static Site actual permanece intacto.
 - El siguiente gate es confirmar CI. Solo si pasa, crear (con aprobación antes de ejecutar la creación) un Web Service gratuito temporal para probar el origen único; el subdominio será distinto y el servicio gratuito se duerme por inactividad. No cambiar la URL actual ni crear OAuth/base de datos todavía.
+
+
+## VYR-006 — integración de origen único desplegada en laboratorio (2026-10-10)
+
+- Nuevo servicio Render gratuito: `vyrox-app-lab`, ID `srv-db4ov00473hc738jkft0`, URL `https://vyrox-app-lab.onrender.com`, rama `lab/universo-frontend`, Ohio.
+- Render confirmó un primer despliegue live; el servidor escuchó en el puerto 10000. El código sirve frontend y API desde el mismo proceso. El despliegue final con Node 20 se está completando/verificando; no declarar aún la versión final validada hasta confirmar evento final de Render.
+- CI verde: [run 38011806491](https://github.com/macabro10000/Manual---jugador/actions/runs/38011806491), [run 38011892531](https://github.com/macabro10000/Manual---jugador/actions/runs/38011892531), [run 38011895817](https://github.com/macabro10000/Manual---jugador/actions/runs/38011895817).
+- No hay prueba externa HTTP confirmada ni prueba física Android/Chrome todavía. No se ha implementado login, OAuth, sesiones ni base de datos.
+- Defecto aparte detectado: `index.html` referencia `manifest.webmanifest` y `icon.svg`, ausentes en el directorio; se debe atender en tarea específica, sin mezclarlo con autenticación.
+- Static Site original `https://vyrox.onrender.com` sigue intacto; `main` y `manual-jugador` no se tocaron.
