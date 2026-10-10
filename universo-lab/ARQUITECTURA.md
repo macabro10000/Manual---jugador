@@ -1,5 +1,7 @@
 # VyROX — Arquitectura y alcance
 
+> **Convención de nombres vigente:** el producto se llama **VyROX**. Este archivo conserva decisiones históricas redactadas cuando el proyecto se llamaba «UNIVERSO»; esas menciones son contexto histórico, no el nombre actual. Consultar `NOMENCLATURA.md` antes de modificar nombres técnicos. No renombrar rutas, ramas o servicios como limpieza cosmética.
+
 Documento reorganizado desde `ARCHIVO_DE_OPERACION.md`. Las secciones históricas se han conservado en su redacción original; las propuestas se distinguen de lo implementado.
 
 # ARCHIVO DE OPERACIÓN — VyROX (antes UNIVERSO)
