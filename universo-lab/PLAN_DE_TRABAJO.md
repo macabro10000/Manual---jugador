@@ -108,3 +108,12 @@ Antes de ejecutar VYR-006, aplicar `NOMENCLATURA.md`:
 - Persistencia candidata para laboratorio: Neon Free Postgres; condiciones y límites deben revalidarse al crearla. Render Postgres Free se descarta para persistencia duradera por vencimiento a 30 días; Supabase Free queda como alternativa con pausa tras inactividad.
 - Se documentaron OAuth Google exclusivo de VyROX, sesiones opacas revocables, política inicial de expiración, handles reservados y criterios de aceptación.
 - Estado: **DISEÑO PROPUESTO / PENDIENTE DE VALIDACIÓN PRÁCTICA**. No se creó infraestructura, OAuth, secreto, base de datos ni ruta de autenticación.
+
+
+### VYR-006 — ejecución técnica posterior a la decisión
+
+1. **IMPLEMENTADO EN RAMA:** `vyrox-server/src/server.js` ahora puede servir `universo-lab/` y `/api/health` desde el mismo proceso/origen. Commits: `46716fc10056941014183dd1507e14595ae6db11` y pruebas `ee639a7e4ab43c7f913d5b6be55c4a3e47f01d6a`.
+2. **PENDIENTE:** verificar estado CI del commit de pruebas y corregir cualquier fallo antes de crear servicio.
+3. **PENDIENTE DE AUTORIZACIÓN:** crear un Web Service gratuito temporal de laboratorio; tendrá un subdominio distinto al Static Site actual. No modificar el Static Site `vyrox`, no renombrar servicios y no tocar `main`.
+4. **PENDIENTE:** probar desde la URL temporal que HTML/assets y `/api/health` responden desde el mismo origen; después probar cookie de ensayo sin identidad real en Chrome Android.
+5. **BLOQUEADO HASTA LAS PRUEBAS:** configurar OAuth, base de datos y endpoints de autenticación. No se permite avanzar a login con evidencia solo de CI.
