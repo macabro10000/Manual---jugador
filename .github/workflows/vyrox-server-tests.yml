@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   test:
@@ -25,17 +25,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Generate and commit lockfile only when absent
-        run: |
-          if [ ! -f package-lock.json ]; then
-            npm install --package-lock-only --ignore-scripts --no-audit --no-fund
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add package-lock.json
-            git commit -m "build(vyrox): add npm lockfile"
-            git push
-          fi
-      - name: Install dependencies from lockfile
+          cache: npm
+          cache-dependency-path: vyrox-server/package-lock.json
+      - name: Install dependencies from committed lockfile
         run: npm ci --no-audit --no-fund
       - name: Run tests
         run: npm test
