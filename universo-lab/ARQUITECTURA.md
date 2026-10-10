@@ -109,3 +109,14 @@ Construir UNIVERSO: un sitio móvil para descubrir videos, noticias, curiosidade
 - Servicios, base de datos y cliente OAuth creados: ninguno.
 - Pruebas de autenticación: todavía no aplican.
 - Siguiente paso exacto: implementar en la rama de laboratorio solo el esqueleto del backend en `vyrox-server/` (`package.json`, servidor Express, configuración validada y `GET /api/health`), sin conectar todavía Google ni una base de datos. Después probar localmente/CI y revisar el diff antes de crear el servicio API en Render.
+
+
+## Aclaración de estado vigente — 2026-10-10
+
+Este archivo conserva texto histórico de la primera arquitectura y algunos de sus estados/siguientes pasos ya quedaron superados. Para el estado vigente:
+
+- El backend `vyrox-server/` sí existe como esqueleto Express con `GET /api/health`, configuración y pruebas.
+- El lockfile ya está versionado y CI usa `npm ci`; consultar `ESTADO_ACTUAL.md` y `BITACORA.md` para la evidencia actual.
+- El contrato más reciente y los gaps comprobados de autenticación se encuentran en `AUTENTICACION_Y_SESIONES.md`.
+- El login Google, usuarios persistentes, sesiones, handles y mensajería siguen **sin implementar**. Los pasos de arquitectura que describen esos componentes son propuestas, no evidencia de funcionamiento.
+- Antes de crear infraestructura o implementar autenticación, seguir el siguiente paso de `PLAN_DE_TRABAJO.md` (VYR-006). No desplegar ni crear credenciales durante la fase de diseño.
